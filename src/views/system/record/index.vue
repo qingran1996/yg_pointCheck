@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="record">
+    record
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'record',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.record {
 	padding: 10px;
 }
 </style>

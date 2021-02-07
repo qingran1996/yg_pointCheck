@@ -7,16 +7,23 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
+import basicInfomationRouter from './modules/basicInfomation'
+import rootRouter from './modules/root' 
+import pointCheckRouter from './modules/pointCheck'
+import abnormaWeekRouter from './modules/abnorma'
+import overhaulRouter from './modules/overhaul'
+import goodsRouter from './modules/goods'
+import systemRouter from './modules/system'
 // import componentsRouter from './modules/components'
-import rootRouter from './modules/root'
-import alarmRouter from './modules/alarm'
-import deviceRouter from './modules/device'
-import personRouter from './modules/person'
-import sparePartRouter from './modules/sparePart'
-import deviceServiceRouter from './modules/deviceService'
-import relatedUnitsRouter from './modules/relatedUnits'
-import spotInspectionRouter from './modules/spotInspection'
-import workTicketRouter from './modules/workTicket'
+// import rootRouter from './modules/root' 
+// import alarmRouter from './modules/alarm'
+// import deviceRouter from './modules/device'
+// import personRouter from './modules/person'
+// import sparePartRouter from './modules/sparePart'
+// import deviceServiceRouter from './modules/deviceService'
+// import relatedUnitsRouter from './modules/relatedUnits'
+// import spotInspectionRouter from './modules/spotInspection'
+// import workTicketRouter from './modules/workTicket'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 
@@ -48,7 +55,7 @@ import workTicketRouter from './modules/workTicket'
  */
 export const constantRoutes = [{
   path: '/redirect',
-  component: Layout,
+  component: Layout, 
   hidden: true,
   children: [{
     path: '/redirect/:path(.*)',
@@ -91,7 +98,13 @@ export const constantRoutes = [{
     }
   }]
 },
-
+basicInfomationRouter,
+rootRouter,
+pointCheckRouter,
+abnormaWeekRouter,
+overhaulRouter,
+goodsRouter,
+systemRouter,
 {
   path: '/error',
   component: Layout,
@@ -122,167 +135,6 @@ export const constantRoutes = [{
   }
   ]
 },
-personRouter,
-deviceRouter,
-workTicketRouter,
-{
-  path: '/device/index',
-  component: Layout,
-  redirect: '/device/index/deviceOverview',
-  children: [{
-    path: 'deviceOverview',
-    hidden: false,
-    component: () => import('@/views/device/device/deviceOverview/index'),
-    name: '设备总览',
-    meta: {
-      title: '设备总览',
-      icon: 'form',
-      keepAlive: true,
-      noCache: true
-    }
-  }]
-},
-sparePartRouter,
-deviceServiceRouter,
-relatedUnitsRouter,
-spotInspectionRouter,
-{
-  path: '/warehouse',
-  component: Layout,
-  redirect: '/warehouse/index',
-  children: [{
-    path: 'index',
-    component: () => import('@/views/warehouse/index'),
-    name: '仓库管理',
-    meta: {
-      title: '仓库管理',
-      icon: 'form',
-      keepAlive: true,
-      noCache: true
-    }
-  },{
-    path: 'warehousePerson',
-    component: () => import('@/views/warehouse/warehouseDialog/warehousePerson'),
-    name: '仓库人员',
-    meta: {
-      title: '仓库人员',
-      icon: 'form',
-      keepAlive: true,
-      noCache: true
-    }
-  }]
-},
-
-{
-  path: '/deviceScrap',
-  component: Layout,
-  redirect: '/deviceScrap/index',
-  children: [{
-    path: 'index',
-    component: () => import('@/views/deviceScrap/index'),
-    name: '设备报废',
-    meta: {
-      title: '设备报废',
-      icon: 'form',
-      keepAlive: true,
-      noCache: true
-    }
-  }]
-},
-rootRouter,
-alarmRouter,
-{
-  path: '/dataCatch',
-  component: Layout,
-  redirect: '/dataCatch/index',
-  children: [{
-    path: 'index',
-    component: () => import('@/views/dataCatch/index'),
-    name: '数据采集',
-    meta: {
-      title: '数据采集',
-      keepAlive: true,
-      icon: 'form',
-      noCache: true
-    }
-  }]
-},
-{
-  path: '/deviceChange',
-  component: Layout,
-  redirect: '/deviceChange/index',
-  children: [{
-    path: 'index',
-    component: () => import('@/views/deviceChange/index'),
-    name: '设备变更',
-    meta: {
-      title: '设备变更',
-      keepAlive: true,
-      icon: 'form',
-      noCache: true
-    }
-  }]
-},
-{
-  path: '/deviceChange/index',
-  component: Layout,
-  redirect: '/deviceChange/index/deviceStatus',
-  children: [{
-    path: 'deviceStatus',
-    hidden: false,
-    component: () => import('@/views/deviceChange/deviceStatus/index'),
-    name: '设备状态',
-    meta: {
-      title: '设备状态',
-      icon: 'form',
-      keepAlive: true,
-      noCache: true
-    }
-  }]
-},
-  {
-    path: '/deviceService/plan',
-    component: Layout,
-    redirect: '/deviceService/plan/servicePlan',
-    children: [{
-      path: 'servicePlan',
-      hidden: false,
-      component: () => import('@/views/deviceService/plan/servicePlan'),
-      name: '保养计划',
-      meta: {
-        title: '保养计划',
-        icon: 'form',
-        keepAlive: true,
-        noCache: true
-      }
-    }]
-  },
-{
-  path: '/dictionary',
-  component: Layout,
-  redirect: '/dictionary/index',
-  children: [{
-    path: 'index',
-    component: () => import('@/views/dictionary/dictionary'),
-    name: '数据字典',
-    meta: {
-      title: '数据字典',
-      keepAlive: true,
-      icon: 'education',
-      noCache: true
-    }
-  },{
-    path: 'children',
-    component: () => import('@/views/dictionary/dictionaryChildren'),
-    name: '字典子数据',
-    meta: {
-      title: '字典子数据',
-      keepAlive: true,
-      icon: 'education',
-      noCache: true
-    }
-  }]
-},
 
 // 404 page must be placed at the end !!!
 {
@@ -290,21 +142,6 @@ alarmRouter,
   redirect: '/404',
   hidden: true
 }
-
-  // {
-  //   path: '/profile',
-  //   component: Layout,
-  //   redirect: '/profile/index',
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/profile/index'),
-  //       name: 'Profile',
-  //       meta: { title: 'Profile', icon: 'user', noCache: true }
-  //     }
-  //   ]
-  // }
 ]
 
 /**

@@ -16,7 +16,7 @@
 			}
 		},
 		mounted() {
-    
+
 		},
 		watch: {
 			$route(to, from) {

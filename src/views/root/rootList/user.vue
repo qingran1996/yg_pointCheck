@@ -1,17 +1,17 @@
 <template>
 	<div class="rootuser">
 		<el-card class="box-card" shadow="always">
-		  <el-form :inline="true" :model="user" class="demo-form-inline">
-		    <el-form-item label="用户名">
-		      <el-input v-model="user.username" placeholder="请输入用户名" @input="user_username_show" clearable/>
-		    </el-form-item>
-		    <el-form-item label="人员姓名">
-		      <el-input v-model="user.name" placeholder="请输入人员姓名" @input="user_name_show" clearable/>
-		    </el-form-item>
-		    <el-form-item>
-		      <el-button size="small" type="primary" @click="onSubmit(user)">查询</el-button>
-		    </el-form-item>
-		  </el-form>
+			<el-form :inline="true" :model="user" class="demo-form-inline">
+				<el-form-item label="用户名">
+					<el-input v-model="user.username" placeholder="请输入用户名" @input="user_username_show" clearable />
+				</el-form-item>
+				<el-form-item label="人员姓名">
+					<el-input v-model="user.name" placeholder="请输入人员姓名" @input="user_name_show" clearable />
+				</el-form-item>
+				<el-form-item>
+					<el-button size="small" type="primary" @click="onSubmit(user)">查询</el-button>
+				</el-form-item>
+			</el-form>
 		</el-card>
 		<el-card class="box-card" shadow="always">
 			<el-row style="margin-bottom: 5px;">
@@ -65,8 +65,8 @@
 			return {
 				// 筛选
 				user: {
-				  name: '',
-				  personName: ''
+					name: '',
+					personName: ''
 				},
 				loading: false,
 				tableHeight: document.body.clientHeight - 84 - 36 - 50 - 152, // 表格高度
@@ -92,7 +92,7 @@
 			// this.$bus.off('roleUpdate')
 		},
 		created() {
-			this.getTable() //获取table数据
+			// this.getTable() //获取table数据
 			this.$bus.$on("userTable_update", msg => {
 				// this.currentPage = 1
 				// this.jsonData.pageNo = 1
@@ -100,10 +100,10 @@
 			});
 		},
 		methods: {
-			user_username_show (event) {
+			user_username_show(event) {
 				this.jsonData.userName = event
 			},
-			user_name_show (event) {
+			user_name_show(event) {
 				this.jsonData.name = event
 			},
 			onSubmit(item) {
@@ -152,8 +152,8 @@
 						// if (this.tableData.length-1==0&&this.jsonData.pageNo==this.totalPages) {
 						// 	this.jsonData.pageNo = this.totalPages-1
 						// }
-            this.currentPage = this.deleteLastPageData(this.total,this.pageSize,this.currentPage)
-            this.jsonData.pageNo = this.currentPage
+						this.currentPage = this.deleteLastPageData(this.total, this.pageSize, this.currentPage)
+						this.jsonData.pageNo = this.currentPage
 						this.getTable()
 					} else {
 						this.$notify.error({

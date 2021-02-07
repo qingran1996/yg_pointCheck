@@ -4,7 +4,7 @@
 		<!-- <div class="canvaszz"></div>
 		<canvas id="canvas"></canvas> -->
 		<div class="manage_tip">
-			<span class="title">EAM</span>
+			<span class="title">永钢点巡检修系统</span>
 			<el-form ref="loginForm" :model="loginForm" status-icon :rules="rules" class="loginForm" label-width="80px">
 				<el-form-item prop="username">
 					<el-input v-model="loginForm.username" prefix-icon="el-icon-s-custom" placeholder="请输入账号" />
@@ -15,11 +15,11 @@
 				<el-form-item>
 					<el-button type="primary" style="margin-bottom: 20px;" class="submit_btn" @click="submitForm('loginForm')"
 					 @keyup.enter="submitForm('loginForm')">登录</el-button>
-				</el-form-item>
-			</el-form>
+				</el-form-item>  
+			</el-form>   
 		</div>
 
-	</div>
+	</div> 
 </template>
 
 <script>
@@ -152,56 +152,53 @@
 				// })
 				this.$refs.loginForm.validate(valid => {
 					if (valid) {
-						const addJson = {
-							userName: this.loginForm.username,
-							password: this.loginForm.password
-						}
-						this.$axios.post('/u/login', addJson).then(res => {
-							if (res.data.code === 0) { // 登录成功
-								const data = res.data.data
-								localStorage.setItem('eleToken', data.accessToken) // 存储token
-								localStorage.setItem('userId', data.id) // 存储用户id
-								localStorage.setItem('username', data.userName) // 存储用户账户名
-								localStorage.setItem('name', data.name) // 存储用户姓名
-								localStorage.setItem('attachUrl', data.attachUrl) // 存储用户头像
-								sessionStorage.setItem('passwordIsInit', data.passwordIsInit) // 判断用户密码是否仍为初始值?
-								localStorage.setItem('userMenu', JSON.stringify(data.userMenuMapList['1'])) // 存储动态菜单
-								this.$store.dispatch('user/login', this.loginForm)
-									.then(() => {
-										// this.isshow = false
-										this.$router.push({
-											path: this.redirect || '/',
-											query: this.otherQuery
-										})
-										this.loading = false
-									})
-									.catch(() => {
-										this.loading = false
-									})
-                // this.$router.push({
-                //   			path: this.redirect || '/',
-                //   			})
-								console.log(res.data.data.accessToken)
-							} else {
-								this.$notify.error({
-									title: '登录失败',
-									message: res.data.message
-								})
-							}
-						})
-						// this.loading = true
-						// this.$store.dispatch('user/login', this.loginForm)
-						//   .then(() => {
-						//     this.isshow = false
-						//     this.$router.push({
-						//       path: this.redirect || '/',
-						//       query: this.otherQuery
-						//     })
-						//     this.loading = false
-						//   })
-						//   .catch(() => {
-						//     this.loading = false
-						//   })
+						// const addJson = {
+						// 	userName: this.loginForm.username,
+						// 	password: this.loginForm.password
+						// }
+						// this.$axios.post('/u/login', addJson).then(res => {
+						// 	if (res.data.code === 0) { // 登录成功
+						// 		const data = res.data.data
+						// 		localStorage.setItem('eleToken', data.accessToken) // 存储token
+						// 		localStorage.setItem('userId', data.id) // 存储用户id
+						// 		localStorage.setItem('username', data.userName) // 存储用户账户名
+						// 		localStorage.setItem('name', data.name) // 存储用户姓名
+						// 		localStorage.setItem('attachUrl', data.attachUrl) // 存储用户头像
+						// 		sessionStorage.setItem('passwordIsInit', data.passwordIsInit) // 判断用户密码是否仍为初始值?
+						// 		localStorage.setItem('userMenu', JSON.stringify(data.userMenuMapList['1'])) // 存储动态菜单
+						// 		this.$store.dispatch('user/login', this.loginForm)
+						// 			.then(() => {
+						// 				// this.isshow = false
+						// 				this.$router.push({
+						// 					path: this.redirect || '/',
+						// 					query: this.otherQuery
+						// 				})
+						// 				this.loading = false
+						// 			})
+						// 			.catch(() => {
+						// 				this.loading = false
+						// 			})
+						// 		console.log(res.data.data.accessToken)
+						// 	} else {
+						// 		this.$notify.error({
+						// 			title: '登录失败',
+						// 			message: res.data.message
+						// 		})
+						// 	}
+						// })
+						this.loading = true
+						this.$store.dispatch('user/login', this.loginForm)
+						  .then(() => {
+						    this.isshow = false
+						    this.$router.push({
+						      path: this.redirect || '/',
+						      query: this.otherQuery
+						    })
+						    this.loading = false
+						  })
+						  .catch(() => {
+						    this.loading = false
+						  })
 					} else {
 						console.log('error submit!!')
 						return false

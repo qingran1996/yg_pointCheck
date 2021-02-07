@@ -7,7 +7,7 @@ const rootRouter = {
   component: Layout,
   redirect: 'noRedirect',
   name: 'root',
-  meta: {
+  meta: { 
     title: '权限管理',
     icon: 'lock'
   },

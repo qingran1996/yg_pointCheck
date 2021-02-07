@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <el-row :gutter="10">
+	  首页
+    <!-- <el-row :gutter="10">
       <el-col :xl="10" >
         <todayWarning/>
       </el-col>
@@ -18,7 +19,7 @@
       <el-col :xl="8" >
         <onlineStatistics/>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- <component :is="currentRole" /> -->
   </div>
 </template>

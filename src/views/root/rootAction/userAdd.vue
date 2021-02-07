@@ -270,8 +270,8 @@
 			}
 		},
 		created() {
-			this.getDeviceType()
-			this.getdata()
+			//this.getDeviceType()
+			//this.getdata()
 			this.$bus.$on("userAdd", msg => {
 				//console.log(msg)
 				this.innerVisible = true

@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="pointCheck">
+    pointCheck
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'pointCheck',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.pointCheck {
 	padding: 10px;
 }
 </style>

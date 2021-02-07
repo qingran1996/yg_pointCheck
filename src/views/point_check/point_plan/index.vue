@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="pointPlan">
+    pointPlan
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'pointPlan',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.pointPlan {
 	padding: 10px;
 }
 </style>

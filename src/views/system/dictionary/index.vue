@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="dictionary">
+    dictionary
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'dictionary',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.dictionary {
 	padding: 10px;
 }
 </style>

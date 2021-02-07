@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="weekMock">
+    weekMock
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'weekMock',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.weekMock {
 	padding: 10px;
 }
 </style>

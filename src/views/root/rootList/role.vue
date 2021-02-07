@@ -15,11 +15,11 @@
 								<el-tag @click="userList(scope.row)" type="success">人员查看</el-tag>
 							</el-tooltip>
 							<el-tooltip class="item" effect="dark" content="菜单权限" placement="bottom">
-								<el-tag @click="lookList(scope.row)" >菜单权限</el-tag>
+								<el-tag @click="lookList(scope.row)">菜单权限</el-tag>
 							</el-tooltip>
-              <el-tooltip class="item" effect="dark" content="流程权限" placement="bottom">
-                <el-tag type="warning" @click="processRole(scope.row)">流程权限</el-tag>
-              </el-tooltip>
+							<el-tooltip class="item" effect="dark" content="流程权限" placement="bottom">
+								<el-tag type="warning" @click="processRole(scope.row)">流程权限</el-tag>
+							</el-tooltip>
 							<el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
 								<el-tag @click="updateList(scope.row)">编辑</el-tag>
 							</el-tooltip>
@@ -44,7 +44,7 @@
 		<editDialog></editDialog>
 		<!-- 查看人员 -->
 		<roleuserDialog></roleuserDialog>
-    <roleProcess/>
+		<roleProcess />
 	</div>
 </template>
 
@@ -53,7 +53,7 @@
 	import lookDialog from '../rootAction/lookDialog.vue'
 	import editDialog from '../rootAction/editDialog'
 	import roleuserDialog from '../rootAction/roleUser'
-  import roleProcess from '@/views/root/rootAction/roleProcess'
+	import roleProcess from '@/views/root/rootAction/roleProcess'
 	export default {
 		name: 'Rootrole',
 		components: {
@@ -61,7 +61,7 @@
 			lookDialog,
 			editDialog,
 			roleuserDialog,
-      roleProcess
+			roleProcess
 		},
 		data() {
 			return {
@@ -89,7 +89,7 @@
 			this.$bus.off('roleProcess')
 		},
 		created() {
-			this.getTable() //获取table数据
+			// this.getTable() //获取table数据
 			this.$bus.$on("roleTable_update", msg => {
 				// this.currentPage = 1
 				// this.jsonData.pageNo = 1
@@ -102,7 +102,7 @@
 			addrole() {
 				this.$bus.$emit('roleAdd', true)
 			},
-			userList (row) {
+			userList(row) {
 				//console.log(row)
 				this.$bus.$emit('roleuser', row.rolename)
 			},
@@ -110,10 +110,10 @@
 			lookList(row) {
 				this.$bus.$emit('roleLook', row)
 			},
-      //流程权限配置
-      processRole(row){
-        this.$bus.emit('roleProcess',row)
-      },
+			//流程权限配置
+			processRole(row) {
+				this.$bus.emit('roleProcess', row)
+			},
 			//编辑
 			updateList(row) {
 				this.$bus.$emit('roleUpdate', row)
@@ -128,10 +128,10 @@
 						// this.numberPage = res.data.data.number
 						//console.log('当前页数数据数量', this.numberPage)
 						this.loading = true
-            this.pageSize = res.data.data.size
-            this.jsonData.pageSize = res.data.data.size
-            this.currentPage = res.data.data.number + 1
-            this.jsonData.pageNo = res.data.data.number + 1
+						this.pageSize = res.data.data.size
+						this.jsonData.pageSize = res.data.data.size
+						this.currentPage = res.data.data.number + 1
+						this.jsonData.pageNo = res.data.data.number + 1
 						let that = this
 						that.tableData = []
 						setTimeout(function() {
@@ -191,7 +191,7 @@
 							type: 'success'
 						});
 
-						this.currentPage = this.deleteLastPageData(this.total,this.pageSize,this.currentPage)
+						this.currentPage = this.deleteLastPageData(this.total, this.pageSize, this.currentPage)
 						this.jsonData.pageNo = this.currentPage
 						this.getTable()
 					} else {
@@ -204,15 +204,15 @@
 			},
 			handleSizeChange(val) {
 				//console.log(`每页 ${val} 条`)
-        this.jsonData.pageSize=val
-        this.pageSize=val
-        this.getTable()
+				this.jsonData.pageSize = val
+				this.pageSize = val
+				this.getTable()
 			},
 			handleCurrentChange(val) {
 				//console.log(`当前页: ${val}`)
-        this.jsonData.pageNo=val
-        this.currentPage=val
-        this.getTable()
+				this.jsonData.pageNo = val
+				this.currentPage = val
+				this.getTable()
 			},
 		}
 	}

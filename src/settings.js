@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'EAM',
+  title: '永钢点巡检',
 
   /**
    * @type {boolean} true | false

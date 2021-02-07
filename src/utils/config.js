@@ -110,7 +110,7 @@ export default {
     };
 		//文件上传upload url 和文档在线预览 url
     Vue.prototype.documentEAMUrl= function(count){
-      const theUrl=process.env.NODE_ENV ==='development'?'http://192.168.10.152':'http://192.168.10.153'
+      const theUrl=process.env.NODE_ENV !='development'?'http://192.168.10.152':'http://192.168.10.153'
       if (count === 'upload'){ //upload上传
         return theUrl + ':10005/u/file/'
       }else if (count === 'preview'){ //在线预览

@@ -1,23 +1,24 @@
 <template>
-  <div class="rootmenu">
-    rootmenu
+  <div class="abnormaMock">
+    abnormaMock
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Rootmenu',
+  name: 'abnormaMock',
   components: {},
   data() {
     return {}
   },
   created() {
+
   },
   methods: {}
 }
 </script>
 <style scoped>
-.rootmenu {
+.abnormaMock {
 	padding: 10px;
 }
 </style>

@@ -174,7 +174,7 @@
 
 		},
 		mounted() {
-			this.getTable() // 请求数据
+			// this.getTable() // 请求数据
 		},
 		created() {
 			this.$bus.$on("deviceAddPerson", msg => {
