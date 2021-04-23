@@ -430,7 +430,7 @@
 	}
 
 	.el-tree>>>.el-tree-node__content:visited {
-		background-color: rgb(0, 15, 70) !important;
+		/* background-color: rgb(0, 15, 70) !important; */
 	}
 
 	.middle_table {

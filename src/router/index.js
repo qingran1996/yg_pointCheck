@@ -14,6 +14,7 @@ import abnormaWeekRouter from './modules/abnorma'
 import overhaulRouter from './modules/overhaul'
 import goodsRouter from './modules/goods'
 import systemRouter from './modules/system'
+import onlineRouter from './modules/online'
 // import componentsRouter from './modules/components'
 // import rootRouter from './modules/root' 
 // import alarmRouter from './modules/alarm'
@@ -104,6 +105,7 @@ pointCheckRouter,
 abnormaWeekRouter,
 overhaulRouter,
 goodsRouter,
+onlineRouter,
 systemRouter,
 {
   path: '/error',

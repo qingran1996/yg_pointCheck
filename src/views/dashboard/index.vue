@@ -1,6 +1,6 @@
 <template>
-  <div class="dashboard-container">
-	  首页
+  <div class="dashboard-container" :style="{height: indexheight}">
+	  
     <!-- <el-row :gutter="10">
       <el-col :xl="10" >
         <todayWarning/>
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       currentRole: 'adminDashboard',
+	  indexheight: document.body.clientHeight - 84 + "px",
       tableData:[{
 
       }]
@@ -58,6 +59,11 @@ export default {
 </script>
 <style scoped>
 .dashboard-container{
-  padding: 15px;
+  /* padding: 15px; */
+	background: url(../../assets/user_images/indexPic.png) no-repeat center/cover;
+    height: 100%;
+	overflow-y: hidden;
+	background-size: 100% 100%;
+	object-fit: fill;
 }
 </style>

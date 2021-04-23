@@ -4,97 +4,346 @@ import service from './http.js'
 
 export default {
 	install(Vue, options) {
-		//部门数据
+		/************基础信息管理***********/
+		//查询区域*********
+		Vue.prototype.areaData = function(data) { //全局函数
+			return service({
+				url: '/bi/area/query',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询数据字典
+		Vue.prototype.dictionaryData = function(data) { //全局函数
+			return service({
+				url: '/bi/dictionary/dicListAll',
+				method: 'post',
+				data: data
+			})
+		};
+		//区域新增
+		Vue.prototype.areaAdd = function(data) { //全局函数
+			return service({
+				url: '/bi/area/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//区域更新
+		Vue.prototype.areaUpdate = function(data) { //全局函数
+			return service({
+				url: '/bi/area/update',
+				method: 'post',
+				data: data
+			})
+		};
+		//区域删除
+		Vue.prototype.areaDelete = function(data) { //全局函数
+			return service({
+				url: '/bi/area/delete?code='+data,
+				method: 'get'
+			})
+		};
+		//获取厂区分厂点检区域树及设备(设备在线点检标准)
+		Vue.prototype.spotAreaEquips = function() { //全局函数
+			return service({
+				url: '/bi/equip/spotAreaEquips',
+				method: 'get'
+			})
+		};
+		//根据点检部门查询设备
+		Vue.prototype.equipByOrg = function(data) { //全局函数
+			return service({
+				url: '/bi/equip/equipByOrg',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检区域设备批量关联
+		Vue.prototype.areaEquipRel = function(data) { //全局函数
+			return service({
+				url: '/bi/area/areaEquipRel',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询组织部门树
 		Vue.prototype.deptData = function(data) { //全局函数
 			return service({
-				url: '/p/org/queryAllTree',
+				url: '/bi/organization/queryTree',
 				method: 'post',
 				data: data
 			})
 		};
-		//人员列表数据
+		//三方部门树指定同步
+		Vue.prototype.thirdorgTbPart = function(data) { //全局函数
+			return service({
+				url: '/bi/hrOrg/orgTbPart',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询三方部门树
+		Vue.prototype.thirddeptData = function(data) { //全局函数
+			return service({
+				url: '/bi/hrOrg/query',
+				method: 'post',
+				data: data
+			})
+		};
+		//组织部门树新增
+		Vue.prototype.deptAdd = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//组织部门树修改
+		Vue.prototype.deptUpdate = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/update',
+				method: 'post',
+				data: data
+			})
+		};
+		//组织部门树删除
+		Vue.prototype.deptDelete = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/delete?code='+data,
+				method: 'get'
+			})
+		};
+		//查询设备*********
+		Vue.prototype.deviceData = function(data) { //全局函数
+		
+			return service({
+				url: '/bi/equip/getByWorkArea',
+				method: 'post',
+				data: data
+			})
+		};
+		//删除设备*********
+		Vue.prototype.deviceDelete = function(data) { //全局函数
+		// console.log(data)
+			return service({
+				url: '/bi/equip/delete?id='+data,
+				method: 'get'
+			})
+		};
+		//查询设备的区域
+		Vue.prototype.areaTodevice = function(data) { //全局函数
+			return service({
+				url: '/bi/equip/workAreaTree',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询设备的部门
+		Vue.prototype.deviceDept = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/getOrgDownList',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询人员*********
 		Vue.prototype.personData = function(data) { //全局函数
 			return service({
-				url: '/p/person/queryRecursive',
+				url: '/bi/person/QueryByCodeAndName',
 				method: 'post',
 				data: data
 			})
 		};
-		Vue.prototype.getDeviceQueryTree = function(data) { //全局函数
+		//新增人员*********
+		Vue.prototype.personAdd = function(data) { //全局函数
 			return service({
-				url: '/d/area/queryAllTree',
+				url: '/bi/person/add',
 				method: 'post',
 				data: data
 			})
 		};
-		//设备分类树 数据
-    Vue.prototype.getDeviceTypeQueryTree = function(data) { //全局函数
-      return service({
-        url: '/d/deviceType/query',
-        method: 'post',
-        data: data
-      })
-    };
-    // 获取仓库信息-备品备件  入库操作
-    Vue.prototype.getWarehouseInfo = function(data) { //全局函数
-      return service({
-        url: '/d/stock/query',
-        method: 'post',
-        data: data
-      })
-    };
-    // 仓库 获取信息
-    Vue.prototype.getWarehouseInfo = function(data) { //全局函数
-      return service({
-        url: '/d/stock/query',
-        method: 'post',
-        data: data
-      })
-    };
-    // 状态state or 文档类型 获取  -》《 字典数据
-    Vue.prototype.getStateInfo = function(data) { //全局函数
-      return service({
-        url: '/u/dictionary/queryByPCode',
-        method: 'post',
-        data: data
-      })
-    };
-    // /d/device/query  设备台账的详情信息
-    Vue.prototype.getDeviceQuery = function(data) { //全局函数
-      return service({
-        url: '/d/device/query',
-        method: 'post',
-        data: data
-      })
-    };
-		// 设备列表_关键词
-		Vue.prototype.getdeviceByKeyword = function(data) { //全局函数
-		  return service({
-		    url: '/d/device/getByKeyword',
-		    method: 'post',
-		    data: data
-		  })
-		};
-    //网络已经注册的用户
-    Vue.prototype.getNetworkPerson = function(data) { //全局函数
-      return service({
-        url: '/u/user/query',
-        method: 'post',
-        data: data
-      })
-    };
-    //备品备件列表
-    Vue.prototype.sparePartQuery = function(data) { //全局函数
-      return service({
-        url: '/d/sparePart/query',
-        method: 'post',
-        data: data
-      })
-    };
-		//根据角色获取人员
-		Vue.prototype.getByRole = function(data) { //全局函数
+		//更新人员*********
+		Vue.prototype.personUpdate = function(data) { //全局函数
 			return service({
-				url: '/u/user/getByRole',
+				url: '/bi/person/update',
+				method: 'post',
+				data: data
+			})
+		};
+		//删除人员*********
+		Vue.prototype.personDelete = function(data) { //全局函数
+			return service({
+				url: '/bi/person/delete',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检标准*********
+		Vue.prototype.pointStandardData = function(data) { //全局函数
+			return service({
+				url: '/bi/equipStandard/query',
+				method: 'post',
+				data: data
+			})
+		};
+		//新增点检标准*********
+		Vue.prototype.pointStandardAdd = function(data) { //全局函数
+			return service({
+				url: '/bi/equipStandard/add',
+				method: 'post',
+				data: data
+			})
+		};
+		/************点检管理***********/
+		//查询点检路线列表
+		Vue.prototype.pointWayData = function(data) { //全局函数
+			return service({
+				url: '/sc/scQuery/spotCheckRouteList',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检计划列表
+		Vue.prototype.pointPlanData = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckPlan',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检计划列表车间查询
+		Vue.prototype.pointPlanFarmData = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/getOrgDownList',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检计划列表部门查询
+		Vue.prototype.pointPlanDeptData = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/getOrgTreeAndUsers?orgId='+data,
+				method: 'get'
+			})
+		};
+		//查询点检计划列表人员查询
+		Vue.prototype.pointPlanPersonData = function(data) { //全局函数
+			return service({
+				url: '/bi/organization/getUsersByOrg',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检计划列表点检区域查询
+		Vue.prototype.pointPlanAreaData = function(data) { //全局函数
+			return service({
+				url: '/bi/area/query',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询点检计划列表下生成的所有任务查询
+		Vue.prototype.pointPlanTaskData = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckTaskByPlanId',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检计划新增
+		Vue.prototype.pointPlanAdd = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/insertOrUpdateSpotCheckPlan',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检计划详情
+		Vue.prototype.pointPlanLook = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckPlanDetail',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检计划删除
+		Vue.prototype.pointPlanDelete = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/cancelSpotCheckPlan',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检计划激活
+		Vue.prototype.pointPlanBego = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/activateSpotCheckPlan',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检任务查询
+		Vue.prototype.pointCheckTaskData = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckTaskList',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检区域任务查询
+		Vue.prototype.pointCheckAreaTaskData = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckAreaTaskList',
+				method: 'post',
+				data: data
+			})
+		};
+		//点检数据查询
+		Vue.prototype.pointCheckSearchData = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/querySpotCheckProjectList',
+				method: 'post',
+				data: data
+			})
+		};
+		/************异常周期管理***********/
+		//查询异常列表
+		Vue.prototype.abnormaMockData = function(data) { //全局函数
+			return service({
+				url: '/ps/exception/queryWebList',
+				method: 'post',
+				data: data
+			})
+		};
+		//异常新增列表
+		Vue.prototype.abnormaMockAdd = function(data) { //全局函数
+			return service({
+				url: '/sc/exception/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//查询周期列表
+		Vue.prototype.weekMockData = function(data) { //全局函数
+			return service({
+				url: '/sc/cycle/queryCycleProjectList',
+				method: 'post',
+				data: data
+			})
+		};
+		//周期新增列表
+		Vue.prototype.weekMockAdd = function(data) { //全局函数
+			return service({
+				url: '/sc/cycle/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//周期删除列表
+		Vue.prototype.weekMockDelete = function(data) { //全局函数
+			return service({
+				url: '/sc/cycle/delete',
 				method: 'post',
 				data: data
 			})

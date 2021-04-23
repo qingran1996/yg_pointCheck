@@ -1,6 +1,6 @@
 <template>
   <div class="record">
-    record
+    <router-view />
   </div>
 </template>
 

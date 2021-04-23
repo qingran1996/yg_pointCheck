@@ -7,6 +7,7 @@ const abnormaWeekRouter = {
   component: Layout,
   redirect: 'noRedirect',
   name: 'abnormaWeek',
+	alwaysShow: true,
   meta: { 
     title: '异常周期管理',
     icon: 'lock'

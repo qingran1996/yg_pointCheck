@@ -1,6 +1,6 @@
 <template>
 	<div class="form_container">
-		<canvaShow v-show="isshow" />
+		<!-- <canvaShow v-show="isshow" /> -->
 		<!-- <div class="canvaszz"></div>
 		<canvas id="canvas"></canvas> -->
 		<div class="manage_tip">
@@ -13,7 +13,7 @@
 					<el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password" placeholder="请输入密码" />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" style="margin-bottom: 20px;" class="submit_btn" @click="submitForm('loginForm')"
+					<el-button type="primary" style="margin-top: 20px;" class="submit_btn" @click="submitForm('loginForm')"
 					 @keyup.enter="submitForm('loginForm')">登录</el-button>
 				</el-form-item>  
 			</el-form>   
@@ -152,53 +152,53 @@
 				// })
 				this.$refs.loginForm.validate(valid => {
 					if (valid) {
-						// const addJson = {
-						// 	userName: this.loginForm.username,
-						// 	password: this.loginForm.password
-						// }
-						// this.$axios.post('/u/login', addJson).then(res => {
-						// 	if (res.data.code === 0) { // 登录成功
-						// 		const data = res.data.data
-						// 		localStorage.setItem('eleToken', data.accessToken) // 存储token
-						// 		localStorage.setItem('userId', data.id) // 存储用户id
-						// 		localStorage.setItem('username', data.userName) // 存储用户账户名
-						// 		localStorage.setItem('name', data.name) // 存储用户姓名
-						// 		localStorage.setItem('attachUrl', data.attachUrl) // 存储用户头像
-						// 		sessionStorage.setItem('passwordIsInit', data.passwordIsInit) // 判断用户密码是否仍为初始值?
-						// 		localStorage.setItem('userMenu', JSON.stringify(data.userMenuMapList['1'])) // 存储动态菜单
-						// 		this.$store.dispatch('user/login', this.loginForm)
-						// 			.then(() => {
-						// 				// this.isshow = false
-						// 				this.$router.push({
-						// 					path: this.redirect || '/',
-						// 					query: this.otherQuery
-						// 				})
-						// 				this.loading = false
-						// 			})
-						// 			.catch(() => {
-						// 				this.loading = false
-						// 			})
-						// 		console.log(res.data.data.accessToken)
-						// 	} else {
-						// 		this.$notify.error({
-						// 			title: '登录失败',
-						// 			message: res.data.message
-						// 		})
-						// 	}
-						// })
-						this.loading = true
-						this.$store.dispatch('user/login', this.loginForm)
-						  .then(() => {
-						    this.isshow = false
-						    this.$router.push({
-						      path: this.redirect || '/',
-						      query: this.otherQuery
-						    })
-						    this.loading = false
-						  })
-						  .catch(() => {
-						    this.loading = false
-						  })
+						const addJson = {
+							userName: this.loginForm.username,
+							password: this.loginForm.password
+						}
+						this.$axios.post('/user/login', addJson).then(res => {
+							if (res.data.code === 0) { // 登录成功
+								const data = res.data.data
+								localStorage.setItem('eleToken', data.accessToken) // 存储token
+								localStorage.setItem('userId', data.id) // 存储用户id
+								localStorage.setItem('username', data.userName) // 存储用户账户名
+								localStorage.setItem('name', data.name) // 存储用户姓名
+								localStorage.setItem('attachUrl', data.attachUrl) // 存储用户头像
+								sessionStorage.setItem('passwordIsInit', data.passwordIsInit) // 判断用户密码是否仍为初始值?
+								localStorage.setItem('userMenu', JSON.stringify(data.userMenuMapList['1'])) // 存储动态菜单
+								this.$store.dispatch('user/login', this.loginForm)
+									.then(() => {
+										// this.isshow = false
+										this.$router.push({
+											path: this.redirect || '/',
+											query: this.otherQuery
+										})
+										this.loading = false
+									})
+									.catch(() => {
+										this.loading = false
+									})
+								console.log(res.data.data.accessToken)
+							} else {
+								this.$notify.error({
+									title: '登录失败',
+									message: res.data.message
+								})
+							}
+						})
+						// this.loading = true
+						// this.$store.dispatch('user/login', this.loginForm)
+						//   .then(() => {
+						//     this.isshow = false
+						//     this.$router.push({
+						//       path: this.redirect || '/',
+						//       query: this.otherQuery
+						//     })
+						//     this.loading = false
+						//   })
+						//   .catch(() => {
+						//     this.loading = false
+						//   })
 					} else {
 						console.log('error submit!!')
 						return false
@@ -259,7 +259,7 @@
 	.canvaszz {
 		/*用来解决视频右键菜单，用于视频上面的遮罩层*/
 		width: 100%;
-		background: url(../../assets/user_images/in_top_bj.jpg) no-repeat;
+		// background: url(../../assets/user_images/in_top_bj.jpg) no-repeat;
 		height: 100%;
 		position: absolute;
 		z-index: 10;
@@ -279,33 +279,36 @@
 		min-width: 1280px;
 		height: 100%;
 		overflow: hidden;
-		/* background: url(../../assets/bg.jpg) no-repeat center center; */
-		background: #000C26;
+		background: url(../../assets/user_images/bg.jpg) no-repeat center center;
+		// background: #000C26;
 		background-size: 100% 100%;
 	}
 
 	.manage_tip {
 		z-index: 1000;
 		width: 370px;
+		height: 30%;
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		margin-top: -136px;
+		right: 10%;
+		background-color: white;
+		top: 35%;
 		border-radius: 5px;
 		text-align: center;
 		margin-left: -185px;
+		box-shadow: 0 0 40px 0 lightblue;
+		animation: clipMe 1s linear infinite;
+		padding: 20px;
 	}
 
 	.form_container .manage_tip .title {
 		font-family: "Microsoft YaHei";
+		margin-top: 50px;
 		font-weight: bold;
 		font-size: 26px;
-		color: #fff;
+		color: rgba(17,105,255,0.7)
 	}
 
-	.el-input>>>.el-input__inner {
-		color: #c0c4cc !important;
-	}
+	
 
 	::-webkit-input-placeholder {
 		/*Webkit browsers 谷歌*/
@@ -333,34 +336,33 @@
 
 	.loginForm {
 		margin-top: 20px;
-		background-color: transparent;
+		// background-color: transparent;
 		color: white;
 		padding: 20px 20px 0 20px;
 		border-radius: 5px;
-		box-shadow: 0 0 40px 0 #ccc;
-		animation: clipMe 1s linear infinite;
+		
 	}
 
 	@keyframes clipMe {
 
 		0% {
-			box-shadow: 0 0 40px 0 #ccc;
+			box-shadow: 0 0 40px 0 lightblue;
 		}
 
 		25% {
-			box-shadow: 0 0 30px 0 #ccc;
+			box-shadow: 0 0 30px 0 lightblue;
 		}
 
 		50% {
-			box-shadow: 0 0 20px 0 #ccc;
+			box-shadow: 0 0 20px 0 lightblue;
 		}
 
 		75% {
-			box-shadow: 0 0 30px 0 #ccc;
+			box-shadow: 0 0 30px 0 lightblue;
 		}
 
 		100% {
-			box-shadow: 0 0 40px 0 #ccc;
+			box-shadow: 0 0 40px 0 lightblue;
 		}
 	}
 
@@ -370,7 +372,7 @@
 	}
 
 	.el-button--primary {
-		background: transparent;
+		background: rgba(17,105,255,0.5);
 		border-color: transparent;
 		box-shadow: 0 0 5px 0 #ccc;
 	}
@@ -387,11 +389,6 @@
 		width: 100%;
 	}
 
-	.el-form>>>.el-input__inner {
-		background: transparent;
-		border: 1px solid hsla(0, 0%, 100%, .1);
-
-	}
 
 	.el-form>>>.el-form-item__content {
 		margin-left: 0 !important;

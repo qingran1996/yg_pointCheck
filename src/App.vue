@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		<!-- <waves></waves> -->
 		<!-- <keep-alive>
 			<router-view v-if="$route.meta.keepAlive" />
 		</keep-alive> -->
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+	// import waves from './components/waves.vue'
 	export default {
 		name: 'App',
 		data() {
@@ -15,6 +17,7 @@
 
 			}
 		},
+		// components: { waves },
 		mounted() {
 
 		},
@@ -32,11 +35,13 @@
 	}
 </script>
 <style>
+	html,body {
+		/* cursor: url('./assets/user_images/146.png'),auto; */
+	}
 	/*全局设置一些element样式*/
 	.cell .el-tag {
 		cursor: pointer;
 	}
-
 	.el-card {
 		margin-bottom: 5px;
 	}

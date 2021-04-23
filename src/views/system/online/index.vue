@@ -1,6 +1,6 @@
 <template>
   <div class="online">
-    online
+    <router-view />
   </div>
 </template>
 
