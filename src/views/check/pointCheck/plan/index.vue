@@ -548,6 +548,7 @@
 				jsonData: {
 					deptId: null, //部门id
 					shopId: null, //车间id（分厂id）
+					shopCode:null,//车间code
 					lineId: null, //条线id
 					planStart: null, //计划开始日期
 					planEnd: null, //计划结束日期
@@ -737,7 +738,7 @@
 				this.formData.checkTime = nav
 			},
 			getFarm() {
-				this.pointPlanFarmData(this.farmJson).then(res => {
+				this.pointPlanFarmDataByUser(this.farmJson).then(res => {
 					if (res.data.code == 0) { //查询到数据
 						let data = res.data.data
 						// console.log(data)
@@ -845,6 +846,7 @@
 					this.checkpointDept = true
 					this.pointCheckPlan.farm = data.name
 					this.jsonData.shopId = data.id
+					this.jsonData.shopCode = data.orgCode
 					this.getDeptData(data.id) //获取部门
 				}
 			},
@@ -903,6 +905,7 @@
 					this.formData.farm = data.name
 					this.addJson.shopId = data.id
 					this.addJson.shopName = data.name
+					this.addJson.shopCode = data.orgCode
 
 					this.personJson.orgId = data.id
 
@@ -912,7 +915,9 @@
 					this.persontags = []
 
 					this.getDeptData(data.id) //获取部门
-					this.getArea(data.id)
+					console.log("=========");
+					console.log(data);
+					this.getArea(data.orgCode)
 
 
 				}
@@ -1025,6 +1030,7 @@
 							planName: '', // 计划名称
 							type: 1, //类别：1点检，2巡检
 							shopId: null, //车间id
+							shopCode: "",
 							shopName: '', //车间名称
 							deptId: null, //部门id
 							deptName: '', //部门名称
@@ -1138,7 +1144,7 @@
 				let areaJson = {
 					pageNo: 1,
 					pageSize: 50,
-					orgId: code
+					orgCode: code
 				}
 				this.areadata = []
 				this.pointPlanAreaData(areaJson).then(res => {

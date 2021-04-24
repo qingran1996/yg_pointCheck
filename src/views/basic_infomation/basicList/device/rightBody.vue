@@ -79,12 +79,12 @@
 						<!-- <div class="action" style="cursor: pointer;" v-else>同步设备无法编辑</div> -->
 					</template>
 				</vxe-table-column>
-				<template #empty>
+				<!-- <template #empty>
 					<span>
 						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
 						<p v-if="tableData.length==0">没有更多数据了！</p>
 					</span>
-				</template>
+				</template> -->
 			</vxe-table>
 			<vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600"
 				min-height="300" :loading="submitLoading" resize destroy-on-close>

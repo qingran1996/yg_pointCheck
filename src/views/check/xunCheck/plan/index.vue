@@ -564,6 +564,7 @@
 					shopId: null, //车间id
 					shopName: '', //车间名称
 					deptId: null, //部门id
+					shopCode:null,
 					deptName: '', //部门名称
 					lineId: null, // 专业id
 					lineName: '', // 专业名称
@@ -844,6 +845,7 @@
 					this.checkpointDept = true
 					this.pointCheckPlan.farm = data.name
 					this.jsonData.shopId = data.id
+					this.jsonData.shopCode = data.orgCode
 					this.getDeptData(data.id) //获取部门
 				}
 			},
@@ -902,7 +904,7 @@
 					this.formData.farm = data.name
 					this.addJson.shopId = data.id
 					this.addJson.shopName = data.name
-
+					this.addJson.shopCode = data.orgCode
 					this.personJson.orgId = data.id
 
 					// this.formData.person = null
@@ -911,7 +913,7 @@
 					this.persontags = []
 
 					this.getDeptData(data.id) //获取部门
-					this.getArea(data.id)
+					this.getArea(data.orgCode)
 
 
 				}
@@ -1135,7 +1137,7 @@
 				let areaJson = {
 					pageNo: 1,
 					pageSize: 50,
-					orgId: code
+					orgCode: code
 				}
 				this.areadata = []
 				this.pointPlanAreaData(areaJson).then(res => {
@@ -1425,7 +1427,7 @@
 							this.changePD = true
 						}
 						// console.log(this.areadata)
-						this.getArea(data.shopId)
+						this.getArea(data.shopCode)
 						// setTimeout(()=>{
 						// 	for (let i=0;i<data.areaBoList.length;i++) {
 						// 		this.areaupdateTree.push(data.areaBoList[i].areaId)
@@ -1450,6 +1452,7 @@
 							planName: data.planName, // 计划名称
 							type: 1, //类别：1点检，2巡检
 							shopId: data.shopId, //车间id
+							shopCode: data.shopCode, //车间id
 							shopName: data.shopName, //车间名称
 							deptId: data.deptId, //部门id
 							deptName: data.deptName, //部门名称
@@ -1499,6 +1502,7 @@
 					planName: '', // 计划名称
 					type: 1, //类别：1点检，2巡检
 					shopId: null, //车间id
+					shopCode: null,
 					shopName: '', //车间名称
 					deptId: null, //部门id
 					deptName: '', //部门名称

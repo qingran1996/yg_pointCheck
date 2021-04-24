@@ -254,6 +254,14 @@ export default {
 				data: data
 			})
 		};
+			//查询点检计划列表车间查询
+			Vue.prototype.pointPlanFarmDataByUser = function(data) { //全局函数
+				return service({
+					url: '/bi/organization/getOrgByUser',
+					method: 'post',
+					data: data
+				})
+			};
 		//查询点检计划列表部门查询
 		Vue.prototype.pointPlanDeptData = function(data) { //全局函数
 			return service({

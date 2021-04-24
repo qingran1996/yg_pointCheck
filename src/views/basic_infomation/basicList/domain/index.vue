@@ -80,11 +80,11 @@
 							<el-tooltip class="item" effect="dark" content="已绑定设备" placement="bottom">
 								<el-tag @click="deviceisBD(scope.row)" type="success">已绑定设备</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="二维码" placement="bottom">
+							<el-tooltip class="item" effect="white" content="二维码" placement="bottom">
 								<div slot="content" ref="imageWrapper">
 									<div class="channelQrcode" :id="'scopeindex'+scope.row.ewm">
 										<div style="justify-content: center;font-size: 13px;text-align: left;">区域：
-											{{ scope.row.areaName }}
+											{{ scope.row.areaNameSon }}
 										</div>
 										<div style="justify-content: center;font-size: 13px;text-align: left;">部门：
 											{{ scope.row.dept }}
@@ -103,12 +103,12 @@
 						</div>
 					</template>
 				</vxe-table-column>
-				<template #empty>
+				<!-- <template #empty>
 					<span>
 						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
 						<p v-if="tableData.length==0">没有更多数据了！</p>
 					</span>
-				</template>
+				</template> -->
 			</vxe-table>
 			
 			<!-- 分页器 -->
@@ -336,6 +336,7 @@
 							// obj.id = data[i].id
 							obj.cid = row.cid + '.' + j
 							obj.id = data[i].id
+							obj.ewm = JSON.stringify(obj.id);
 							obj.areaName = row.data.name
 							obj.areaNameSon = data[i].name
 							obj.pareacode = row.data.areaCode
@@ -346,6 +347,7 @@
 							// obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
 							// 	.pageSize + i + 1
 							
+							console.log(obj.ewm);
 							child.push(obj)
 						}
 						resolve(child)
@@ -512,11 +514,11 @@
 			//获取部门接口
 			getDeptData() {
 				let json = {
-					orgCode: ""
+					orgType: 2
 				}
 				this.updateTree = []
 				this.deptList = []
-				this.deptData(json).then(res => {
+				this.pointPlanFarmData(json).then(res => {
 					if (res.data.code === 0) {
 						console.log("部门数据", res.data.data)
 						//将设备位置 从左树传给右侧 主界面

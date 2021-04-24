@@ -333,7 +333,7 @@
 								status: data.isActived,
 								area: null
 							}
-							this.getArea(data.shopId)
+							this.getArea(data.shopCode)
 							this.areaupdateTree = []
 							this.$nextTick(() => {
 								for (let i = 0; i < data.areaBoList.length; i++) {
