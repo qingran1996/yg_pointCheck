@@ -55,47 +55,34 @@
 					批量导出二维码</el-button>
 				<el-button icon="el-icon-download" v-else type="info" @click="ewmOut">批量导出二维码</el-button>
 			</el-row>
-			<el-table v-loading="loading" :data="tableData" ref="multipleTable" @selection-change="selectionchange"
-				:row-key="getRowKeys" border style="width: 100%" :max-height="tableHeight">
-				<!-- <el-table-column type="index" label="序号" width="100" align="center" /> -->
-				<el-table-column type="selection" :reserve-selection="true" width="55" align="center"></el-table-column>
-				<el-table-column prop="cid" width="100" label="序号" align="center" fixed>
-				</el-table-column>
-				<el-table-column prop="areaName" show-overflow-tooltip label="名称" min-width="180" align="center" />
-				<el-table-column prop="dept" show-overflow-tooltip label="部门" min-width="180" align="center" />
-				<!-- <el-table-column prop="orgCode" show-overflow-tooltip label="部门编码" min-width="180" align="center" /> -->
-				<!-- <el-table-column prop="ve" show-overflow-tooltip label="版本号" min-width="180" align="center" /> -->
-
-				<el-table-column prop="state" show-overflow-tooltip label="状态" min-width="200" align="center">
-					<!-- <template slot-scope="scope">
-						<el-switch v-model="scope.row.state" @change="switchStatus(scope.row)" active-color="#13ce66">
-						</el-switch>
-					</template> -->
-				</el-table-column>
-				<el-table-column fixed="right" label="操作" width="220" align="center">
+			<vxe-table border round show-overflow highlight-hover-row highlight-current-row highlight-hover-column
+				highlight-current-column resizable ref="xTree" row-id="id" 
+				:tree-config="{lazy: true, accordion: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+				:data="tableData" :max-height="tableHeight" @checkbox-change="selectChangeEvent">
+				<vxe-table-column type="checkbox" title="全选" width="100" tree-node></vxe-table-column>
+				<vxe-table-column field="cid" title="序号" align="center" width="100" ></vxe-table-column>
+				<vxe-table-column field="areaName" min-width="180" align="center" title="父区域"></vxe-table-column>
+				<vxe-table-column field="areaNameSon" min-width="180" align="center" title="区域"></vxe-table-column>
+				<vxe-table-column field="dept" min-width="180" align="center" title="部门"></vxe-table-column>
+				<vxe-table-column field="state" min-width="180" align="center" title="状态"></vxe-table-column>
+				<vxe-table-column field="" title="操作" align="center" min-width="380" fixed="right">
 					<template slot-scope="scope">
-						<div class="action">
-							<el-tooltip class="item" effect="dark" content="修改" placement="bottom">
-								<el-tag @click="updateList(scope.row)">修改</el-tag>
+						<div class="action" style="cursor: pointer;">
+							<el-tooltip v-show="scope.row.isSon==false" class="item" effect="dark" content="新增子区域" placement="bottom">
+								<el-tag @click="addSonList(scope.row)">新增子区域</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="设备关联" placement="bottom">
-								<el-tag @click="deviceList(scope.row)" type="success">设备关联</el-tag>
+							<el-tooltip class="item" effect="dark" content="修改" placement="bottom">
+								<el-tag type="info" @click="updateList(scope.row)">修改</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="设备绑定" placement="bottom">
+								<el-tag @click="deviceList(scope.row)" type="success">设备绑定</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="已绑定设备" placement="bottom">
+								<el-tag @click="deviceisBD(scope.row)" type="success">已绑定设备</el-tag>
 							</el-tooltip>
 							<el-tooltip class="item" effect="dark" content="二维码" placement="bottom">
 								<div slot="content" ref="imageWrapper">
-									<!-- <div style="text-align: center;font-size: 18px;">
-										<el-link icon="el-icon-download" type="primary"
-											style="font-size: 16px;margin-left: 5px"
-											v-print="'scopeindex'+scope.row.ewm" :underline="false"
-											@click="dyewm(scope)">
-											打印二维码
-										</el-link>
-									</div> -->
 									<div class="channelQrcode" :id="'scopeindex'+scope.row.ewm">
-										<!-- <div style="display: flex;justify-content: center;font-size: 13px;">
-											区域： {{ scope.row.areaName }}</div>
-										<div style="display: flex;justify-content: center;font-size: 13px;">
-											部门： {{ scope.row.dept }}</div> -->
 										<div style="justify-content: center;font-size: 13px;text-align: left;">区域：
 											{{ scope.row.areaName }}
 										</div>
@@ -112,10 +99,18 @@
 								</div>
 								<el-tag type="warning">二维码</el-tag>
 							</el-tooltip>
+							
 						</div>
 					</template>
-				</el-table-column>
-			</el-table>
+				</vxe-table-column>
+				<template #empty>
+					<span>
+						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
+						<p v-if="tableData.length==0">没有更多数据了！</p>
+					</span>
+				</template>
+			</vxe-table>
+			
 			<!-- 分页器 -->
 			<div class="block" style="margin-top:15px;" v-show="showpage">
 				<el-pagination v-show="total!==0" align="center" :current-page="currentPage" :page-sizes="[5,10,20,200]"
@@ -123,7 +118,7 @@
 					@size-change="handleSizeChange" @current-change="handleCurrentChange" />
 			</div>
 		</el-card>
-		<vxe-modal v-model="showEdit" :title="selectRow ? '区域编辑&保存' : '区域新增&保存'" width="60%" min-width="600"
+		<vxe-modal v-model="showEdit" :title="selectRow ? '区域编辑&保存' : '区域新增&保存'" width="50%" min-width="600"
 			:loading="submitLoading" resize destroy-on-close @close="closemodel">
 			<template #default>
 				<vxe-form :data="formData" :rules="formRules" title-colon title-align="right" title-width="150"
@@ -142,20 +137,12 @@
 										:default-expanded-keys="updateTree" :expand-on-click-node="false"
 										:props="defaultProps" @node-click="handleNodeClick1"></el-tree>
 								</div>
-								<!-- <el-button slot="reference">选择部门</el-button> -->
-								<!-- <el-input v-model="formData.dept" placeholder="请点击选择部门" slot="reference" clearable /> -->
-								<vxe-input slot="reference" v-model="formData.dept"
+								<vxe-input slot="reference" v-model="formData.dept" :disabled="isSon"
 									@input="$refs.xForm.updateStatus(scope)" placeholder="请点击选择部门" clearable>
 								</vxe-input>
 							</el-popover>
 						</template>
 					</vxe-form-item>
-					<!-- <vxe-form-item title="版本号" field="version" span="12" :item-render="{}">
-						<template #default="scope">
-							<vxe-input v-model="formData.version" @input="$refs.xForm.updateStatus(scope)"
-								placeholder="请输入版本号" clearable></vxe-input>
-						</template>
-					</vxe-form-item> -->
 					<vxe-form-item class="bottomShow" align="center" span="24" :item-render="{}">
 						<template #default>
 							<vxe-button type="submit" status="primary">确定</vxe-button>
@@ -169,6 +156,7 @@
 			v-if="downloadLoading" @isshow="downloadLoading" />
 		<!-- 选择设备 -->
 		<choosedevice :isshow="addType" :areaCode="areaCode" @closedialog="closedialog"></choosedevice>
+		<deviceLook :isshow="lookType" :areaCode="areaCode" @closedialogg="closedialog1"></deviceLook>
 		<showexcel @dataUpdate="dataUpdate"></showexcel>
 		<!-- 点检修改 -->
 		<!-- <domainEdit :isshow="addType" :deptList="deptList" @closedialog="closedialog" @dataUpdate="dataUpdate"></domainEdit> -->
@@ -178,6 +166,7 @@
 <script>
 	import bus from "../../../../utils/bus"
 	import choosedevice from './deviceChoose.vue'
+	import deviceLook from './deviceLook.vue'
 	import showexcel from "./excel_.vue"
 	import QrcodeVue from 'qrcode.vue'
 	import JSZip from "jszip";
@@ -190,10 +179,12 @@
 			choosedevice,
 			showexcel,
 			QrcodeVue,
+			deviceLook,
 			QrCode
 		},
 		data() {
 			return {
+				isSon: false,
 				// 导出
 				downloadLoading: false,
 				multipleSelection: [],
@@ -227,9 +218,10 @@
 					name: '',
 					orgCode: '',
 					orgName: '',
-					version: ''
+					pareacode: null
 				},
 				addType: false,
+				lookType: false,
 				areaCode: '',
 				isdeptshow: false, //部门弹出
 				isdeptshow1: false, //部门弹出
@@ -303,32 +295,84 @@
 			// })
 		},
 		methods: {
-			dyewm(item) {
-				var prints = document.getElementById('scopeindex' + item.row.ewm);
-				// document.getElementById('scopeindex' + item.row.ewm).style.width = '600px'
-				prints.title = "打印的标题";
-				// console.log(this.$Print)
-				// this.$Print(document.getElementById('scopeindex' + item.row.ewm))
-				// console.log(document.getElementById('scopeindex'+item.row.ewm))
-				// var newWin = window.open(""); //新打开一个空窗口
-				// var imageToPrint = document.getElementById('scopeindex' + item.row.ewm); //将要被打印的图片
-				// newWin.document.write(imageToPrint.outerHTML); //将图片添加进新的窗口
-				// newWin.document.close(); //在IE浏览器中使用必须添加这一句
-				// newWin.focus(); //在IE浏览器中使用必须添加这一句
-				// setTimeout(function() {
-				// 	newWin.print(); //打印
-				// 	newWin.close(); //关闭窗口
-				// }, 100);
+			selectChangeEvent ({ records }) {
+				console.log(records)
+				this.chooseData = records
+			},
+			//新增子区域
+			addSonList (item) {
+				console.log(item)
+				this.formData = {
+					name: '',
+					dept: item.dept,
+					version: '',
+					belongToLine: '',
+					state: '',
+					remarks: ''
+				}
+				this.addJson = {
+					name: '',
+					orgCode: item.orgCode,
+					orgName: item.dept,
+					pareacode: item.data.areaCode
+				}
+				this.isSon = true
+				this.selectRow = null
+				this.showEdit = true
+			},
+			//点击展开
+			loadChildrenMethod({
+				row
+			}) {
+				// 异步加载子节点
+				return new Promise(resolve => {
+					console.log(row)
+					setTimeout(() => {
+						let child = []
+						let data = row.childrenData
+						for (let i = 0; i < data.length; i++) {
+							var obj = {}
+							var j = i + 1
+							// obj.id = data[i].id
+							obj.cid = row.cid + '.' + j
+							obj.id = data[i].id
+							obj.areaName = row.data.name
+							obj.areaNameSon = data[i].name
+							obj.pareacode = row.data.areaCode
+							obj.data = data[i]
+							obj.isSon = true
+							obj.dept = data[i].orgName
+							obj.state = data[i].status == 0 ? '禁用' : '启用'
+							// obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
+							// 	.pageSize + i + 1
+							
+							child.push(obj)
+						}
+						resolve(child)
+					}, 500)
+				})
 			},
 			deviceList(row) {
 				console.log(row)
 				this.addType = true
 				this.areaCode = row.data.areaCode
 			},
+			deviceisBD (row) {
+				this.lookType = true
+				this.areaCode = row.data.areaCode
+			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
-				// console.log('区域管理')
+				console.log('区域管理')
 				this.addType = val
+				
+				this.areaCode = ''
+				this.jsonData.pageNo = 1
+				this.jsonData.pageSize = 10
+				this.getData()
+			},
+			closedialog1 (val) {
+				this.lookType = val
 				this.areaCode = ''
 			},
 			// 添加信息
@@ -344,8 +388,10 @@
 				this.addJson = {
 					name: '',
 					orgCode: '',
-					orgName: ''
+					orgName: '',
+					pareacode: null
 				}
+				this.isSon = false
 				this.selectRow = null
 				this.showEdit = true
 			},
@@ -498,6 +544,7 @@
 						//console.log('当前页数数据数量', this.numberPage)
 						this.loading = true
 						let that = this
+						this.tableData = []
 						setTimeout(function() {
 							if (data.length !== 0) { //如果请求数据不为空
 								that.total = res.data.data.total //列表总数
@@ -505,11 +552,15 @@
 									var obj = {}
 									obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
 										.pageSize + i + 1
-									obj.areaName = data[i].name
+									obj.areaName = '- -'
+									obj.areaNameSon = data[i].name
 									obj.id = data[i].id
 									obj.ewm = JSON.stringify(data[i].id) //id -》二维码
 									obj.code = data[i].code
 									obj.data = data[i]
+									obj.hasChild = data[i].childArea != null ? true : false
+									obj.isSon = false
+									obj.childrenData = data[i].childArea
 									obj.orgCode = data[i].orgCode
 									obj.dept = data[i].orgName
 									obj.version = data[i].cid
@@ -681,6 +732,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
+					// console.log(6666)
 					this.deleteAll(0)
 				}).catch(() => {
 					this.$message({
@@ -724,7 +776,7 @@
 						if (res.data.code === 0) {
 							this.$message({
 								title: res.data.message,
-								message: this.chooseData[i].areaName + ' 删除成功',
+								message: '删除成功',
 								type: 'success',
 								duration: 800
 							});
@@ -743,7 +795,7 @@
 						}
 					})
 				} else {
-					this.$refs.multipleTable.clearSelection();
+					// this.$refs.multipleTable.clearSelection();
 					this.jsonData.pageNo = 1
 					this.jsonData.pageSize = 10
 					this.getData()

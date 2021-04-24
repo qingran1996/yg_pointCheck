@@ -165,6 +165,7 @@
 								localStorage.setItem('name', data.name) // 存储用户姓名
 								localStorage.setItem('attachUrl', data.attachUrl) // 存储用户头像
 								sessionStorage.setItem('passwordIsInit', data.passwordIsInit) // 判断用户密码是否仍为初始值?
+								localStorage.setItem('workShopCode', data.workShopCode) // 获取workShopCode，找到当前用户所在车间
 								localStorage.setItem('userMenu', JSON.stringify(data.userMenuMapList['1'])) // 存储动态菜单
 								this.$store.dispatch('user/login', this.loginForm)
 									.then(() => {

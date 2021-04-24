@@ -764,7 +764,7 @@
 			handleSelectPerson(item) {
 				// this.$refs.xForm.updateStatus(scope)
 				console.log(item);
-				this.formData.person = item.name
+				this.formData.person = ''
 				this.persontags.push({
 					id: item.id,
 					name: item.name,
@@ -939,6 +939,8 @@
 							message: '请选择区域',
 							type: 'warning'
 						});
+					} else {
+						this.showEdit = false
 					}
 					if (this.selectRow) {
 						// this.updateMock()

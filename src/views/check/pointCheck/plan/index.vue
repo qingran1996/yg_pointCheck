@@ -486,10 +486,10 @@
 						required: true,
 						message: '请选择部门'
 					}],
-					person: [{
-						required: true,
-						message: '请输入点检人'
-					}],
+					// person: [{
+					// 	required: true,
+					// 	message: '请输入点检人'
+					// }],
 					showDate: [{
 						required: true,
 						message: '请选择起始时间'
@@ -604,6 +604,9 @@
 				},{
 					value: 3,
 					label: '电气'
+				},{
+					value: 4,
+					label: '设备'
 				}],
 				pointDeptData: [{
 					value: '1',
@@ -764,7 +767,7 @@
 			handleSelectPerson(item) {
 				// this.$refs.xForm.updateStatus(scope)
 				console.log(item);
-				this.formData.person = item.name
+				this.formData.person = ''
 				this.persontags.push({
 					id: item.id,
 					name: item.name,
@@ -790,9 +793,7 @@
 				let finalResult = [];
 				for (let i = 0; i < this.persontags.length; i++) {
 					result[this.persontags[i].name] = this.persontags[i];
-					// arr[i].month 不能重复,达到去重效果,且这里必须知晓"month"或是其他键名
 				}
-				// console.log(result);
 				for (const item in result) {
 					finalResult.push(result[item]);
 				}
@@ -939,6 +940,8 @@
 							message: '请选择区域',
 							type: 'warning'
 						});
+					} else {
+						this.showEdit = false
 					}
 					if (this.selectRow) {
 						// this.updateMock()
@@ -993,6 +996,8 @@
 						console.log(this.formData, this.addJson)
 						if (this.showEdit === false) {
 							this.addMock()
+						} else {
+							console.log(123123)
 						}
 					}
 				}, 500)

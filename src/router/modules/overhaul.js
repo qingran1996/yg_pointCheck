@@ -16,21 +16,22 @@ const overhaulRouter = {
     component: () => import('@/views/overhaul/overhaulPlan/index'),
     name: 'overhaulPlan',
     meta: {
-      title: '检修计划',
+      title: '检修作业卡',
       keepAlive: true,
       noCache: true
     }
   },
-  {
-    path: 'overhaulProject',
-    component: () => import('@/views/overhaul/overhaulProject/index'),
-    name: 'overhaulProject',
-    meta: {
-      title: '检修项目',
-      keepAlive: true,
-      noCache: true
-    }
-  },{
+  // {
+  //   path: 'overhaulProject',
+  //   component: () => import('@/views/overhaul/overhaulProject/index'),
+  //   name: 'overhaulProject',
+  //   meta: {
+  //     title: '检修项目',
+  //     keepAlive: true,
+  //     noCache: true
+  //   }
+  // },
+	{
 		  path: 'safe',
 		  component: () => import('@/views/overhaul/safe/index'),
 		  name: 'safe',

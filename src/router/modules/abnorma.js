@@ -17,7 +17,7 @@ const abnormaWeekRouter = {
     component: () => import('@/views/abnormaWeek/abnormaMock/index'),
     name: 'abnormaMock',
     meta: {
-      title: '异常模块',
+      title: '隐患模块',
       keepAlive: true,
       noCache: true
     }

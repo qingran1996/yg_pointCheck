@@ -37,13 +37,14 @@
 				<!-- <el-button type="danger" @click="deleteRoute">删除</el-button> -->
 			</el-row>
 			<vxe-table border round show-overflow highlight-hover-row highlight-current-row highlight-hover-column
-				highlight-current-column resizable ref="xTree" row-id="id"
+				highlight-current-column resizable ref="xTree" row-id="id" 
 				:tree-config="{lazy: true, accordion: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
 				:data="tableData" :max-height="tableHeight">
 				<vxe-table-column field="cid" title="序号" align="center" width="100" tree-node></vxe-table-column>
 				<vxe-table-column field="oneLevelArea" width="180" align="center" title="一级区域"></vxe-table-column>
 				<vxe-table-column field="twoLevelArea" width="180" align="center" title="二级区域"></vxe-table-column>
 				<vxe-table-column field="deviceName" width="180" align="center" title="名称"></vxe-table-column>
+				<vxe-table-column field="deviceType" width="180" align="center" title="设备类型"></vxe-table-column>
 				<vxe-table-column field="specs" width="180" align="center" title="规格"></vxe-table-column>
 				<vxe-table-column field="line" width="180" align="center" title="设备条线"></vxe-table-column>
 				<vxe-table-column field="belongTodevice" width="180" align="center" title="所属设备"></vxe-table-column>
@@ -56,11 +57,13 @@
 				<vxe-table-column field="state" width="180" align="center" title="状态"></vxe-table-column>
 				<vxe-table-column field="" title="操作" align="center" width="140" fixed="right">
 					<template slot-scope="scope">
-						<div class="action" style="cursor: pointer;">
+						<div class="action" style="cursor: pointer;" >
 							<el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-								<el-tag @click="updateList(scope.row)">编辑</el-tag>
+								<el-button type="primary" size="mini" v-if="scope.row.deviceType=='非设备'" @click="updateList(scope.row)" >编辑</el-button>
+								<el-button type="primary" size="mini" v-else disabled>编辑</el-button>
+								<!-- <el-tag v-if="scope.row.deviceType=='非设备'" @click="updateList(scope.row)">编辑</el-tag>
+								<el-tag v-else disabled @click="updateList(scope.row)">编辑</el-tag> -->
 							</el-tooltip>
-
 							<!-- <el-tooltip class="item" effect="dark" content="详情" placement="bottom">
 								<el-tag @click="lookList(scope.row)">详情</el-tag>
 							</el-tooltip>
@@ -68,17 +71,20 @@
 								<el-tag @click="overhaulProject(scope.row)">检修项目</el-tag>
 							</el-tooltip> -->
 							<el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-								<el-tag type="danger" @click="deleteList(scope.row)">删除</el-tag>
+								<!-- <el-tag type="danger" @click="deleteList(scope.row)">删除</el-tag> -->
+								<el-button type="danger" size="mini" v-if="scope.row.deviceType=='非设备'" @click="deleteList(scope.row)" >删除</el-button>
+								<el-button type="danger" size="mini" v-else disabled>删除</el-button>
 							</el-tooltip>
 						</div>
+						<!-- <div class="action" style="cursor: pointer;" v-else>同步设备无法编辑</div> -->
 					</template>
 				</vxe-table-column>
-				<!-- <template #empty>
+				<template #empty>
 					<span>
 						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
-						<p>没有更多数据了！</p>
+						<p v-if="tableData.length==0">没有更多数据了！</p>
 					</span>
-				</template> -->
+				</template>
 			</vxe-table>
 			<vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600"
 				min-height="300" :loading="submitLoading" resize destroy-on-close>
@@ -87,17 +93,17 @@
 						@submit="submitEvent">
 						<vxe-form-item title="名称" field="name" span="12" :item-render="{}">
 							<template #default="scope">
-								<vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+								<vxe-input v-model="formData.name" @input="$refs.xForm.updateStatus(scope)" placeholder="请输入名称" clearable></vxe-input>
 							</template>
 						</vxe-form-item>
 						<vxe-form-item title="资产编码" field="assetCode" span="12" :item-render="{}">
 							<template #default="scope">
-								<vxe-input v-model="formData.assetCode" placeholder="请输入资产编码" clearable></vxe-input>
+								<vxe-input v-model="formData.assetCode" @input="$refs.xForm.updateStatus(scope)" placeholder="请输入资产编码" clearable></vxe-input>
 							</template>
 						</vxe-form-item>
 						<vxe-form-item title="部门" field="dept" span="12" :item-render="{}">
 							<template #default="scope">
-								<vxe-select v-model="formData.dept" @change="$refs.xForm.updateStatus(scope)"
+								<vxe-select v-model="formData.dept" @change="deptform_change(scope)"
 									placeholder="请选择部门" clearable>
 									<vxe-option v-for="item in deptList" :key="item.value" :value="item.value"
 										:label="item.label">
@@ -117,7 +123,7 @@
 						</vxe-form-item>
 						<vxe-form-item title="一二级区域" field="oneTwo" span="12" :item-render="{}">
 							<template #default="scope">
-								<el-cascader v-model="formData.oneTwo" placeholder="请搜索或选择" :options="showarea"
+								<el-cascader v-model="formData.oneTwo" separator="-" placeholder="请搜索或选择" :options="showarea"
 									ref="ooo" @change="oneTwo_change" clearable filterable>
 								</el-cascader>
 							</template>
@@ -129,7 +135,7 @@
 								</vxe-input>
 							</template>
 						</vxe-form-item>
-						<vxe-form-item title="设备类型" field="type" span="12" :item-render="{}">
+						<!-- <vxe-form-item title="设备类型" field="type" span="12" :item-render="{}">
 							<template #default="scope">
 								<vxe-select v-model="formData.type" @change="$refs.xForm.updateStatus(scope)"
 									placeholder="请选择设备类型" clearable>
@@ -138,18 +144,14 @@
 									</vxe-option>
 								</vxe-select>
 							</template>
-						</vxe-form-item>
-						<vxe-form-item title="内容描述" field="content" span="12" :item-render="{}">
+						</vxe-form-item> -->
+						<!-- <vxe-form-item title="内容描述" field="content" span="12" :item-render="{}">
 							<template #default="scope">
-								<!-- <vxe-input v-model="formData.lowerLimit" placeholder="请选择下限"
-									@input="$refs.xForm.updateStatus(scope)" type="number" min="0" clearable>
-								</vxe-input> -->
 								<vxe-textarea v-model="formData.content" @input="$refs.xForm.updateStatus(scope)"
 									placeholder="请输入内容描述" :autosize="{ minRows: 2, maxRows: 4 }">
-
 								</vxe-textarea>
 							</template>
-						</vxe-form-item>
+						</vxe-form-item> -->
 						<vxe-form-item align="center" span="24" :item-render="{}">
 							<template #default="scope">
 								<vxe-button type="submit" status="primary">确定</vxe-button>
@@ -191,10 +193,12 @@
 					name: null, //名称
 					description: null, //描述
 					limitUsedYears: null, //使用年限
-					assetCode: null, //资产编码
+					// assetCode: null, //资产编码
 					orgCode: null, //部门Code
-					type: null, //
+					type: 0, //
+					orgName: null,
 					areaCode: null, //所属区域
+					fatherId: 0,
 					area1: null, //
 					areaId1: null, //
 					area2: null, //
@@ -230,10 +234,10 @@
 						required: true,
 						message: '请选择部门'
 					}],
-					area: [{
-						required: true,
-						message: '请选择区域'
-					}],
+					// area: [{
+					// 	required: true,
+					// 	message: '请选择区域'
+					// }],
 					limitUsedYears: [{
 						required: true,
 						message: '请输入使用年限'
@@ -312,6 +316,7 @@
 					pageNo: 1,
 					pageSize: 10
 				},
+				returnData: []
 			}
 		},
 		created() {
@@ -383,8 +388,12 @@
 			oneTwo_change(item) {
 				console.log(item)
 				// console.log(this.)
-				let returnData = this.getCascaderObj(item,this.showarea)
-				console.log(returnData)
+				this.returnData = this.getCascaderObj(item,this.showarea)
+				this.addJson.area1 = this.returnData[0].label
+				this.addJson.areaId1 = this.returnData[0].value
+				this.addJson.area2 = this.returnData[1].label
+				this.addJson.areaId2 = this.returnData[1].value
+				// console.log(returnData)
 			},
 			dept_change(data) {
 				console.log(data)
@@ -450,6 +459,12 @@
 			commissioningDate_show(event) {
 				console.log(event)
 			},
+			deptform_change (scope) {
+				this.$refs.xForm.updateStatus(scope)
+				// console.log(scope.data.dept,this.formData.dept)
+				this.addJson.orgCode = scope.data.dept
+				this.addJson.orgName = this.changeOrg(scope.data.dept)
+			},
 			submitEvent() {
 				this.submitLoading = true
 				setTimeout(() => {
@@ -461,7 +476,37 @@
 						// 	status: 'success'
 						// })
 						// Object.assign(this.selectRow, this.formData)
+						
+						this.addJson.name = this.formData.name
+						this.addJson.assetCode = this.formData.assetCode
+						this.addJson.areaCode = this.formData.area
+						this.addJson.limitUsedYears = this.formData.limitUsedYears
+						// this.addJson.orgCode = this.formData.dept
+						// this.addJson.orgName = this.changeOrg(this.addJson.orgCode)
+						// this.addJson.areaCode = this.formData.area
+						// this.addJson.area1 = this.returnData[0].label
+						// this.addJson.areaId1 = this.returnData[0].value
+						// this.addJson.area2 = this.returnData[1].label
+						// this.addJson.areaId2 = this.returnData[1].value
+						// this.addJson.limitUsedYears = this.formData.limitUsedYears
+						
+						// console.log(this.addJson)
+						this.deviceUpdateDevice()
 					} else {
+						this.addJson.name = this.formData.name
+						this.addJson.assetCode = this.formData.assetCode
+						// this.addJson.orgCode = this.formData.dept
+						// this.addJson.orgName = this.changeOrg(this.addJson.orgCode)
+						this.addJson.areaCode = this.formData.area
+						// this.addJson.area1 = this.returnData[0].label
+						// this.addJson.areaId1 = this.returnData[0].value
+						// this.addJson.area2 = this.returnData[1].label
+						// this.addJson.areaId2 = this.returnData[1].value
+						this.addJson.limitUsedYears = this.formData.limitUsedYears
+						// this.addJson.type = this.formData.type
+						this.addJson.description = this.formData.content
+						// console.log(this.addJson)
+						this.addDevice()
 						// this.$XModal.message({
 						// 	message: '新增成功',
 						// 	status: 'success'
@@ -469,6 +514,53 @@
 						// this.$refs.xTable.insert(this.formData)
 					}
 				}, 500)
+			},
+			changeOrg (code) {
+				let val = ''
+				for (let i=0;i<this.deptList.length;i++) {
+					if (code===this.deptList[i].value) {
+						val = this.deptList[i].label
+					}
+				}
+				return val
+			},
+			deviceUpdateDevice () {
+				this.deviceUpdate(this.addJson).then(res => {
+					if (res.data.code === 0) {
+						this.$message({
+							message: '设备更新成功',
+							type: 'success'
+						})
+						this.jsonData.pageNo = 1
+						this.jsonData.pageSize = 10
+						this.getData()
+						this.showEdit = false
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
+			},
+			addDevice () {
+				this.deviceAdd(this.addJson).then(res => {
+					if (res.data.code === 0) {
+						this.$message({
+							message: '设备新增成功',
+							type: 'success'
+						})
+						this.jsonData.pageNo = 1
+						this.jsonData.pageSize = 10
+						this.getData()
+						this.showEdit = false
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
 			},
 			selectChangeEvent({
 				records
@@ -499,6 +591,7 @@
 							obj.specs = data[i].specification
 							obj.departmentName = row.departmentName
 							obj.line = data[i].line
+							obj.deviceType = data[i].deviceType == 0?'非设备':'设备'
 							obj.belongTodevice = row.deviceName
 							obj.area = row.area
 							obj.startTime = row.startTime
@@ -568,14 +661,16 @@
 									obj.specs = data[i].specification
 									obj.line = data[i].line
 									obj.departmentName = data[i].orgName
+									obj.deviceType = data[i].equipType == 0?'非设备':'设备'
 									obj.belongTodevice = '- -'
 									// obj.area = data[i].installPosition
 									obj.childList = data[i].equipmentComponentlist
-									obj.hasChild = data[i].equipmentComponentlist != [] ? true : false
+									obj.hasChild = data[i].equipmentComponentlist != undefined ? true : false
 									obj.startTime = data[i].commissioningDate
 									obj.userYear = data[i].limitUsedYears
 									obj.deviceCode = data[i].equipCode
 									obj.state = data[i].status == 1 ? '启用' : '废弃'
+									obj.data = data[i]
 									that.tableData.push(obj)
 								}
 								//console.log('表', that.tableData)
@@ -618,16 +713,31 @@
 			},
 			addRoute() {
 				this.formData = {
-					name: '',
-					nickname: '',
-					role: '',
-					sex: '',
-					age: '',
-					num: '',
-					checkedList: [],
-					flag1: '',
-					date3: '',
-					address: ''
+					name: null,
+					assetCode: null,
+					description: null,
+					dept: null,
+					limitUsedYears: null,
+					type: null,
+					area: null,
+					oneTwo: null,
+					content: null
+				}
+				this.addJson = {
+					name: null, //名称
+					description: null, //描述
+					limitUsedYears: null, //使用年限
+					assetCode: null, //资产编码
+					orgName: null,
+					orgCode: null, //部门Code
+					type: 0, //
+					areaCode: null, //所属区域
+					fatherId: 0,
+					area1: null, //
+					areaId1: null, //
+					area2: null, //
+					areaId2: null, //
+					pictureUrl: null //设备图片
 				}
 				this.selectRow = null
 				this.showEdit = true
@@ -669,7 +779,41 @@
 				})
 			},
 			updateList(item) {
-				// console.log(item)
+				console.log(item)
+				// console.log(this.changeOrg(JSON.parse(item.data.orgCode)))
+				let oneTwo = []
+				oneTwo.push(item.data.areaId1)
+				oneTwo.push(item.data.areaId2)
+				this.formData = {
+					name: item.deviceName,
+					assetCode: item.data.assetCode,
+					description: '- -',
+					dept: this.changeOrg(JSON.parse(item.data.orgCode)),
+					limitUsedYears: item.userYear,
+					type: null,
+					area: null,
+					oneTwo: oneTwo,
+					content: null
+				}
+				this.addJson = {
+					id: item.id,
+					name: item.deviceName, //名称
+					description: null, //描述
+					limitUsedYears: item.userYear, //使用年限
+					assetCode: item.data.assetCode, //资产编码
+					orgCode: item.data.orgCode, //部门Code
+					orgName: this.changeOrg(JSON.parse(item.data.orgCode)),
+					type: 0, //
+					areaCode: null, //所属区域
+					fatherId: 0,
+					area1: item.data.area1, //
+					areaId1: item.data.areaId1, //
+					area2: item.data.area2, //
+					areaId2: item.data.areaId2, //
+					pictureUrl: null //设备图片
+				}
+				this.selectRow = item
+				this.showEdit = true
 			},
 			lookList() {},
 			overhaulProject() {},
