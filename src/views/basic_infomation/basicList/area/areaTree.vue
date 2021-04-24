@@ -409,7 +409,7 @@
 			//拖拽结束
 			handleDragEnd(draggingNode, dropNode, dropType, ev) {
 				console.log(dropNode.data)
-				
+
 				// this.father = dropNode.data.code
 				// this.fatherid = dropNode.data.id
 			},
@@ -510,7 +510,7 @@
 		/* border-radius: 5px; */
 		color: lightseagreen;
 	}
-	
+
 	.el-tree>>>.el-tree-node__content:visited {
 		/* background-color: rgb(0, 15, 70) !important; */
 	}

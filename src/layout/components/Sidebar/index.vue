@@ -97,7 +97,7 @@
 								keepAlive: true,
 								noCache: true
 							}
-						}, 
+						},
 						// {
 						// 	path: 'onlineStandard',
 						// 	name: 'onlineStandard',
@@ -117,7 +117,7 @@
 							noCache: true
 						}
 					}]
-				}, 
+				},
 				{
 
 					id: 2,
@@ -127,41 +127,17 @@
 						title: '权限管理',
 						icon: 'guide',
 					},
-					children: [{
-						path: 'role',
-						name: 'rootrole',
-						meta: {
-							title: '角色管理'
-						},
-						children: [{
-								path: 'menuRole',
-								name: 'menuRole',
-								meta: {
-									title: '菜单权限',
-									keepAlive: true,
-									noCache: true
-								}
-							},
-							{
-								path: 'flowPathRole',
-								name: 'flowPathRole',
-								meta: {
-									title: '流程权限',
-									keepAlive: true,
-									noCache: true
-								}
-							},
-							{
-								path: 'dataRole',
-								name: 'dataRole',
-								meta: {
-									title: '数据权限',
-									keepAlive: true,
-									noCache: true
-								}
-							}
-						]
-					}, {
+					children: [
+            {
+              path: 'role',
+              name: 'rootrole',
+              meta: {
+                title: '角色管理',
+                keepAlive: true,
+                noCache: true
+              }
+              },
+					  {
 						path: 'menu',
 						name: 'rootMenu',
 						meta: {
@@ -169,9 +145,19 @@
 							keepAlive: true,
 							noCache: true
 						}
-					}]
+					},
+            {
+              path: 'user',
+              name: 'userMenu',
+              meta: {
+                title: '用户管理',
+                keepAlive: true,
+                noCache: true
+              }
+            }
+					]
 
-				}, 
+				},
 				{
 					id: 3,
 					path: '/pointCheck',
@@ -307,7 +293,7 @@
 						// 	}
 						// }
 					]
-				}, 
+				},
 				// {
 				// 	id: 5,
 				// 	path: '/overhaul',
@@ -344,7 +330,7 @@
 				// 		}
 				// 	]
 
-				// }, 
+				// },
 				// {
 				// 	id: 6,
 				// 	path: '/goods',
@@ -383,7 +369,7 @@
 				// 	]
 
 
-				// }, 
+				// },
 				// {
 
 				// 	id: 7,
@@ -415,7 +401,7 @@
 
 
 
-				// }, 
+				// },
 				// {
 				// 	id: 8,
 				// 	path: '/system',
@@ -552,7 +538,7 @@
 			// for (let i = 0; i < data.length; i++) {
 			//   if (data[i].pid === 0) {
 			//     this.showMenu.push({
-			//       id: data[i].id, 
+			//       id: data[i].id,
 			//       path: data[i].path,
 			//       name: data[i].name,
 			//       meta: {
@@ -562,7 +548,7 @@
 			//         path: data[i].path,
 			//         name: data[i].name,
 			//         meta: {
-			//           title: data[i].name, 
+			//           title: data[i].name,
 			//           noCache: true
 			//         }
 			//       }
