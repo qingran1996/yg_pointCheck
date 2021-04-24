@@ -406,7 +406,6 @@ export default {
 				data: data
 			})
 		};
-<<<<<<< HEAD
     //WEB权限 菜单树状接口
     Vue.prototype.getWEBTree = function() { //全局函数
       return service({
@@ -541,8 +540,6 @@ export default {
 
 
 
-
-=======
 		/************检修管理***********/
 		//作业卡列表
 		Vue.prototype.jobCardList = function(data) { //全局函数
@@ -592,6 +589,5 @@ export default {
 				data: data
 			})
 		};
->>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 	}
 }
