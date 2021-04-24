@@ -1,36 +1,18 @@
 <template>
-	<div class="personAdd">
-		<el-dialog title="设备关联" v-dialogDrag :visible.sync="pointWayAdd_show" width="80%" :close-on-click-modal="false"
+	<div v-show="isshow" class="personAdd">
+		<el-dialog title="已绑定设备" v-dialogDrag :visible.sync="pointWayAdd_show" width="80%" :close-on-click-modal="false"
 			@close="showclose" center>
 			<el-row :gutter="20">
-				<el-col :span="8">
-					<el-input class="searchInput" v-model="filterText" placeholder="请输入区域名称">
-						<i slot="suffix" class="el-input__icon el-icon-search" />
-					</el-input>
-					<el-tree ref="tree" v-loading="loading" :data="data" element-loading-text="拼命加载中"
-						element-loading-spinner="el-icon-loading" node-key="id" accordion show-checkbox
-						:style="{height: treeheight,overflowY: 'scroll'}" highlight-current :check-strictly="true"
-						:filter-node-method="filterNode" :props="defaultProps" :default-expanded-keys="updateTree"
-						:expand-on-click-node="false" @check="handleNodeClick">
-						<span slot-scope="{ node, data }" class="custom-tree-node">
-							<el-tooltip class="item" effect="dark" :content="node.label" placement="right">
-								<!-- <span v-if="data.spotareas!=undefined">{{ node.label }} 123</span> -->
-								<span>{{ node.label }}</span>
-								<!-- <span v-show="data.isOpen===true"><i class="el-icon-refresh"></i></span> -->
-							</el-tooltip>
-						</span>
-					</el-tree>
-				</el-col>
-				<el-col :span="16">
+				<el-col :span="24">
 					<el-table :data="tableData" style="width: 100%" :max-height="treeheight">
 						<el-table-column prop="index" width="100" label="序号" align="center"></el-table-column>
 						<el-table-column prop="name" label="名称"  show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="specs" label="规格"  show-overflow-tooltip>
+						<el-table-column prop="specification" label="规格"  show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="startTime" label="投运日期"  show-overflow-tooltip>
+						<el-table-column prop="commissioningDate" label="投运日期"  show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="departmentName" label="所属部门"  show-overflow-tooltip>
+						<el-table-column prop="orgName" label="所属部门"  show-overflow-tooltip>
 						</el-table-column>
 						<!-- <el-table-column fixed="right" label="操作" min-width="200" align="center">
 							<template slot-scope="scope">
@@ -44,10 +26,10 @@
 					</el-table>
 				</el-col>
 			</el-row>
-			<span slot="footer" class="dialog-footer">
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="pointWayAdd_show = false">取 消</el-button>
 				<el-button v-prevent-re-click type="primary" @click="submitForm()">确 定</el-button>
-			</span>
+			</span> -->
 		</el-dialog>
 	</div>
 </template>
@@ -101,7 +83,8 @@
 				if (val === true) {
 					this.pointWayAdd_show = true
 					// console.log(this.areaCode)
-					this.getdata()
+					// this.getdata()
+					this.getTable()
 				}
 			},
 			filterText(val) {
@@ -122,6 +105,28 @@
 		methods: {
 			deleteList(item) {
 				console.log(item)
+			},
+			getTable () {
+				let json = {
+					areaCode: this.areaCode
+				}
+				// console.log(json)
+				this.tableData = []
+				this.equipByArea(json).then(res => {
+					if (res.data.code === 0) {
+						console.log(res.data.data)
+						let data = res.data.data
+						for (let i=0;i<data.length;i++) {
+							data[i]['index'] = i+1
+						}
+						this.tableData = data
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
 			},
 			getdata() {
 				this.updateTree = []
@@ -178,7 +183,7 @@
 								}
 							});
 						}
-						console.log(arr)
+						// console.log(arr)
 						this.data = arr
 						this.updateTree[0] = arr[0].id
 						// this.data.push(res.data.data)
@@ -302,8 +307,7 @@
 							message: '设备关联成功',
 							type: 'success'
 						})
-						// this.showclose()
-						// this.$emit('closedialog', false)
+						this.showclose()
 						this.pointWayAdd_show = false
 					} else {
 						this.$message({
@@ -318,7 +322,7 @@
 				// console.log(123)
 				this.aboutData = []
 				this.tableData = []
-				this.$emit('closedialog', false)
+				this.$emit('closedialogg', false)
 			}
 		}
 	}

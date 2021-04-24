@@ -2,14 +2,38 @@
 	<div class="pointStandard">
 		<el-card shadow="always">
 			<el-form :inline="true" :model="pointStandard_model" ref="pointStandard_model" class="demo-form-inline">
-				<el-form-item label="部门">
+				<!-- <el-form-item label="部门">
 					<el-input v-model="pointStandard_model.dept" placeholder="请输入内容" clearable />
+				</el-form-item> -->
+				<el-form-item label="部门">
+					<!-- <el-select v-model="user.dept" placeholder="请选择部门" @change="dept_change">
+						<el-option v-for="item in deptData" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select> -->
+					<el-popover placement="right" width="400" trigger="click" v-model="isdeptshow">
+						<div style="height: 200px;overflow-y: scroll;">
+							<el-tree :data="deptList" accordion node-key="id" :default-expanded-keys="updateTree"
+								:expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick">
+							</el-tree>
+						</div>
+						<el-input v-model="pointStandard_model.dept" placeholder="请点击选择部门" slot="reference" clearable />
+					</el-popover>
 				</el-form-item>
-				<el-form-item label="区域">
+				<!-- <el-form-item label="区域">
 					<el-input v-model="pointStandard_model.area" placeholder="请输入内容" clearable />
-				</el-form-item>
-				<el-form-item label="设备">
-					<el-input v-model="pointStandard_model.device" placeholder="请输入内容" clearable />
+				</el-form-item> -->
+				<el-form-item label="专业">
+					<!-- <vxe-select v-model="pointStandard_model.profession"
+						@change="$refs.xForm.updateStatus(scope)" placeholder="请选择专业" clearable>
+						<vxe-option v-for="item in disciplineData" :key="item.value"
+							:value="item.value" :label="item.label">
+						</vxe-option>
+					</vxe-select> -->
+					<el-select v-model="pointStandard_model.profession" placeholder="请选择专业">
+						<el-option v-for="item in disciplineData" :key="item.value" :label="item.label"
+							:value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item>
 					<el-button v-prevent-re-click size="small" type="primary" @click="onSubmit">查询</el-button>
@@ -29,24 +53,32 @@
 				<el-table-column prop="index" label="序号" width="100" align="center" />
 				<el-table-column prop="name" label="标准名称" min-width="180" align="center" show-overflow-tooltip />
 				<el-table-column prop="content" label="标准内容" min-width="180" align="center" show-overflow-tooltip />
+				<el-table-column prop="profession" label="专业" min-width="180" align="center" show-overflow-tooltip>
+					<template v-slot="scope">
+						<span v-if="scope.row.profession==1">生产</span>
+						<span v-else-if="scope.row.profession==2">安全</span>
+						<span v-else-if="scope.row.profession==3">电气</span>
+						<span v-else-if="scope.row.profession==4">设备</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="equipCode" label="设备编码" min-width="180" align="center" show-overflow-tooltip />
 				<el-table-column prop="equipName" label="设备名称" min-width="180" align="center" show-overflow-tooltip />
 				<el-table-column prop="upperLimit" label="上限值" min-width="180" align="center" show-overflow-tooltip />
 				<el-table-column prop="lowerLimit" label="下限值" min-width="180" align="center" show-overflow-tooltip />
-				<el-table-column prop="unit" label="单位" min-width="180" align="center" show-overflow-tooltip />
+				<!-- <el-table-column prop="unit" label="单位" min-width="180" align="center" show-overflow-tooltip /> -->
 				<el-table-column prop="createTime" label="创建时间" min-width="180" align="center" show-overflow-tooltip />
 				<el-table-column prop="updateTime" label="更新时间" min-width="180" align="center" show-overflow-tooltip />
-				<el-table-column fixed="right" label="操作" min-width="180" align="center">
+				<el-table-column fixed="right" label="操作" min-width="80" align="center">
 					<template v-slot="scope">
 						<div class="action">
 							<el-tooltip class="item" effect="dark" content="编辑" placement="bottom"
 								:open-delay="otherTooltipDelay">
 								<el-tag @click.prevent="updateList(scope.row)">编辑</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="详情" placement="bottom"
+							<!-- <el-tooltip class="item" effect="dark" content="详情" placement="bottom"
 								:open-delay="otherTooltipDelay">
 								<el-tag @click="lookList(scope.row)" type="success">详情</el-tag>
-							</el-tooltip>
+							</el-tooltip> -->
 						</div>
 					</template>
 				</el-table-column>
@@ -54,8 +86,8 @@
 			<vxe-modal v-model="showEdit" :title="selectRow ? '点检标准编辑&保存' : '点检标准新增&保存'" width="60%" min-width="600"
 				:loading="submitLoading" resize destroy-on-close @close="closemodel">
 				<template #default>
-					<vxe-form :data="formData" :rules="formRules" title-colon title-align="right"
-						title-width="150" ref="xForm" @submit="submitEvent">
+					<vxe-form :data="formData" :rules="formRules" title-colon title-align="right" title-width="150"
+						ref="xForm" @submit="submitEvent">
 						<vxe-form-item title="标准名称" field="name" span="12" :item-render="{}">
 							<template #default="scope">
 								<vxe-input v-model="formData.name" @input="$refs.xForm.updateStatus(scope)"
@@ -64,10 +96,10 @@
 						</vxe-form-item>
 						<vxe-form-item title="专业" field="profession" span="12" :item-render="{}">
 							<template #default="scope">
-								<vxe-select v-model="formData.profession"
-									@change="$refs.xForm.updateStatus(scope)" placeholder="请选择状态" clearable>
-									<vxe-option v-for="item in professionData" :key="item.value"
-										:value="item.value" :label="item.label">
+								<vxe-select v-model="formData.profession" @change="$refs.xForm.updateStatus(scope)"
+									placeholder="请选择状态" clearable>
+									<vxe-option v-for="item in professionData" :key="item.value" :value="item.value"
+										:label="item.label">
 									</vxe-option>
 								</vxe-select>
 							</template>
@@ -84,10 +116,10 @@
 						</vxe-form-item>
 						<vxe-form-item title="精度监测" field="accuracyStatus" span="12" :item-render="{}">
 							<template #default="scope">
-								<vxe-select v-model="formData.accuracyStatus"
-									@change="$refs.xForm.updateStatus(scope)" placeholder="请选择精度监测" clearable>
-									<vxe-option v-for="item in accuracyStatusData" :key="item.value"
-										:value="item.value" :label="item.label">
+								<vxe-select v-model="formData.accuracyStatus" @change="$refs.xForm.updateStatus(scope)"
+									placeholder="请选择精度监测" clearable>
+									<vxe-option v-for="item in accuracyStatusData" :key="item.value" :value="item.value"
+										:label="item.label">
 									</vxe-option>
 								</vxe-select>
 							</template>
@@ -102,7 +134,7 @@
 								</vxe-select>
 							</template>
 						</vxe-form-item>
-						<vxe-form-item title="单位" field="unit" span="12" :item-render="{}">
+						<!-- <vxe-form-item title="单位" field="unit" span="12" :item-render="{}">
 							<template #default="scope">
 								<vxe-select v-model="formData.unit" @change="$refs.xForm.updateStatus(scope)"
 									placeholder="请选择单位" clearable>
@@ -111,7 +143,7 @@
 									</vxe-option>
 								</vxe-select>
 							</template>
-						</vxe-form-item>
+						</vxe-form-item> -->
 						<vxe-form-item title="上限" field="upperLimit" span="12" :item-render="{}">
 							<template #default="scope">
 								<vxe-input v-model="formData.upperLimit" placeholder="请选择上限"
@@ -131,10 +163,9 @@
 								<!-- <vxe-input v-model="formData.lowerLimit" placeholder="请选择下限"
 									@input="$refs.xForm.updateStatus(scope)" type="number" min="0" clearable>
 								</vxe-input> -->
-								<vxe-textarea v-model="formData.content"
-									@input="$refs.xForm.updateStatus(scope)" placeholder="请输入内容描述"
-									:autosize="{ minRows: 2, maxRows: 4 }">
-					
+								<vxe-textarea v-model="formData.content" @input="$refs.xForm.updateStatus(scope)"
+									placeholder="请输入内容描述" :autosize="{ minRows: 2, maxRows: 4 }">
+
 								</vxe-textarea>
 							</template>
 						</vxe-form-item>
@@ -194,6 +225,29 @@
 					lowerLimit: null, // 下限
 					status: null // 状态 0弃用 1在用
 				},
+				disciplineData: [{
+					value: '',
+					label: '全部'
+				}, {
+					value: 1,
+					label: '生产'
+				}, {
+					value: 2,
+					label: '安全'
+				}, {
+					value: 3,
+					label: '电气'
+				}, {
+					value: 4,
+					label: '设备'
+				}],
+				deptList: [],
+				updateTree: [],
+				isdeptshow: false,
+				defaultProps: {
+					children: 'childOrgs',
+					label: 'name'
+				},
 				formRules: {
 					name: [{
 						required: true,
@@ -214,19 +268,7 @@
 					status: [{
 						required: true,
 						message: '请选择状态'
-					}],
-					unit: [{
-						required: true,
-						message: '请选择单位'
-					}],
-					upperLimit: [{
-						required: true,
-						message: '请选择上限'
-					}],
-					lowerLimit: [{
-						required: true,
-						message: '请选择下限'
-					}],
+					}]
 				},
 				addJson: {
 					name: null, // 标准名称
@@ -251,10 +293,16 @@
 				}],
 				professionData: [{
 					value: 1,
-					label: '专业1'
+					label: '生产'
 				}, {
 					value: 2,
-					label: '专业2'
+					label: '安全'
+				}, {
+					value: 3,
+					label: '电气'
+				}, {
+					value: 4,
+					label: '设备'
 				}],
 				accuracyStatusData: [{
 					value: 1,
@@ -320,7 +368,8 @@
 				pointStandard_model: {
 					dept: '',
 					area: '',
-					device: ''
+					device: '',
+					profession: '',
 				},
 				//设备状态
 				device_status: null
@@ -331,6 +380,7 @@
 			// this.getOrgInfo() //组织机构获取
 			// this.getStatus() // 状态获取
 			this.getTable() //获取table数据
+			this.getDeptData()
 		},
 		mounted() {
 			//this.qrcode(1);
@@ -348,9 +398,39 @@
 		},
 		watch: {},
 		methods: {
+			handleNodeClick(data) {
+				// console.log(data);
+				this.isdeptshow = false
+				this.pointStandard_model.dept = data.name
+				this.jsonData.orgCode = data.orgCode
+			},
 			closemodel() {
 				// console.log('关闭对话框')
 				this.checked = true
+			},
+			//获取部门接口
+			getDeptData() {
+				let json = {
+					orgCode: ""
+				}
+				this.updateTree = []
+				this.deptList = []
+				this.deptData(json).then(res => {
+					if (res.data.code === 0) {
+						console.log("部门数据", res.data.data)
+						//将设备位置 从左树传给右侧 主界面
+						// this.$bus.emit('devicePlace', res.data.data)
+						const data = res.data.data
+						this.updateTree[0] = res.data.data.id
+						this.deptList.push(data)
+
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
 			},
 			submitEvent() {
 				this.submitLoading = true
@@ -364,14 +444,14 @@
 						this.addJson.profession = this.formData.profession
 						this.addJson.type = this.formData.type
 						this.addJson.accuracyStatus = this.formData.accuracyStatus
-						this.addJson.unit = this.formData.unit
+						// this.addJson.unit = this.formData.unit
 						this.addJson.upperLimit = this.formData.upperLimit
 						this.addJson.lowerLimit = this.formData.lowerLimit
 						this.addJson.status = this.formData.status
-						
+
 						this.addJson.equipCode = 'gh9527'
 						this.addJson.equipName = '测试大西瓜1'
-						this.addPointStand()
+						this.updatePointStand()
 						// this.updateArea()
 					} else {
 						// this.addJson.name = this.formData.name
@@ -381,11 +461,11 @@
 						this.addJson.profession = this.formData.profession
 						this.addJson.type = this.formData.type
 						this.addJson.accuracyStatus = this.formData.accuracyStatus
-						this.addJson.unit = this.formData.unit
+						// this.addJson.unit = this.formData.unit
 						this.addJson.upperLimit = this.formData.upperLimit
 						this.addJson.lowerLimit = this.formData.lowerLimit
 						this.addJson.status = this.formData.status
-						
+
 						this.addJson.equipCode = 'gh9527'
 						this.addJson.equipName = '测试大西瓜1'
 						// console.log(this.addJson)
@@ -393,7 +473,26 @@
 					}
 				}, 500)
 			},
-			addPointStand () {
+			updatePointStand() {
+				this.pointStandardUpdate(this.addJson).then(res => {
+					if (res.data.code === 0) {
+						this.$message({
+							message: '更新标准成功',
+							type: 'success'
+						})
+						this.showEdit = false
+						this.getTable()
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				}).catch(err => {
+					console.log(err)
+				})
+			},
+			addPointStand() {
 				this.pointStandardAdd(this.addJson).then(res => {
 					if (res.data.code === 0) {
 						this.$message({
@@ -471,7 +570,8 @@
 								// 	that.tableData.push(obj)
 								// }
 								for (var i = 0; i < data.length; i++) {
-									data[i]['index'] = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData.pageSize + i + 1
+									data[i]['index'] = that.jsonData.pageNo * that.jsonData.pageSize - that
+										.jsonData.pageSize + i + 1
 									data[i]['unit'] = data[i].unit
 									data[i]['upperLimit'] = data[i].upperLimit
 									data[i]['lowerLimit'] = data[i].lowerLimit
@@ -511,6 +611,9 @@
 			onSubmit() {
 				//console.log('submit!')
 				//this.jsonData.installAreaCode = null
+				// this.jsonData.equipCode = '150103014'
+				this.jsonData.equipName = this.pointStandard_model.device
+				this.jsonData.profession = this.pointStandard_model.profession
 				this.jsonData.pageNo = 1
 				this.jsonData.pageSize = 10
 				this.getTable()
@@ -522,6 +625,7 @@
 					orgCode: '',
 					areaCode: '',
 					equipCode: '',
+					profession: '',
 					pageNo: 1,
 					pageSize: 10
 				}
@@ -529,7 +633,8 @@
 					orgCode: '',
 					areaCode: '',
 					position: '',
-					equipCode: ''
+					equipCode: '',
+					profession: ''
 				}
 			},
 			selectionchange(data) {
@@ -583,7 +688,7 @@
 					type: item.type, // 文本类型 0数值1文本
 					equipCode: item.equipCode, // 设备code
 					equipName: item.equipName, // 设备名字
-					accuracyStatus: null, // 精度监测 1是 0否
+					accuracyStatus: item.accuracyStatus, // 精度监测 1是 0否
 					unit: item.unit, // 单位
 					upperLimit: item.upperLimit, // 上限
 					lowerLimit: item.lowerLimit, // 下限

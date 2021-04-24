@@ -2,10 +2,7 @@
 	<div class="abnormaMock">
 		<el-card class="box-card" shadow="always">
 			<el-form :inline="true" :model="user" class="demo-form-inline">
-				<el-form-item label="发现人员">
-					<el-input v-model="user.person" placeholder="请输入人员" @input="user_person_show" clearable />
-				</el-form-item>
-				<el-form-item label="发现部门">
+				<el-form-item label="发现部门/车间">
 					<!-- <el-select v-model="user.dept" placeholder="请选择部门" @change="dept_change">
 						<el-option v-for="item in deptData" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
@@ -22,6 +19,16 @@
 							placeholder="请选择部门" clearable></vxe-input>
 					</el-popover>
 				</el-form-item>
+				<!-- <el-form-item label="发现人员">
+					<el-input v-model="user.person" placeholder="请输入人员" @input="user_person_show" clearable />
+				</el-form-item> -->
+				<el-form-item label="时间范围">
+					<!-- <el-input v-model="pointCheckPlan.timeshow" placeholder="请输入人员" @input="pointCheckPlan_person_show" clearable /> -->
+					<el-date-picker v-model="user.timeshow" type="daterange" unlink-panels range-separator="至"
+						start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp"
+						@change="timeshow_change">
+					</el-date-picker>
+				</el-form-item>
 				<el-form-item label="专业">
 					<el-select v-model="user.belongToWay" placeholder="请选择专业" @change="belongToWay_change">
 						<el-option v-for="item in belongToWayData" :key="item.value" :label="item.label"
@@ -29,6 +36,7 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				
 				<el-form-item label="状态">
 					<el-select v-model="user.state" placeholder="请选择状态" @change="state_change">
 						<el-option v-for="item in stateData" :key="item.value" :label="item.label" :value="item.value">
@@ -43,29 +51,47 @@
 			</el-form>
 		</el-card>
 		<el-card class="box-card" shadow="always">
-			<el-row style="margin-bottom: 5px;">
+			<!-- <el-row style="margin-bottom: 5px;">
 				<el-button type="primary" @click="addRoute">新增</el-button>
 				<el-button type="danger" @click="deleteRoute">删除</el-button>
-			</el-row>
+			</el-row> -->
 			<el-table v-loading="loading" :data="tableData" :row-key="getRowKeys" border style="width: 100%"
 				:max-height="tableHeight">
 				<!-- <el-table-column type="index" label="序号" width="100" align="center" /> -->
 				<el-table-column prop="cid" width="100" label="序号" align="center" fixed>
 				</el-table-column>
-				<el-table-column prop="person" show-overflow-tooltip label="发现人员" min-width="180" align="center" />
-				<el-table-column prop="dept" show-overflow-tooltip label="所属部门" min-width="180" align="center" />
-				<el-table-column prop="belongToWay" show-overflow-tooltip label="专业" min-width="180" align="center" />
 				<el-table-column prop="content" show-overflow-tooltip label="发现内容" min-width="180" align="center" />
-				<el-table-column prop="time" show-overflow-tooltip label="发现时间" min-width="180" align="center" />
-				<el-table-column prop="state" show-overflow-tooltip label="状态" min-width="180" align="center" />
-				<el-table-column fixed="right" label="操作" min-width="180" align="center">
+				<el-table-column prop="pic" show-overflow-tooltip label="图片" min-width="180" align="center" />
+				<el-table-column prop="device" show-overflow-tooltip label="指派/移交/定修人" min-width="180" align="center" />
+				<el-table-column prop="type" show-overflow-tooltip label="专业分类" min-width="180" align="center" />
+				<el-table-column prop="findTime" show-overflow-tooltip label="发现时间" min-width="180" align="center" />
+				<el-table-column prop="findPerson" show-overflow-tooltip label="发现人" min-width="180" align="center" />
+				<el-table-column prop="source" show-overflow-tooltip label="异常来源" min-width="180" align="center" />
+				<el-table-column prop="status" show-overflow-tooltip label="异常状态" min-width="180" align="center" />
+				<el-table-column prop="level" show-overflow-tooltip label="异常等级" min-width="180" align="center" />
+				<el-table-column fixed="right" label="操作" min-width="360" align="center">
 					<template slot-scope="scope">
 						<div class="action">
 							<!-- <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
 								<el-tag @click="updateList(scope.row)">编辑</el-tag>
 							</el-tooltip> -->
-							<el-tooltip class="item" effect="dark" content="详情" placement="bottom">
-								<el-tag @click="lookList(scope.row)">详情</el-tag>
+							<!-- <el-tooltip class="item" effect="dark" content="设备详情" placement="bottom">
+								<el-tag @click="lookList(scope.row)">设备详情</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="预览检修单" placement="bottom">
+								<el-tag @click="lookcheck(scope.row)" type="success">预览检修单</el-tag>
+							</el-tooltip> -->
+							<el-tooltip class="item" effect="dark" content="隐患指派" placement="bottom">
+								<el-tag @click="abnormaTo(scope.row)" type="info">隐患指派</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="隐患定修" placement="bottom">
+								<el-tag @click="abnormaCheck(scope.row)">隐患定修</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="隐患移交" placement="bottom">
+								<el-tag @click="abnormaHe(scope.row)" type="success">隐患移交</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="隐患废除" placement="bottom">
+								<el-tag @click="deleteList(scope.row)" type="danger">隐患废除</el-tag>
 							</el-tooltip>
 							<!-- <el-tooltip class="item" effect="dark" content="配置计划" placement="bottom">
 								<el-tag @click="pzplan(scope.row)">配置计划</el-tag>
@@ -74,7 +100,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<vxe-modal v-model="showEdit" :title="selectRow ? '异常编辑&保存' : '异常新增&保存'" width="800" min-width="600"
+			<vxe-modal v-model="showEdit" :title="selectRow ? '异常编辑&保存' : '异常新增&保存'" width="50%" min-width="600"
 				min-height="300" :loading="submitLoading" resize destroy-on-close @close="closemodel">
 				<template #default>
 					<vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100"
@@ -173,15 +199,32 @@
 					@size-change="handleSizeChange" @current-change="handleCurrentChange" />
 			</div>
 		</el-card>
+		<!-- 设备详情 -->
+		<deviceLook :isshow="lookType" :showData="abnormaNav" @closedialog="closedialog"></deviceLook>
+		<!-- 预览检修单 -->
+		<checkLook :isshow="checkType" :showData="abnormaNav" @closedialog="closedialog"></checkLook>
+		<abnormaLook :isshow="abnormaType" :titleshow="titleName" :showData="abnormaNav" @closedialog="closedialog"></abnormaLook>
 	</div>
 </template>
 
 <script>
+	import deviceLook from './deviceLook.vue'
+	import checkLook from './checkLook.vue'
+	import abnormaLook from './abnormaLook.vue'
 	export default {
 		name: 'abnormaMock',
-		components: {},
+		components: {
+			deviceLook,
+			checkLook,
+			abnormaLook
+		},
 		data() {
 			return {
+				abnormaNav: {},
+				titleName: '',
+				lookType: false, //查看设备详情隐藏
+				checkType: false,
+				abnormaType: false,
 				isdeptshow: false,
 				isdeptshow1: false,
 				deptList: [],
@@ -244,6 +287,7 @@
 					person: '',
 					dept: '',
 					belongToWay: '',
+					timeshow: '',
 					state: ''
 				},
 				loading: false,
@@ -256,11 +300,17 @@
 				//展示参数表，并未实际应用
 				tableData: [],
 				belongToWayData: [{
-					value: '1',
-					label: '路线1'
-				}, {
-					value: '2',
-					label: '路线2'
+					value: '',
+					label: '全部'
+				},{
+					value: 1,
+					label: '生产'
+				},{
+					value: 2,
+					label: '安全'
+				},{
+					value: 3,
+					label: '电气'
 				}],
 				levelData: [{
 					value: '1',
@@ -274,22 +324,19 @@
 					label: '全部'
 				}, {
 					value: '0',
-					label: '待确认'
+					label: '待指派'
 				}, {
 					value: '1',
-					label: '确认中'
+					label: '待处理'
 				}, {
 					value: '2',
-					label: '已取消'
+					label: '已完成'
 				}, {
 					value: '3',
-					label: '检修中'
+					label: '加入定修'
 				}, {
 					value: '4',
-					label: '待验收'
-				}, {
-					value: '5',
-					label: '已完成'
+					label: '已废除'
 				}],
 				addData: {
 					findPerson: '',
@@ -322,17 +369,100 @@
 			this.getDeptData()
 		},
 		methods: {
+			//设备详情
+			lookList(item) {
+				this.lookType = true
+				this.abnormaNav = item
+			},
+			//预览检修单
+			lookcheck (item) {
+				this.checkType = true
+				this.abnormaNav = item
+			},
+			//隐患废除
+			deleteList (item) {
+				this.$confirm('是否废除该隐患?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.deleteItem(item.id)
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			deleteItem (id) {
+				let json = {
+					handlerType: 4, //处理类型：1指派，2移交，3，定修，4，废除
+					executor: null, //选定的执行人
+					line: null, //专业条线
+					id: id
+				}
+				this.handlerExce(json).then(res => {
+					//console.log(res)
+					if (res.data.code === 0) {
+						this.$message({
+							type: 'success',
+							message: '成功废除该隐患'
+						})
+						this.getData()
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				}).catch(err => {
+					console.log(err)
+				})
+			},
+			//隐患指派
+			abnormaTo (item) {
+				this.abnormaType = true
+				this.titleName = '指派'
+				this.abnormaNav = item
+			},
+			//隐患定修
+			abnormaCheck (item) {
+				this.abnormaType = true
+				this.titleName = '定修'
+				this.abnormaNav = item
+			},
+			//隐患移交
+			abnormaHe (item) {
+				this.abnormaType = true
+				this.titleName = '移交'
+				this.abnormaNav = item
+			},
+			//父子组件传值，控制隐藏显示
+			closedialog(val) {
+				// console.log('区域管理')
+				this.jsonData.pageNo = 1
+				this.jsonData.pageSize = 10
+				this.getData()
+				this.lookType = val
+				this.checkType = val
+				this.abnormaType = val
+			},
 			handleNodeClick(data) {
 				console.log(data);
 				this.isdeptshow1 = false
 				this.formData.dept = data.name
 				this.addData.findDept = data.orgCode
 			},
+			timeshow_change (event) { //筛选时间范围
+				console.log(event)
+				this.jsonData.findDateStart = event[0]
+				this.jsonData.findDateEnd =JSON.parse(new Date(( event[1]/1000+86400)*1000) - 1)
+			},
 			searchDeptClick(data) {
-				// console.log(data);
+				console.log(data);
 				this.isdeptshow = false
 				this.user.dept = data.name
-				this.addData.findDept = data.orgCode
+				this.jsonData.orgCode = data.orgCode
 			},
 			content_show (event) {
 				this.addData.content = event
@@ -372,6 +502,7 @@
 				}, 1200 * Math.random());
 			},
 			closemodel() {
+				
 				console.log('关闭对话框')
 				this.checked = true
 			},
@@ -540,27 +671,36 @@
 									// obj.time = that.formatDate(data[i].findDate)
 									let state = ''
 									if (data[i].state == 0) {
-										state = '待确认'
+										state = '待指派'
 									} else if (data[i].state == 1) {
-										state = '确认中'
+										state = '待处理'
 									} else if (data[i].state == 2) {
-										state = '已取消'
-									} else if (data[i].state == 3) {
-										state = '检修中'
-									} else if (data[i].state == 4) {
-										state = '待验收'
-									} else {
 										state = '已完成'
+									} else if (data[i].state == 3) {
+										state = '加入定修'
+									} else if (data[i].state == 4) {
+										state = '已废除'
 									}
-									
+									let level = ''
+									if (data[i].proLevel== 1) {
+										level = '一般'
+									} else if (data[i].proLevel== 2) {
+										level = '较大'
+									} else if (data[i].proLevel== 3) {
+										level = '重大'
+									}
 									that.tableData.push({
+										id: data[i].id,
 										cid: that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData.pageSize + i + 1,
-										person: data[i].findPerson,
-										dept: data[i].findDept,
-										belongToWay: data[i].line,
 										content: data[i].content,
-										time: data[i].findDate,
-										state: state
+										pic: data[i].image,
+										device: data[i].executor!=null?data[i].executor:'- -',
+										type: data[i].line,
+										findTime: that.formatDate(data[i].findDate),
+										findPerson: data[i].findPerson,
+										source: data[i].source,
+										status: state,
+										level: level
 									})
 								}
 								//console.log('表', that.tableData)
@@ -584,15 +724,25 @@
 			},
 			//路线名称
 			user_person_show(event) {
-				this.jsonData.findPerson = event
+				this.jsonData.findPerson = event 
+			},
+			dicchange (code) {
+				let val = ''
+				for (let i=0;i<this.belongToWayData.length;i++) {
+					if (code===this.belongToWayData[i].value) {
+						val = this.belongToWayData[i].label
+					}
+				}
+				return val
 			},
 			//所属部门选择
 			dept_change() {
 				// this.jsonData.dept = ''
 			},
 			//所属条线选择
-			belongToWay_change() {
+			belongToWay_change(item) {
 				// this.jsonData.dept = event
+				this.jsonData.line = this.dicchange(item)
 			},
 			//状态选择
 			state_change(event) {
@@ -646,7 +796,7 @@
 				this.selectRow = item
 				this.showEdit = true
 			},
-			lookList() {},
+			
 			pzplan() {},
 			onSubmit(item) {
 				// console.log(123)
@@ -657,10 +807,12 @@
 			onreset() {
 				// this.$refs[formName].resetFields();
 				this.jsonData = {
-					findPerson: '',
 					findDept: '',
+					findDateStart: '',
+					findDateEnd: '',
+					closeDateStart: '',
+					closeDateEnd: '',
 					line: '',
-					state: '',
 					pageNo: 1,
 					pageSize: 10
 				}
@@ -670,6 +822,7 @@
 					person: '',
 					dept: '',
 					belongToWay: '',
+					timeshow: '',
 					state: ''
 				}
 				// this.isdeptshow = true
@@ -680,13 +833,13 @@
 				this.pageSize = val
 				this.jsonData.pageSize = val
 				this.jsonData.pageNo = 1
-				// this.getTable()
+				this.getData()
 			},
 			handleCurrentChange(val) {
 				//console.log(`当前页: ${val}`)
 				this.currentPage = val
 				this.jsonData.pageNo = val
-				// this.getTable()
+				this.getData()
 			},
 		}
 	}

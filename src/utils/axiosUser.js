@@ -91,6 +91,14 @@ export default {
 				data: data
 			})
 		};
+		//根据点检区域查询设备
+		Vue.prototype.equipByArea = function(data) { //全局函数
+			return service({
+				url: '/bi/equip/equipByArea',
+				method: 'post',
+				data: data
+			})
+		};
 		//组织部门树新增
 		Vue.prototype.deptAdd = function(data) { //全局函数
 			return service({
@@ -119,6 +127,24 @@ export default {
 
 			return service({
 				url: '/bi/equip/getByWorkArea',
+				method: 'post',
+				data: data
+			})
+		};
+		//新增设备*********
+		Vue.prototype.deviceAdd = function(data) { //全局函数
+		
+			return service({
+				url: '/bi/equip/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//更新设备*********
+		Vue.prototype.deviceUpdate = function(data) { //全局函数
+		
+			return service({
+				url: '/bi/equip/update',
 				method: 'post',
 				data: data
 			})
@@ -191,6 +217,14 @@ export default {
 		Vue.prototype.pointStandardAdd = function(data) { //全局函数
 			return service({
 				url: '/bi/equipStandard/add',
+				method: 'post',
+				data: data
+			})
+		};
+		//更新点检标准*********
+		Vue.prototype.pointStandardUpdate = function(data) { //全局函数
+			return service({
+				url: '/bi/equipStandard/update',
 				method: 'post',
 				data: data
 			})
@@ -316,6 +350,22 @@ export default {
 				data: data
 			})
 		};
+		//异常 - 处理异常
+		Vue.prototype.handlerExce = function(data) { //全局函数
+			return service({
+				url: '/ps/exception/handlerExce',
+				method: 'post',
+				data: data
+			})
+		};
+		// 根据来源查询作业卡详情
+		Vue.prototype.getJobCardDetailBySource = function(data) { //全局函数
+			return service({
+				url: '/ps/jobCardController/getJobCardDetailBySource',
+				method: 'post',
+				data: data
+			})
+		};
 		//异常新增列表
 		Vue.prototype.abnormaMockAdd = function(data) { //全局函数
 			return service({
@@ -333,7 +383,7 @@ export default {
 			})
 		};
 		//周期新增列表
-		Vue.prototype.weekMockAdd = function(data) { //全局函数
+		Vue.prototype.weekMockAdd = function(data) { //全局函数equipsByArea
 			return service({
 				url: '/sc/cycle/add',
 				method: 'post',
@@ -348,6 +398,7 @@ export default {
 				data: data
 			})
 		};
+<<<<<<< HEAD
     //WEB权限 菜单树状接口
     Vue.prototype.getWEBTree = function() { //全局函数
       return service({
@@ -483,5 +534,56 @@ export default {
 
 
 
+=======
+		/************检修管理***********/
+		//作业卡列表
+		Vue.prototype.jobCardList = function(data) { //全局函数
+			return service({
+				url: '/ps/jobCardController/jobCardList',
+				method: 'post',
+				data: data
+			})
+		};
+		//作业卡详情
+		Vue.prototype.jobCardDetail = function(data) { //全局函数
+			return service({
+				url: '/ps/jobCardController/jobCardDetail',
+				method: 'post',
+				data: data
+			})
+		};
+		//作业卡人员
+		Vue.prototype.jobCardUser = function(data) { //全局函数
+			return service({
+				url: '/user/user/query',
+				method: 'post',
+				data: data
+			})
+		};
+		//作业卡下发
+		Vue.prototype.issueJoBCard = function(data) { //全局函数
+			return service({
+				url: '/ps/maintenanceController/issueJoBCard',
+				method: 'post',
+				data: data
+			})
+		};
+		//作业卡编辑
+		Vue.prototype.updateJobCard = function(data) { //全局函数
+			return service({
+				url: '/ps/maintenanceController/updateJobCard',
+				method: 'post',
+				data: data
+			})
+		};
+		//检修风险 - 查询
+		Vue.prototype.jobCardRisk = function(data) { //全局函数
+			return service({
+				url: '/ps/safeRiskController/selectList',
+				method: 'post',
+				data: data
+			})
+		};
+>>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 	}
 }

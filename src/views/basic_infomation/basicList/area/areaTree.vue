@@ -4,7 +4,8 @@
 			<el-input class="searchInput" v-model="filterText" placeholder="请输入组织名称">
 				<i slot="suffix" class="el-input__icon el-icon-search" />
 			</el-input>
-			<div style="width: 50px;height: 36px;line-height: 36px;text-align: center;background-color: rgba(48, 65, 82, 0.8) !important;font-size: 25px;">
+			<div
+				style="width: 50px;height: 36px;line-height: 36px;text-align: center;background-color: rgba(48, 65, 82, 0.8) !important;font-size: 25px;">
 				<el-tooltip class="item" effect="dark" content="部门同步" placement="right">
 					<i class="el-icon-refresh tbshow" style="color: white;cursor: pointer;" @click="refreshShow"></i>
 				</el-tooltip>
@@ -13,7 +14,7 @@
 		</div>
 
 		<el-tree ref="tree" v-loading="loading" :data="data" element-loading-text="拼命加载中"
-			element-loading-spinner="el-icon-loading" element-loading-background="rgba(48, 65, 82, 1)" node-key="id"
+			element-loading-spinner="el-icon-loading" element-loading-background="rgba(48, 65, 82, 0.8)" node-key="id"
 			accordion :style="{height: treeheight,overflowY: 'scroll'}" highlight-current
 			:filter-node-method="filterNode" :props="defaultProps" :default-expanded-keys="updateTree"
 			:expand-on-click-node="false" @node-contextmenu='rightClick' @node-click="handleNodeClick">
@@ -32,6 +33,12 @@
 				</el-form-item>
 				<el-form-item label="编码" prop="code">
 					<el-input v-model="infoData.code" clearable />
+				</el-form-item>
+				<el-form-item label="部门类型" prop="orgType">
+					<el-select v-model="infoData.orgType" placeholder="请选择">
+						<el-option v-for="item in orgTypeData" :key="item.value" :label="item.label"  :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<!-- <el-form-item label="财务组织编码" prop="orgAdminNumber">
 					<el-input v-model="infoData.orgAdminNumber" clearable />
@@ -57,7 +64,9 @@
 	import refreshTree from './refresh_tree.vue'
 	export default {
 		name: 'AreaTree',
-		components: {refreshTree},
+		components: {
+			refreshTree
+		},
 		data() {
 			return {
 				menu: false,
@@ -75,6 +84,7 @@
 					name: '',
 					code: '',
 					orgAdminNumber: '',
+					orgType: '',
 					id: '',
 					pid: ''
 				},
@@ -90,12 +100,19 @@
 						message: '请输入编码',
 						trigger: ['change', 'blur']
 					}],
-					orgAdminNumber: [{
+					orgType: [{
 						required: true,
-						message: '请输入财务组织编码',
+						message: '请选择部门类型',
 						trigger: ['change', 'blur']
 					}],
 				},
+				orgTypeData: [{
+					value: 1,
+					label: '厂处'
+				},{
+					value: 2,
+					label: '车间'
+				}],
 				updateTree: [],
 				loading: false,
 				defaultProps: {
@@ -134,13 +151,13 @@
 			// })
 		},
 		methods: {
-			refreshShow () {
+			refreshShow() {
 				this.lookType = true
 			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
 				// console.log('区域管理')
-				this.lookType  = val
+				this.lookType = val
 				this.getdata()
 			},
 			//关闭对话框,并清空选择状态
@@ -158,12 +175,13 @@
 						const data = res.data.data
 						// this.data = this.dataDG(res.data.data)
 						this.loading = true
-						setTimeout(()=>{
+						setTimeout(() => {
 							this.loading = false
 							this.data.push(res.data.data)
 							this.updateTree[0] = res.data.data.id
+							this.updateTree[1] = res.data.data.childOrgs[0].id
 							this.updateTree.push(this.pid)
-						},800)
+						}, 800)
 						this.$bus.emit('firstDept', res.data.data)
 
 					} else {
@@ -180,7 +198,7 @@
 					orgCode: this.infoData.code,
 					// orgAdminNumber: this.infoData.orgAdminNumber,
 					orderNo: 0, //排序
-					orgType: 1, //类型
+					orgType: this.infoData.orgType, //类型
 					pid: this.infoData.pid
 				}
 				this.deptAdd(json).then(res => {
@@ -211,7 +229,7 @@
 					orgCode: this.infoData.code,
 					// orgAdminNumber: this.infoData.orgAdminNumber,
 					orderNo: 0, //排序
-					orgType: 1, //类型
+					orgType: this.infoData.orgType, //类型
 					pid: this.infoData.pid
 				}
 				this.deptUpdate(json).then(res => {
@@ -297,6 +315,7 @@
 							this.infoData.id = value.id
 							this.infoData.pid = value.pid
 							this.infoData.name = value.name
+							this.infoData.orgType = value.orgType
 							this.infoData.code = value.orgCode
 							this.infoData.orgAdminNumber = value.orgAdminNumber
 							this.deptAddType = true
@@ -480,9 +499,11 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
+
 	.areaTree>>>.tbshow:hover {
 		color: orange !important;
 	}
+
 	.el-tree>>>.el-tree-node__expand-icon.is-leaf {
 		color: transparent;
 		cursor: default;

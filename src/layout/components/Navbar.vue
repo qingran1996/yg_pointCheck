@@ -44,8 +44,8 @@
 					<!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a> -->
-					<el-dropdown-item @click.native="changePic">修改头像</el-dropdown-item>
-					<el-dropdown-item @click.native="changePassword">修改密码</el-dropdown-item>
+					<!-- <el-dropdown-item @click.native="changePic">修改头像</el-dropdown-item>
+					<el-dropdown-item @click.native="changePassword">修改密码</el-dropdown-item> -->
 					<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 
 					<!-- <el-dropdown-item divided @click.native="logout">

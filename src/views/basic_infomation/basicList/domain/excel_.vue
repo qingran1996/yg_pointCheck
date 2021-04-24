@@ -161,7 +161,7 @@
 						name: this.tableData[i].areaName,
 						orgCode: this.tableData[i].orgCode,
 						orgName: this.tableData[i].deptName,
-						pAreaCode: this.tableData[i].pAreaCode
+						pareacode: this.tableData[i].pAreaCode
 					}
 					//console.log(addJson)
 					this.areaAdd(addJson).then(res => {
