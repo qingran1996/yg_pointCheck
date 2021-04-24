@@ -97,7 +97,7 @@
 								keepAlive: true,
 								noCache: true
 							}
-						}, 
+						},
 						// {
 						// 	path: 'onlineStandard',
 						// 	name: 'onlineStandard',
@@ -117,6 +117,49 @@
 							noCache: true
 						}
 					}]
+<<<<<<< HEAD
+				},
+				{
+
+					id: 2,
+					path: '/root',
+					name: 'root',
+					meta: {
+						title: '权限管理',
+						icon: 'guide',
+					},
+					children: [
+            {
+              path: 'role',
+              name: 'rootrole',
+              meta: {
+                title: '角色管理',
+                keepAlive: true,
+                noCache: true
+              }
+              },
+					  {
+						path: 'menu',
+						name: 'rootMenu',
+						meta: {
+							title: '菜单管理',
+							keepAlive: true,
+							noCache: true
+						}
+					},
+            {
+              path: 'user',
+              name: 'userMenu',
+              meta: {
+                title: '用户管理',
+                keepAlive: true,
+                noCache: true
+              }
+            }
+					]
+
+				},
+=======
 				}, 
 				// {
 
@@ -172,6 +215,7 @@
 				// 	}]
 
 				// }, 
+>>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 				{
 					id: 3,
 					path: '/pointCheck',
@@ -307,6 +351,46 @@
 						// 	}
 						// }
 					]
+<<<<<<< HEAD
+				},
+				// {
+				// 	id: 5,
+				// 	path: '/overhaul',
+				// 	name: 'overhaul',
+				// 	meta: {
+				// 		title: '检修管理',
+				// 		icon: 'guide',
+				// 	},
+				// 	children: [{
+				// 			path: 'overhaulPlan',
+				// 			name: 'overhaulPlan',
+				// 			meta: {
+				// 				title: '检修计划',
+				// 				keepAlive: true,
+				// 				noCache: true
+				// 			}
+				// 		},
+				// 		{
+				// 			path: 'overhaulProject',
+				// 			name: 'overhaulProject',
+				// 			meta: {
+				// 				title: '检修项目',
+				// 				keepAlive: true,
+				// 				noCache: true
+				// 			}
+				// 		}, {
+				// 			path: 'safe',
+				// 			name: 'safe',
+				// 			meta: {
+				// 				title: '安全风险措施管理',
+				// 				keepAlive: true,
+				// 				noCache: true
+				// 			}
+				// 		}
+				// 	]
+
+				// },
+=======
 				}, 
 				{
 					id: 5,
@@ -346,6 +430,7 @@
 					]
 
 				}, 
+>>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 				// {
 				// 	id: 6,
 				// 	path: '/goods',
@@ -384,7 +469,7 @@
 				// 	]
 
 
-				// }, 
+				// },
 				// {
 
 				// 	id: 7,
@@ -416,7 +501,7 @@
 
 
 
-				// }, 
+				// },
 				// {
 				// 	id: 8,
 				// 	path: '/system',
@@ -553,7 +638,7 @@
 			// for (let i = 0; i < data.length; i++) {
 			//   if (data[i].pid === 0) {
 			//     this.showMenu.push({
-			//       id: data[i].id, 
+			//       id: data[i].id,
 			//       path: data[i].path,
 			//       name: data[i].name,
 			//       meta: {
@@ -563,7 +648,7 @@
 			//         path: data[i].path,
 			//         name: data[i].name,
 			//         meta: {
-			//           title: data[i].name, 
+			//           title: data[i].name,
 			//           noCache: true
 			//         }
 			//       }

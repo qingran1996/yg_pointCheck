@@ -124,7 +124,7 @@ export default {
 		};
 		//查询设备*********
 		Vue.prototype.deviceData = function(data) { //全局函数
-		
+
 			return service({
 				url: '/bi/equip/getByWorkArea',
 				method: 'post',
@@ -406,6 +406,143 @@ export default {
 				data: data
 			})
 		};
+<<<<<<< HEAD
+    //WEB权限 菜单树状接口
+    Vue.prototype.getWEBTree = function() { //全局函数
+      return service({
+        url: '/user/menu/tree/1',
+        method: 'get'
+      })
+    };
+    //APP权限 菜单树状接口
+    Vue.prototype.getAPPTree = function() { //全局函数
+      return service({
+        url: '/user/menu/tree/2',
+        method: 'get'
+      })
+    };
+
+
+    //根据角色获取菜单
+    Vue.prototype.getAllMenuByRole = function(data) { //全局函数
+      return service({
+        url: '/user/roleMenu/getAllMenuByRole',
+        method: 'post',
+        data:data
+      })
+    };
+  //查询标签组
+    Vue.prototype.listGroup = function(data) { //全局函数
+      return service({
+        url: '/user/role/listGroup',
+        method: 'get'
+      })
+    };
+    //角色列表
+    Vue.prototype.roleList = function(data) { //全局函数
+      return service({
+        url: '/user/role/page',
+        method: 'get',
+        params:data
+      })
+    };
+
+    //新增角色
+    Vue.prototype.setRole = function(data) { //全局函数
+      return service({
+        url: '/user/role/submit',
+        method: 'post',
+        data: data
+      })
+    };
+    //角色组保存
+    Vue.prototype.submitGroup = function(data) { //全局函数
+      return service({
+        url: '/user/role/submitGroup',
+        method: 'post',
+        data: data
+      })
+    };
+    //删除角色组
+    Vue.prototype.deleGroup = function(data) { //全局函数
+      return service({
+        url: '/user/role/removeRoleGroup?id='+data,
+        method: 'post'
+      })
+    };
+
+    //菜单列表
+    Vue.prototype.menuList = function(data) { //全局函数
+      return service({
+        url: '/user/menu/page',
+        method: 'get',
+        params:data
+      })
+    };
+    //新增菜单
+    Vue.prototype.addMenu = function(data) { //全局函数
+      return service({
+        url: '/user/menu/submit',
+        method: 'post',
+        data: data
+      })
+    };
+
+
+
+    //保存角色权限
+    Vue.prototype.saveMenu = function(data) { //全局函数
+      return service({
+        url: '/user/roleMenu/set',
+        method: 'post',
+        data: data
+      })
+    };
+    //保存数据权限
+    Vue.prototype.saveRole = function(data) { //全局函数
+      return service({
+        url: '/user/role/setRoleData',
+        method: 'post',
+        data: data
+      })
+    };
+    //根据用户获取数据权限
+    Vue.prototype.getScope = function(data) { //全局函数
+      return service({
+        url: '/user/role/getRoleData?roleCode='+data,
+        method: 'get',
+      })
+    };
+    //huoqu
+    Vue.prototype.getNetworkPerson = function(data) { //全局函数
+      return service({
+        url: 'user/user/query',
+        method: 'post',
+        data:data
+      })
+    };
+    //delete
+    Vue.prototype.userdelete = function(data) { //全局函数
+      return service({
+        url: 'user/user/delete',
+        method: 'post',
+        data:data
+      })
+    };
+ //添加用户
+    Vue.prototype.userAdd = function(data) { //全局函数
+      return service({
+        url: 'user/user/add',
+        method: 'post',
+        data:data
+      })
+    };
+
+
+
+
+
+=======
 		/************检修管理***********/
 		//作业卡列表
 		Vue.prototype.jobCardList = function(data) { //全局函数
@@ -455,5 +592,6 @@ export default {
 				data: data
 			})
 		};
+>>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 	}
 }

@@ -19,9 +19,25 @@ const rootRouter = {
 				title: '菜单管理'
 			}
 		},
+    {
+      path: 'role',
+      component: () => import('@/views/root/role/index'),
+      name: 'rootrole',
+      meta: {
+        title: '角色管理'
+      }
+    },
+    {
+      path: 'user',
+      component: () => import('@/views/root/role/user'),
+      name: 'userMenu',
+      meta: {
+        title: '用户管理'
+      }
+    },
 		{
 			path: 'role',
-			component: () => import('@/views/root/role/index'),
+			component: () => import('@/views/root/role/menuRole/index'),
 			name: 'rootRole',
 			redirect: 'noRedirect', //顶部禁止跳转
 			meta: {
