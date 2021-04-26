@@ -29,6 +29,14 @@ export default {
 				data: data
 			})
 		};
+		//查询点检计划列表部门查询
+		  Vue.prototype.getDisciplineDataByUserOrg= function(data) { //全局函数
+		   return service({
+		    url: '/bi/organization/getMajorByUserOrg',
+		    method: 'post',
+		    data: data
+		   })
+		  };
 		//区域更新
 		Vue.prototype.areaUpdate = function(data) { //全局函数
 			return service({
@@ -133,7 +141,7 @@ export default {
 		};
 		//新增设备*********
 		Vue.prototype.deviceAdd = function(data) { //全局函数
-
+		
 			return service({
 				url: '/bi/equip/add',
 				method: 'post',
@@ -142,7 +150,7 @@ export default {
 		};
 		//更新设备*********
 		Vue.prototype.deviceUpdate = function(data) { //全局函数
-
+		
 			return service({
 				url: '/bi/equip/update',
 				method: 'post',
@@ -254,6 +262,14 @@ export default {
 				data: data
 			})
 		};
+			//查询点检计划列表车间查询
+			Vue.prototype.pointPlanFarmDataByUser = function(data) { //全局函数
+				return service({
+					url: '/bi/organization/getOrgByUser',
+					method: 'post',
+					data: data
+				})
+			};
 		//查询点检计划列表部门查询
 		Vue.prototype.pointPlanDeptData = function(data) { //全局函数
 			return service({

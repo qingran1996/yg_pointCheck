@@ -17,7 +17,7 @@
 								style="justify-content: center;text-align: center;">
 							</qrcode-vue>
 							<div style="justify-content: center;font-size: 13px;text-align: center;">
-								{{ item.areaName }}
+								{{ item.areaNameSon }}
 							</div>
 						</el-col>
 					</el-row>
@@ -79,6 +79,7 @@
 					type: 'warning'
 				});
 				// this.ewmlist(0)
+				// console.log(this.qrCodeData)
 				setTimeout(()=>{
 					let data = []
 					for (let i=0;i<this.qrCodeData.length;i++) {

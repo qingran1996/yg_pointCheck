@@ -49,12 +49,12 @@
 						<vxe-button type="text">按钮2</vxe-button>
 					</template>
 				</vxe-table-column>
-				<template v-slot:empty>
+				<!-- <template v-slot:empty>
 					<span style="color: red;">
 						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
 						<p>不用再看了，没有更多数据了！</p>
 					</span>
-				</template>
+				</template> -->
 			</vxe-table>
 		</el-card>
 	</div>

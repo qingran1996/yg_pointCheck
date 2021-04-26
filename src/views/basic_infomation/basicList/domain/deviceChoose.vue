@@ -1,5 +1,5 @@
 <template>
-	<div class="personAdd">
+	<div v-show="isshow" class="personAdd">
 		<el-dialog title="设备关联" v-dialogDrag :visible.sync="pointWayAdd_show" width="80%" :close-on-click-modal="false"
 			@close="showclose" center>
 			<el-row :gutter="20">
@@ -302,8 +302,7 @@
 							message: '设备关联成功',
 							type: 'success'
 						})
-						// this.showclose()
-						// this.$emit('closedialog', false)
+						this.showclose()
 						this.pointWayAdd_show = false
 					} else {
 						this.$message({

@@ -114,6 +114,9 @@
 				}, {
 					value: 3,
 					label: '电气'
+				},{
+					value: 4,
+					label: '设备'
 				}],
 				personrestaurants: []
 			}
@@ -227,7 +230,7 @@
 				let areaJson = {
 					pageNo: 1,
 					pageSize: 50,
-					orgId: code
+					orgCode: code
 				}
 				this.areadata = []
 				this.pointPlanAreaData(areaJson).then(res => {

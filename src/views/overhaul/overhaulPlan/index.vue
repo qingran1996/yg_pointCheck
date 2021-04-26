@@ -93,6 +93,9 @@
 		},
 		data() {
 			return {
+				isdeptshow: false, //部门弹出
+				isdeptshow1: false, //部门弹出
+				deptList: [],
 				lookType: false,
 				showitem: null,
 				titleName: '',
@@ -194,9 +197,47 @@
 		},
 		created() {
 			this.getTable()
+				this.getDeptData()
 		},
 		methods: {
+			handleNodeClick(data) {
+				console.log(data);
+				this.isdeptshow = false
+				this.user.dept = data.name
+				this.jsonData.orgCode = data.orgCode
+			},
+			handleNodeClick1(item) {
+				// this.$refs.xForm.updateStatus(scope)
+				console.log(item);
+				this.isdeptshow1 = false
+				this.formData.dept = item.name
+				this.addJson.orgName = item.name
+				this.addJson.orgCode = item.orgCode
+			},
+//获取部门接口
+			getDeptData() {
+				let json = {
+					orgType: 2
+				}
+				this.updateTree = []
+				this.deptList = []
+				this.pointPlanFarmDataByUser(json).then(res => {
+					if (res.data.code === 0) {
+						console.log("部门数据", res.data.data)
+						//将设备位置 从左树传给右侧 主界面
+						// this.$bus.emit('devicePlace', res.data.data)
+						const data = res.data.data
+						this.updateTree[0] = res.data.data.id
+						this.deptList = data
 
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
+			},
 			//计划名称
 			user_planName_show(event) {
 				this.jsonData.planName = event

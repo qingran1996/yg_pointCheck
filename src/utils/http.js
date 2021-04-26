@@ -9,8 +9,8 @@ import router from '../router/index.js'
 
 let loading // 定义loading变量
 //线上头http://58.210.247.252:10005
-const baseURL = process.env.NODE_ENV != 'development' ? 'http://10.10.4.71:10005' :
-	'http://192.168.10.152:10005/' //开发模式 为152,build时为153
+const baseURL = process.env.NODE_ENV != 'development' ? 'http://apiygtpm.yong-gang.cn:8260/' :
+	'http://192.168.10.152:10005' //开发模式 为152,build时为153
 axios.defaults.timeout = 50000
 axios.defaults.baseURL = baseURL // 关键步骤–填写后台请求统一的地址   外网地址头:http://61.177.60.14:10005/a 内网:http://192.168.1.184:10005/a
 axios.defaults.withCredentials = true

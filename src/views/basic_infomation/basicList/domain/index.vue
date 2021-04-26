@@ -2,9 +2,6 @@
 	<div class="domain">
 		<el-card class="box-card" shadow="always">
 			<el-form :inline="true" :model="user" class="demo-form-inline">
-				<el-form-item label="名称">
-					<el-input v-model="user.areaName" placeholder="请输入区域名称" @input="user_areaName_show" clearable />
-				</el-form-item>
 				<el-form-item label="部门">
 					<!-- <el-select v-model="user.dept" placeholder="请选择部门" @change="dept_change">
 						<el-option v-for="item in deptData" :key="item.value" :label="item.label" :value="item.value">
@@ -12,12 +9,21 @@
 					</el-select> -->
 					<el-popover placement="right" width="400" trigger="click" v-model="isdeptshow">
 						<div style="height: 200px;overflow-y: scroll;">
-							<el-tree :data="deptList" accordion node-key="id" :default-expanded-keys="updateTree"
+							<!-- <el-tree :data="deptList" accordion node-key="id" :default-expanded-keys="updateTree"
 								:expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick">
+							</el-tree> -->
+							<el-tree :data="deptList" accordion show-checkbox check-strictly
+								:expand-on-click-node="false"  ref="treeForm" node-key="id"
+								@check-change="handleNodeClick" :props="defaultProps">
+								<span slot-scope="{ node }" class="custom-tree-node">
+									<el-tooltip class="item" effect="dark" :content="node.label" placement="right">
+										<span>{{ node.label }}</span>
+									</el-tooltip>
+								</span>
 							</el-tree>
 						</div>
 						<!-- <el-button slot="reference">选择部门</el-button> -->
-						<el-input v-model="user.dept" placeholder="请点击选择部门" slot="reference" clearable />
+						<el-input v-model="user.dept" placeholder="请点击选择车间" slot="reference" clearable />
 					</el-popover>
 				</el-form-item>
 				<!-- <el-form-item label="所属条线">
@@ -62,10 +68,11 @@
 				<vxe-table-column type="checkbox" title="全选" width="100" tree-node></vxe-table-column>
 				<vxe-table-column field="cid" title="序号" align="center" width="100" ></vxe-table-column>
 				<vxe-table-column field="areaName" min-width="180" align="center" title="父区域"></vxe-table-column>
-				<vxe-table-column field="areaNameSon" min-width="180" align="center" title="区域"></vxe-table-column>
+				<vxe-table-column field="areaNameSon" min-width="180" align="center" title="子区域"></vxe-table-column>
+				<vxe-table-column field="areaNameLong" min-width="180" align="center" title="全区域"></vxe-table-column>
 				<vxe-table-column field="dept" min-width="180" align="center" title="部门"></vxe-table-column>
 				<vxe-table-column field="state" min-width="180" align="center" title="状态"></vxe-table-column>
-				<vxe-table-column field="" title="操作" align="center" min-width="380" fixed="right">
+				<vxe-table-column field="" title="操作" align="center" min-width="280" fixed="right">
 					<template slot-scope="scope">
 						<div class="action" style="cursor: pointer;">
 							<el-tooltip v-show="scope.row.isSon==false" class="item" effect="dark" content="新增子区域" placement="bottom">
@@ -74,21 +81,18 @@
 							<el-tooltip class="item" effect="dark" content="修改" placement="bottom">
 								<el-tag type="info" @click="updateList(scope.row)">修改</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="设备绑定" placement="bottom">
-								<el-tag @click="deviceList(scope.row)" type="success">设备绑定</el-tag>
+							<el-tooltip class="item" effect="dark" content="设备关联" placement="bottom">
+								<el-tag @click="deviceList(scope.row)" type="success">设备关联</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="已绑定设备" placement="bottom">
-								<el-tag @click="deviceisBD(scope.row)" type="success">已绑定设备</el-tag>
-							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="二维码" placement="bottom">
+							<el-tooltip class="item" effect="white" content="二维码" placement="bottom">
 								<div slot="content" ref="imageWrapper">
 									<div class="channelQrcode" :id="'scopeindex'+scope.row.ewm">
-										<div style="justify-content: center;font-size: 13px;text-align: left;">区域：
-											{{ scope.row.areaName }}
+										<!-- <div style="justify-content: center;font-size: 13px;text-align: left;">区域1：
+											{{ scope.row.areaNameSon }}
 										</div>
 										<div style="justify-content: center;font-size: 13px;text-align: left;">部门：
 											{{ scope.row.dept }}
-										</div>
+										</div> -->
 										<qrcode-vue  :id="'showqrcode'+scope.row.ewm" :value="scope.row.ewm"
 											:size="'150'" level="H"
 											style="display: flex;justify-content: center;text-align: left;">
@@ -103,12 +107,12 @@
 						</div>
 					</template>
 				</vxe-table-column>
-				<template #empty>
+				<!-- <template #empty>
 					<span>
 						<img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
 						<p v-if="tableData.length==0">没有更多数据了！</p>
 					</span>
-				</template>
+				</template> -->
 			</vxe-table>
 			
 			<!-- 分页器 -->
@@ -156,7 +160,6 @@
 			v-if="downloadLoading" @isshow="downloadLoading" />
 		<!-- 选择设备 -->
 		<choosedevice :isshow="addType" :areaCode="areaCode" @closedialog="closedialog"></choosedevice>
-		<deviceLook :isshow="lookType" :areaCode="areaCode" @closedialogg="closedialog1"></deviceLook>
 		<showexcel @dataUpdate="dataUpdate"></showexcel>
 		<!-- 点检修改 -->
 		<!-- <domainEdit :isshow="addType" :deptList="deptList" @closedialog="closedialog" @dataUpdate="dataUpdate"></domainEdit> -->
@@ -166,7 +169,6 @@
 <script>
 	import bus from "../../../../utils/bus"
 	import choosedevice from './deviceChoose.vue'
-	import deviceLook from './deviceLook.vue'
 	import showexcel from "./excel_.vue"
 	import QrcodeVue from 'qrcode.vue'
 	import JSZip from "jszip";
@@ -179,7 +181,6 @@
 			choosedevice,
 			showexcel,
 			QrcodeVue,
-			deviceLook,
 			QrCode
 		},
 		data() {
@@ -221,13 +222,12 @@
 					pareacode: null
 				},
 				addType: false,
-				lookType: false,
 				areaCode: '',
 				isdeptshow: false, //部门弹出
 				isdeptshow1: false, //部门弹出
 				defaultProps: {
 					children: 'childOrgs',
-					label: 'name'
+					label: 'longName'
 				},
 				addOredit: true, //新增还是修改
 				listitem: null,
@@ -336,8 +336,11 @@
 							// obj.id = data[i].id
 							obj.cid = row.cid + '.' + j
 							obj.id = data[i].id
+							obj.ewm = JSON.stringify(obj.id);
 							obj.areaName = row.data.name
 							obj.areaNameSon = data[i].name
+							obj.areaNameLong = obj.areaName + data[i].name
+
 							obj.pareacode = row.data.areaCode
 							obj.data = data[i]
 							obj.isSon = true
@@ -346,6 +349,7 @@
 							// obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
 							// 	.pageSize + i + 1
 							
+							console.log(obj);
 							child.push(obj)
 						}
 						resolve(child)
@@ -357,22 +361,10 @@
 				this.addType = true
 				this.areaCode = row.data.areaCode
 			},
-			deviceisBD (row) {
-				this.lookType = true
-				this.areaCode = row.data.areaCode
-			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
-				console.log('区域管理')
+				// console.log('区域管理')
 				this.addType = val
-				
-				this.areaCode = ''
-				this.jsonData.pageNo = 1
-				this.jsonData.pageSize = 10
-				this.getData()
-			},
-			closedialog1 (val) {
-				this.lookType = val
 				this.areaCode = ''
 			},
 			// 添加信息
@@ -512,18 +504,19 @@
 			//获取部门接口
 			getDeptData() {
 				let json = {
-					orgCode: ""
+					orgType: 2
 				}
 				this.updateTree = []
 				this.deptList = []
-				this.deptData(json).then(res => {
+				this.pointPlanFarmDataByUser(json).then(res => {
 					if (res.data.code === 0) {
 						console.log("部门数据", res.data.data)
 						//将设备位置 从左树传给右侧 主界面
 						// this.$bus.emit('devicePlace', res.data.data)
 						const data = res.data.data
 						this.updateTree[0] = res.data.data.id
-						this.deptList.push(data)
+						this.deptList = data
+						console.log(this.deptList);
 
 					} else {
 						this.$message({
@@ -544,7 +537,6 @@
 						//console.log('当前页数数据数量', this.numberPage)
 						this.loading = true
 						let that = this
-						this.tableData = []
 						setTimeout(function() {
 							if (data.length !== 0) { //如果请求数据不为空
 								that.total = res.data.data.total //列表总数
@@ -552,15 +544,24 @@
 									var obj = {}
 									obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
 										.pageSize + i + 1
-									obj.areaName = '- -'
+									obj.areaName = ''
 									obj.areaNameSon = data[i].name
+									obj.areaNameLong = data[i].name
 									obj.id = data[i].id
 									obj.ewm = JSON.stringify(data[i].id) //id -》二维码
 									obj.code = data[i].code
 									obj.data = data[i]
 									obj.hasChild = data[i].childArea != null ? true : false
 									obj.isSon = false
-									obj.childrenData = data[i].childArea
+									obj.childrenData = data[i].childArea;
+									// if(obj.hasChild){
+									// 	for(var j=0; j<data[i].childArea.length;j++){
+									// 			data[i].childArea[j].ewm = JSON.stringify(data[i].childArea[j].id);
+									// 	}
+									// 	obj.childrenData = data[i].childArea;
+									// 	console.log("=====childrenData:"+obj.childrenData);
+									// }
+									
 									obj.orgCode = data[i].orgCode
 									obj.dept = data[i].orgName
 									obj.version = data[i].cid
@@ -748,7 +749,7 @@
 					let val = []
 					val = this.chooseData
 					val.forEach((e, i) => {
-						val[i].qid = `${e.areaName}`; //二维码图片名称标识
+						val[i].qid = `${e.areaNameLong}`; //二维码图片名称标识
 						val[i].url = `${e.id}`; //二维码文本内容 https://www.baidu.com/s?wd=${e.id}
 					});
 					this.multipleSelection = val;
