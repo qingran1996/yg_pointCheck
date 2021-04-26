@@ -193,7 +193,7 @@
 				updateTree: [],
 				defaultProps: {
 					children: 'children',
-					label: 'longName'
+					label: 'name'
 				},
 				pointCheckTask: {
 					dept: '',
@@ -389,7 +389,7 @@
 				// this.addData.findDept = data.code
 			},
 			getFarm() {
-				this.pointPlanFarmData(this.farmJson).then(res => {
+				this.pointPlanFarmDataByUser(this.farmJson).then(res => {
 					if (res.data.code == 0) { //查询到数据
 						let data = res.data.data
 						// console.log(data)

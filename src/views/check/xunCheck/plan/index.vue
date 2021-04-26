@@ -412,7 +412,7 @@
 				isdeptshow1: false,
 				isFarmshow: false,
 				isFarmshow1: false,
-				lookId: null,//查看得详情
+				lookId: null, //查看得详情
 				isBego: false,
 				areaupdateTree: [],
 				persontags: [],
@@ -564,7 +564,7 @@
 					shopId: null, //车间id
 					shopName: '', //车间名称
 					deptId: null, //部门id
-					shopCode:null,
+					shopCode: null,
 					deptName: '', //部门名称
 					lineId: null, // 专业id
 					lineName: '', // 专业名称
@@ -596,15 +596,18 @@
 				disciplineData: [{
 					value: '',
 					label: '全部'
-				},{
+				}, {
 					value: 1,
 					label: '生产'
-				},{
+				}, {
 					value: 2,
 					label: '安全'
-				},{
+				}, {
 					value: 3,
 					label: '电气'
+				}, {
+					value: 4,
+					label: '设备'
 				}],
 				pointDeptData: [{
 					value: '1',
@@ -668,6 +671,7 @@
 			// this.getStatus() // 状态获取
 			this.getTable() //获取table数据
 			this.getFarm() //获取车间
+
 
 			// this.$bus.on('pointWayAdd', (e) => {
 			// 	console.log(666)
@@ -735,7 +739,7 @@
 				this.formData.checkTime = nav
 			},
 			getFarm() {
-				this.pointPlanFarmData(this.farmJson).then(res => {
+				this.pointPlanFarmDataByUser(this.farmJson).then(res => {
 					if (res.data.code == 0) { //查询到数据
 						let data = res.data.data
 						// console.log(data)
@@ -847,7 +851,37 @@
 					this.jsonData.shopId = data.id
 					this.jsonData.shopCode = data.orgCode
 					this.getDeptData(data.id) //获取部门
+					this.getDisciplineData(data.orgCode);
 				}
+			},
+			getDisciplineData(orgCode) {
+				let newDisciplineData = []
+				let param = {
+					orgType: 2,
+					orgCode: orgCode
+				};
+				this.getDisciplineDataByUserOrg(param).then(res => {
+					if (res.data.code === 0) {
+						const data = res.data.data
+						for (let i = 0; i < this.disciplineData.length; i++) {
+							if (this.disciplineData[i].value == '') {
+								newDisciplineData.push(this.disciplineData[i])
+							}
+							for (let j = 0; j < data.length; j++) {
+								if (data[j] == this.disciplineData[i].value) {
+									newDisciplineData.push(this.disciplineData[i])
+								}
+							}
+						}
+						// this.updateTree.push(data[0].id)
+						this.disciplineData = newDisciplineData
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
 			},
 			//删除人员
 			handleClose(tag) {
@@ -934,7 +968,7 @@
 				this.submitLoading = true
 				setTimeout(() => {
 					this.submitLoading = false
-					
+
 					if (this.addJson.areaBoList.length === 0) {
 						this.showEdit = true
 						this.$message({
@@ -959,7 +993,8 @@
 						// this.addJson.planEnd = JSON.parse(this.formData.showDate[1] - 1)
 						// }
 						this.addJson.planStart = this.formData.showDate[0]
-						this.addJson.planEnd = JSON.parse(new Date(( this.formData.showDate[1]/1000+86400)*1000) - 1)
+						this.addJson.planEnd = JSON.parse(new Date((this.formData.showDate[1] / 1000 + 86400) *
+							1000) - 1)
 						this.addJson.planLong = this.formData.checkHour
 						this.addJson.isActived = this.formData.status
 						this.addJson.userBoList = []
@@ -989,7 +1024,8 @@
 						// this.addJson.planEnd = JSON.parse(this.formData.showDate[1] - 1)
 						// }
 						this.addJson.planStart = this.formData.showDate[0]
-							this.addJson.planEnd = JSON.parse(new Date(( this.formData.showDate[1]/1000+86400)*1000) - 1)
+						this.addJson.planEnd = JSON.parse(new Date((this.formData.showDate[1] / 1000 + 86400) *
+							1000) - 1)
 						this.addJson.planLong = this.formData.checkHour
 						this.addJson.isActived = this.formData.status
 						// this.addJson.planLong = this.formData.checkTime
@@ -1385,12 +1421,12 @@
 						console.log(data.timePoint.match(/\d+/g))
 						let showTimepoint = data.timePoint.match(/\d+/g)
 						for (var i = 0; i < showTimepoint.length; i++) {
-							if (JSON.parse(showTimepoint[i])<10) {
-								showTimepoint[i] = '0'+showTimepoint[i]+':00'
+							if (JSON.parse(showTimepoint[i]) < 10) {
+								showTimepoint[i] = '0' + showTimepoint[i] + ':00'
 							} else {
-								showTimepoint[i] = showTimepoint[i]+':00'
+								showTimepoint[i] = showTimepoint[i] + ':00'
 							}
-						} 
+						}
 						// console.log(showTimepoint)
 						let arr = []
 						for (var i = 0; i < showTimepoint.length; i++) {

@@ -311,6 +311,9 @@
 				},{
 					value: 3,
 					label: '电气'
+				},{
+					value: 4,
+					label: '设备'
 				}],
 				levelData: [{
 					value: '1',
@@ -463,6 +466,37 @@
 				this.isdeptshow = false
 				this.user.dept = data.name
 				this.jsonData.orgCode = data.orgCode
+				this.getDisciplineData(data.orgCode)
+			},
+			getDisciplineData(orgCode){
+				let newDisciplineData = []
+				let param = {
+					orgType:2,
+					orgCode:orgCode
+				};
+				let _this = this;
+				this.getDisciplineDataByUserOrg(param).then(res => {
+					if (res.data.code === 0) {
+						const data = res.data.data
+						for (let i = 0; i < _this.belongToWayData.length; i++) {
+							if(_this.belongToWayData[i].value==''){
+								newDisciplineData.push(_this.belongToWayData[i])
+							}
+							for (let j = 0; j < data.length; j++) {
+								if(data[j] == _this.belongToWayData[i].value){
+									newDisciplineData.push(_this.belongToWayData[i])
+								}
+							}
+						}
+						// this.updateTree.push(data[0].id)
+						_this.belongToWayData = newDisciplineData
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
 			},
 			content_show (event) {
 				this.addData.content = event
@@ -509,18 +543,18 @@
 			//获取部门接口
 			getDeptData() {
 				let json = {
-					orgCode: ""
+					orgType: 2
 				}
 				this.updateTree = []
 				this.deptList = []
-				this.deptData(json).then(res => {
+				this.pointPlanFarmDataByUser(json).then(res => {
 					if (res.data.code === 0) {
 						console.log("异常模块部门数据", res.data.data)
 						//将设备位置 从左树传给右侧 主界面
 						// this.$bus.emit('devicePlace', res.data.data)
 						const data = res.data.data
 						
-						this.deptList.push(res.data.data)
+						this.deptList = res.data.data;
 						this.updateTree[0] = res.data.data.id
 					} else {
 						this.$message({

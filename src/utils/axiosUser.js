@@ -29,6 +29,14 @@ export default {
 				data: data
 			})
 		};
+		//查询点检计划列表部门查询
+		  Vue.prototype.getDisciplineDataByUserOrg= function(data) { //全局函数
+		   return service({
+		    url: '/bi/organization/getMajorByUserOrg',
+		    method: 'post',
+		    data: data
+		   })
+		  };
 		//区域更新
 		Vue.prototype.areaUpdate = function(data) { //全局函数
 			return service({

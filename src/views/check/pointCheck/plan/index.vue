@@ -848,6 +848,7 @@
 					this.jsonData.shopId = data.id
 					this.jsonData.shopCode = data.orgCode
 					this.getDeptData(data.id) //获取部门
+					this.getDisciplineData(data.orgCode)
 				}
 			},
 			//删除人员
@@ -1132,6 +1133,35 @@
 						this.deptList = data
 					} else {
 						this.deptList = []
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
+			},
+			getDisciplineData(orgCode){
+				let newDisciplineData = []
+				let param = {
+					orgType:2,
+					orgCode:orgCode
+				};
+				this.getDisciplineDataByUserOrg(param).then(res => {
+					if (res.data.code === 0) {
+						const data = res.data.data
+						for (let i = 0; i < this.disciplineData.length; i++) {
+							if(this.disciplineData[i].value==''){
+								newDisciplineData.push(this.disciplineData[i])
+							}
+							for (let j = 0; j < data.length; j++) {
+								if(data[j] == this.disciplineData[i].value){
+									newDisciplineData.push(this.disciplineData[i])
+								}
+							}
+						}
+						// this.updateTree.push(data[0].id)
+						this.disciplineData = newDisciplineData
+					} else {
 						this.$message({
 							message: res.data.message,
 							type: 'warning'

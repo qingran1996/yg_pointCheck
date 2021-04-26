@@ -164,7 +164,6 @@
   import bus from "../../../../utils/bus"
 
   export default {
-    name: 'menuRole',
     components: {},
     data() {
       return {
@@ -344,7 +343,7 @@
       },
 
 
-      toMenu(){
+      toMenu(row){
         this.showMenu = true
       },
       handleClick(tab, event) {

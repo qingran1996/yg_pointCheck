@@ -186,7 +186,8 @@
 								that.totalPages = res.data.data.totalPages
 								for (var i = 0; i < data.length; i++) {
 									that.tableData.push({
-										cid: that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData.pageSize + i + 1,
+										cid: that.jsonData.pageNo * that.jsonData.pageSize - that
+											.jsonData.pageSize + i + 1,
 										id: data[i].id,
 										username: data[i].userName,
 										name: data[i].name,

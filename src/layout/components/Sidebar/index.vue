@@ -34,527 +34,526 @@
 			return {
 				titlename: '点检检修系统',
 				showMenu: [{
-					children: [{
-						path: 'index',
-						name: '首页',
-						meta: {
-							title: '首页',
-							icon: 'component',
-							affix: true
-						}
-					}]
-				}, {
-					id: 1,
-					path: '/basicInfomation',
-					name: 'basicInfomation',
-					meta: {
-						title: '基础信息管理',
-						icon: 'guide',
-					},
-					children: [{
-						path: 'person',
-						name: 'person',
-						meta: {
-							title: '人员管理',
-							keepAlive: true,
-							noCache: true
-						}
+						children: [{
+							path: 'index',
+							name: '首页',
+							meta: {
+								title: '首页',
+								icon: 'component',
+								affix: true
+							}
+						}]
 					}, {
-						path: 'domain',
-						name: 'domain',
+						id: 1,
+						path: '/basicInfomation',
+						name: 'basicInfomation',
 						meta: {
-							title: '点检区域',
-							keepAlive: true,
-							noCache: true
-						}
-					}, {
-						path: 'device',
-						name: 'device',
-						meta: {
-							title: '设备管理',
-							keepAlive: true,
-							noCache: true
-						}
-					}, {
-						path: 'standard',
-						name: 'standard',
-						meta: {
-							title: '标准管理'
+							title: '基础信息管理',
+							icon: 'guide',
 						},
 						children: [{
-							path: 'pointStandard',
-							name: 'pointStandard',
+							path: 'person',
+							name: 'person',
 							meta: {
-								title: '点检标准',
+								title: '人员管理',
 								keepAlive: true,
 								noCache: true
 							}
 						}, {
-							path: 'lookStandard',
-							name: 'lookStandard',
+							path: 'domain',
+							name: 'domain',
 							meta: {
-								title: '巡检标准',
+								title: '点检区域',
 								keepAlive: true,
 								noCache: true
 							}
-						}, 
-						// {
-						// 	path: 'onlineStandard',
-						// 	name: 'onlineStandard',
-						// 	meta: {
-						// 		title: '在线标准',
-						// 		keepAlive: true,
-						// 		noCache: true
-						// 	}
-						// },
-						]
-					}, {
-						path: 'dictionary',
-						name: 'dictionary',
-						meta: {
-							title: '数据字典',
-							keepAlive: true,
-							noCache: true
-						}
-					}]
-				},
-				{
-
-					id: 2,
-					path: '/root',
-					name: 'root',
-					meta: {
-						title: '权限管理',
-						icon: 'guide',
-					},
-					children: [
-            {
-              path: 'role',
-              name: 'rootrole',
-              meta: {
-                title: '角色管理',
-                keepAlive: true,
-                noCache: true
-              }
-              },
-					  {
-						path: 'menu',
-						name: 'rootMenu',
-						meta: {
-							title: '菜单管理',
-							keepAlive: true,
-							noCache: true
-						}
-					},
-            {
-              path: 'user',
-              name: 'userMenu',
-              meta: {
-                title: '用户管理',
-                keepAlive: true,
-                noCache: true
-              }
-            }
-					]
-
-				},
-				
-				// {
-
-				// 	id: 2,
-				// 	path: '/root',
-				// 	name: 'root',
-				// 	meta: {
-				// 		title: '权限管理',
-				// 		icon: 'guide',
-				// 	},
-				// 	children: [{
-				// 		path: 'role',
-				// 		name: 'rootrole',
-				// 		meta: {
-				// 			title: '角色管理'
-				// 		},
-				// 		children: [{
-				// 				path: 'menuRole',
-				// 				name: 'menuRole',
-				// 				meta: {
-				// 					title: '菜单权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			},
-				// 			{
-				// 				path: 'flowPathRole',
-				// 				name: 'flowPathRole',
-				// 				meta: {
-				// 					title: '流程权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			},
-				// 			{
-				// 				path: 'dataRole',
-				// 				name: 'dataRole',
-				// 				meta: {
-				// 					title: '数据权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}
-				// 		]
-				// 	}, {
-				// 		path: 'menu',
-				// 		name: 'rootMenu',
-				// 		meta: {
-				// 			title: '菜单管理',
-				// 			keepAlive: true,
-				// 			noCache: true
-				// 		}
-				// 	}]
-
-				// }, 
-				{
-					id: 3,
-					path: '/pointCheck',
-					name: 'pointCheck',
-					meta: {
-						title: '点巡检管理',
-						icon: 'guide',
-					},
-					children: [{
-							path: 'point',
-							name: 'point',
+						}, {
+							path: 'device',
+							name: 'device',
 							meta: {
-								title: '点检管理'
+								title: '设备管理',
+								keepAlive: true,
+								noCache: true
+							}
+						}, {
+							path: 'standard',
+							name: 'standard',
+							meta: {
+								title: '标准管理'
 							},
 							children: [{
-									path: 'pointCheckPlan',
-									name: 'pointCheckPlan',
+									path: 'pointStandard',
+									name: 'pointStandard',
 									meta: {
-										title: '点检计划管理',
+										title: '点检标准',
 										keepAlive: true,
 										noCache: true
 									}
-								},
-								{
-									path: 'pointCheckTask',
-									name: 'pointCheckTask',
+								}, {
+									path: 'lookStandard',
+									name: 'lookStandard',
 									meta: {
-										title: '点检任务查询',
-										keepAlive: true,
-										noCache: true
-									}
-								},
-								{
-									path: 'pointCheckArea',
-									name: 'pointCheckArea',
-									meta: {
-										title: '点检区域任务查询',
-										keepAlive: true,
-										noCache: true
-									}
-								},
-								{
-									path: 'pointCheckDataSearch',
-									name: 'pointCheckDataSearch',
-									meta: {
-										title: '点检数据查询',
+										title: '巡检标准',
 										keepAlive: true,
 										noCache: true
 									}
 								},
 								// {
-								// 	path: 'pointCheckDataAbout',
-								// 	name: 'pointCheckDataAbout',
+								// 	path: 'onlineStandard',
+								// 	name: 'onlineStandard',
 								// 	meta: {
-								// 		title: '点检数据分析',
+								// 		title: '在线标准',
 								// 		keepAlive: true,
 								// 		noCache: true
 								// 	}
-								// }
+								// },
 							]
-						},
-						{
-							path: 'xun',
-							name: 'xun',
+						}, {
+							path: 'dictionary',
+							name: 'dictionary',
 							meta: {
-								title: '巡检管理',
-							},
-							children: [{
-									path: 'xunCheckPlan',
-									name: 'xunCheckPlan',
-									meta: {
-										title: '巡检计划管理',
-										keepAlive: true,
-										noCache: true
-									}
-								},
-								{
-									path: 'xunCheckTask',
-									name: 'xunCheckTask',
-									meta: {
-										title: '巡检任务查询',
-										keepAlive: true,
-										noCache: true
-									}
-								},
-								{
-									path: 'xunCheckArea',
-									name: 'xunCheckArea',
-									meta: {
-										title: '巡检区域任务查询',
-										keepAlive: true,
-										noCache: true
-									}
-								},
-								{
-									path: 'xunCheckDataSearch',
-									name: 'xunCheckDataSearch',
-									meta: {
-										title: '巡检数据查询',
-										keepAlive: true,
-										noCache: true
-									}
+								title: '数据字典',
+								keepAlive: true,
+								noCache: true
+							}
+						}]
+					},
+					{
+
+						id: 2,
+						path: '/root',
+						name: 'root',
+						meta: {
+							title: '权限管理',
+							icon: 'guide',
+						},
+						children: [{
+								path: 'role',
+								name: 'rootrole',
+								meta: {
+									title: '角色管理',
+									keepAlive: true,
+									noCache: true
 								}
-							]
-						}
-					]
+							},
+							{
+								path: 'menu',
+								name: 'rootMenu',
+								meta: {
+									title: '菜单管理',
+									keepAlive: true,
+									noCache: true
+								}
+							},
+							{
+								path: 'user',
+								name: 'userMenu',
+								meta: {
+									title: '用户管理',
+									keepAlive: true,
+									noCache: true
+								}
+							}
+						]
 
-				}, {
-					id: 4,
-					path: '/abnormaWeek',
-					name: 'abnormaWeek',
-					alwaysShow: true, //保持展开两个
-					meta: {
-						title: '异常周期管理',
-						icon: 'guide',
 					},
-					children: [{
-							path: 'abnormaMock',
-							name: 'abnormaMock',
-							meta: {
-								title: '隐患模块',
-								keepAlive: true,
-								noCache: true
-							}
+
+					// {
+
+					// 	id: 2,
+					// 	path: '/root',
+					// 	name: 'root',
+					// 	meta: {
+					// 		title: '权限管理',
+					// 		icon: 'guide',
+					// 	},
+					// 	children: [{
+					// 		path: 'role',
+					// 		name: 'rootrole',
+					// 		meta: {
+					// 			title: '角色管理'
+					// 		},
+					// 		children: [{
+					// 				path: 'menuRole',
+					// 				name: 'menuRole',
+					// 				meta: {
+					// 					title: '菜单权限',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			},
+					// 			{
+					// 				path: 'flowPathRole',
+					// 				name: 'flowPathRole',
+					// 				meta: {
+					// 					title: '流程权限',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			},
+					// 			{
+					// 				path: 'dataRole',
+					// 				name: 'dataRole',
+					// 				meta: {
+					// 					title: '数据权限',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			}
+					// 		]
+					// 	}, {
+					// 		path: 'menu',
+					// 		name: 'rootMenu',
+					// 		meta: {
+					// 			title: '菜单管理',
+					// 			keepAlive: true,
+					// 			noCache: true
+					// 		}
+					// 	}]
+
+					// }, 
+					{
+						id: 3,
+						path: '/pointCheck',
+						name: 'pointCheck',
+						meta: {
+							title: '点巡检管理',
+							icon: 'guide',
 						},
-						// {
-						// 	path: 'weekMock',
-						// 	name: 'weekMock',
-						// 	meta: {
-						// 		title: '周期模块',
-						// 		keepAlive: true,
-						// 		noCache: true
-						// 	}
-						// }
-					]
-				}, 
-				{
-					id: 5,
-					path: '/overhaul',
-					name: 'overhaul',
-					meta: {
-						title: '检修管理',
-						icon: 'guide',
+						children: [{
+								path: 'point',
+								name: 'point',
+								meta: {
+									title: '点检管理'
+								},
+								children: [{
+										path: 'pointCheckPlan',
+										name: 'pointCheckPlan',
+										meta: {
+											title: '点检计划管理',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'pointCheckTask',
+										name: 'pointCheckTask',
+										meta: {
+											title: '点检任务查询',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'pointCheckArea',
+										name: 'pointCheckArea',
+										meta: {
+											title: '点检区域任务查询',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'pointCheckDataSearch',
+										name: 'pointCheckDataSearch',
+										meta: {
+											title: '点检数据查询',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									// {
+									// 	path: 'pointCheckDataAbout',
+									// 	name: 'pointCheckDataAbout',
+									// 	meta: {
+									// 		title: '点检数据分析',
+									// 		keepAlive: true,
+									// 		noCache: true
+									// 	}
+									// }
+								]
+							},
+							{
+								path: 'xun',
+								name: 'xun',
+								meta: {
+									title: '巡检管理',
+								},
+								children: [{
+										path: 'xunCheckPlan',
+										name: 'xunCheckPlan',
+										meta: {
+											title: '巡检计划管理',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'xunCheckTask',
+										name: 'xunCheckTask',
+										meta: {
+											title: '巡检任务查询',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'xunCheckArea',
+										name: 'xunCheckArea',
+										meta: {
+											title: '巡检区域任务查询',
+											keepAlive: true,
+											noCache: true
+										}
+									},
+									{
+										path: 'xunCheckDataSearch',
+										name: 'xunCheckDataSearch',
+										meta: {
+											title: '巡检数据查询',
+											keepAlive: true,
+											noCache: true
+										}
+									}
+								]
+							}
+						]
+
+					}, {
+						id: 4,
+						path: '/abnormaWeek',
+						name: 'abnormaWeek',
+						alwaysShow: true, //保持展开两个
+						meta: {
+							title: '异常周期管理',
+							icon: 'guide',
+						},
+						children: [{
+								path: 'abnormaMock',
+								name: 'abnormaMock',
+								meta: {
+									title: '隐患模块',
+									keepAlive: true,
+									noCache: true
+								}
+							},
+							// {
+							// 	path: 'weekMock',
+							// 	name: 'weekMock',
+							// 	meta: {
+							// 		title: '周期模块',
+							// 		keepAlive: true,
+							// 		noCache: true
+							// 	}
+							// }
+						]
 					},
-					children: [{
-							path: 'overhaulPlan',
-							name: 'overhaulPlan',
-							meta: {
-								title: '检修作业卡',
-								keepAlive: true,
-								noCache: true
-							}
+					{
+						id: 5,
+						path: '/overhaul',
+						name: 'overhaul',
+						meta: {
+							title: '检修管理',
+							icon: 'guide',
 						},
-						// {
-						// 	path: 'overhaulProject',
-						// 	name: 'overhaulProject',
-						// 	meta: {
-						// 		title: '检修项目',
-						// 		keepAlive: true,
-						// 		noCache: true
-						// 	}
-						// }, 
-						{
-							path: 'safe',
-							name: 'safe',
-							meta: {
-								title: '安全风险措施管理',
-								keepAlive: true,
-								noCache: true
+						children: [{
+								path: 'overhaulPlan',
+								name: 'overhaulPlan',
+								meta: {
+									title: '检修作业卡',
+									keepAlive: true,
+									noCache: true
+								}
+							},
+							// {
+							// 	path: 'overhaulProject',
+							// 	name: 'overhaulProject',
+							// 	meta: {
+							// 		title: '检修项目',
+							// 		keepAlive: true,
+							// 		noCache: true
+							// 	}
+							// }, 
+							{
+								path: 'safe',
+								name: 'safe',
+								meta: {
+									title: '安全风险措施管理',
+									keepAlive: true,
+									noCache: true
+								}
 							}
-						}
-					]
+						]
 
-				}, 
-				// {
-				// 	id: 6,
-				// 	path: '/goods',
-				// 	name: 'goods',
-				// 	meta: {
-				// 		title: '物资管理',
-				// 		icon: 'guide',
-				// 	},
-				// 	children: [{
-				// 			path: 'warehouse',
-				// 			name: 'warehouse',
-				// 			meta: {
-				// 				title: '物资信息查询',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		},
-				// 		{
-				// 			path: 'spareParts',
-				// 			name: 'spareParts',
-				// 			meta: {
-				// 				title: '物资报表管理',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		},
-				// 		{
-				// 			path: 'goodsDetails',
-				// 			name: 'goodsDetails',
-				// 			meta: {
-				// 				title: '物资履历信息',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}
-				// 	]
-
-
-				// }, 
-				// {
-
-				// 	id: 7,
-				// 	path: '/onlineshow',
-				// 	name: 'onlineshow',
-				// 	meta: {
-				// 		title: '在线数据管理',
-				// 		icon: 'guide',
-				// 	},
-				// 	children: [{
-				// 			path: 'onlineData',
-				// 			name: 'onlineData',
-				// 			meta: {
-				// 				title: '在线数据',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		},
-				// 		{
-				// 			path: 'history',
-				// 			name: 'history',
-				// 			meta: {
-				// 				title: '历史数据',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}
-				// 	]
+					},
+					// {
+					// 	id: 6,
+					// 	path: '/goods',
+					// 	name: 'goods',
+					// 	meta: {
+					// 		title: '物资管理',
+					// 		icon: 'guide',
+					// 	},
+					// 	children: [{
+					// 			path: 'warehouse',
+					// 			name: 'warehouse',
+					// 			meta: {
+					// 				title: '物资信息查询',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		},
+					// 		{
+					// 			path: 'spareParts',
+					// 			name: 'spareParts',
+					// 			meta: {
+					// 				title: '物资报表管理',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		},
+					// 		{
+					// 			path: 'goodsDetails',
+					// 			name: 'goodsDetails',
+					// 			meta: {
+					// 				title: '物资履历信息',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}
+					// 	]
 
 
+					// }, 
+					// {
 
-				// }, 
-				// {
-				// 	id: 8,
-				// 	path: '/system',
-				// 	name: 'system',
-				// 	meta: {
-				// 		title: '系统管理',
-				// 		icon: 'guide',
-				// 	},
-				// 	children: [{
-				// 			path: 'online',
-				// 			name: 'online',
-				// 			meta: {
-				// 				title: '在线统计',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			},
-				// 			children: [{
-				// 				path: 'onlineApp',
-				// 				name: 'onlineApp',
-				// 				meta: {
-				// 					title: 'App端统计',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}, {
-				// 				path: 'onlineWeb',
-				// 				name: 'onlineWeb',
-				// 				meta: {
-				// 					title: 'Web端统计',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}]
-				// 		},
-				// 		{
-				// 			path: 'record',
-				// 			name: 'record',
-				// 			meta: {
-				// 				title: '日志管理',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			},
-				// 			children: [{
-				// 				path: 'recordAction',
-				// 				name: 'recordAction',
-				// 				meta: {
-				// 					title: '操作日志',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}, {
-				// 				path: 'recordLogin',
-				// 				name: 'recordLogin',
-				// 				meta: {
-				// 					title: '登陆日志',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}]
-				// 		}, {
-				// 			path: 'appEdition',
-				// 			name: 'appEdition',
-				// 			meta: {
-				// 				title: 'App版本迭代记录',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}, {
-				// 			path: 'cronJob',
-				// 			name: 'cronJob',
-				// 			meta: {
-				// 				title: '定时任务可视化',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}, {
-				// 			path: 'server',
-				// 			name: 'server',
-				// 			meta: {
-				// 				title: '服务器监控',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}, {
-				// 			path: 'parameter',
-				// 			name: 'parameter',
-				// 			meta: {
-				// 				title: '参数配置',
-				// 				keepAlive: true,
-				// 				noCache: true
-				// 			}
-				// 		}
-				// 	]
+					// 	id: 7,
+					// 	path: '/onlineshow',
+					// 	name: 'onlineshow',
+					// 	meta: {
+					// 		title: '在线数据管理',
+					// 		icon: 'guide',
+					// 	},
+					// 	children: [{
+					// 			path: 'onlineData',
+					// 			name: 'onlineData',
+					// 			meta: {
+					// 				title: '在线数据',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		},
+					// 		{
+					// 			path: 'history',
+					// 			name: 'history',
+					// 			meta: {
+					// 				title: '历史数据',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}
+					// 	]
 
 
 
-				// },
+					// }, 
+					// {
+					// 	id: 8,
+					// 	path: '/system',
+					// 	name: 'system',
+					// 	meta: {
+					// 		title: '系统管理',
+					// 		icon: 'guide',
+					// 	},
+					// 	children: [{
+					// 			path: 'online',
+					// 			name: 'online',
+					// 			meta: {
+					// 				title: '在线统计',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			},
+					// 			children: [{
+					// 				path: 'onlineApp',
+					// 				name: 'onlineApp',
+					// 				meta: {
+					// 					title: 'App端统计',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			}, {
+					// 				path: 'onlineWeb',
+					// 				name: 'onlineWeb',
+					// 				meta: {
+					// 					title: 'Web端统计',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			}]
+					// 		},
+					// 		{
+					// 			path: 'record',
+					// 			name: 'record',
+					// 			meta: {
+					// 				title: '日志管理',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			},
+					// 			children: [{
+					// 				path: 'recordAction',
+					// 				name: 'recordAction',
+					// 				meta: {
+					// 					title: '操作日志',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			}, {
+					// 				path: 'recordLogin',
+					// 				name: 'recordLogin',
+					// 				meta: {
+					// 					title: '登陆日志',
+					// 					keepAlive: true,
+					// 					noCache: true
+					// 				}
+					// 			}]
+					// 		}, {
+					// 			path: 'appEdition',
+					// 			name: 'appEdition',
+					// 			meta: {
+					// 				title: 'App版本迭代记录',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}, {
+					// 			path: 'cronJob',
+					// 			name: 'cronJob',
+					// 			meta: {
+					// 				title: '定时任务可视化',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}, {
+					// 			path: 'server',
+					// 			name: 'server',
+					// 			meta: {
+					// 				title: '服务器监控',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}, {
+					// 			path: 'parameter',
+					// 			name: 'parameter',
+					// 			meta: {
+					// 				title: '参数配置',
+					// 				keepAlive: true,
+					// 				noCache: true
+					// 			}
+					// 		}
+					// 	]
+
+
+
+					// },
 				]
 			}
 		},

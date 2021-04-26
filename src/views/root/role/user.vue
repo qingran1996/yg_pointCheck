@@ -1,23 +1,24 @@
 <template>
 	<div class="rootuser">
 		<el-card class="box-card" shadow="always">
-		  <el-form :inline="true" :model="user" class="demo-form-inline">
-		    <el-form-item label="用户名">
-		      <el-input v-model="user.username" placeholder="请输入用户名" @input="user_username_show" clearable/>
-		    </el-form-item>
-		    <el-form-item label="人员姓名">
-		      <el-input v-model="user.name" placeholder="请输入人员姓名" @input="user_name_show" clearable/>
-		    </el-form-item>
-		    <el-form-item>
-		      <el-button size="small" type="primary" @click="onSubmit(user)">查询</el-button>
-		    </el-form-item>
-		  </el-form>
+			<el-form :inline="true" :model="user" class="demo-form-inline">
+				<el-form-item label="用户名">
+					<el-input v-model="user.username" placeholder="请输入用户名" @input="user_username_show" clearable />
+				</el-form-item>
+				<el-form-item label="人员姓名">
+					<el-input v-model="user.name" placeholder="请输入人员姓名" @input="user_name_show" clearable />
+				</el-form-item>
+				<el-form-item>
+					<el-button size="small" type="primary" @click="onSubmit(user)">查询</el-button>
+				</el-form-item>
+			</el-form>
 		</el-card>
 		<el-card class="box-card" shadow="always">
 			<el-row style="margin-bottom: 5px;">
 				<el-button type="primary" @click="adduser">新增用户</el-button>
 			</el-row>
-			<el-table v-loading="loading" :data="tableData" :row-key="getRowKeys" border style="width: 100%" :max-height="tableHeight">
+			<el-table v-loading="loading" :data="tableData" :row-key="getRowKeys" border style="width: 100%"
+				:max-height="tableHeight">
 				<!-- <el-table-column type="index" label="序号" width="100" align="center" /> -->
 				<el-table-column prop="cid" width="100" label="序号" align="center" fixed>
 				</el-table-column>
@@ -41,8 +42,9 @@
 			</el-table>
 			<!-- 分页器 -->
 			<div class="block" style="margin-top:15px;" v-show="showpage">
-				<el-pagination v-show="total!==0" align="center" :current-page="currentPage" :page-sizes="[5,10,20]" :page-size="pageSize"
-				 layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+				<el-pagination v-show="total!==0" align="center" :current-page="currentPage" :page-sizes="[5,10,20]"
+					:page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+					@size-change="handleSizeChange" @current-change="handleCurrentChange" />
 			</div>
 		</el-card>
 		<!-- 配置角色 -->
@@ -50,63 +52,72 @@
 		<!-- 新增 -->
 		<userAdd></userAdd>
 
-    <vxe-modal v-model="showTabs" title="新增&保存" width="60%" min-width="600" height="50%"
-               resize destroy-on-close>
-      <template #default>
-        <vxe-form :data="group" :rules="groupRules" title-colon title-align="right" title-width="150"
-                  ref="xForm" >
-          <vxe-form-item title="用户名称" field="name" span="12" :item-render="{}">
-            <template #default="scope">
-              <vxe-input v-model="group.name" @input="$refs.xForm.updateStatus(scope)"
-                         placeholder="请输入用户名称" clearable></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="人员姓名" field="userName" span="12" :item-render="{}">
-            <template #default="scope">
-              <vxe-input v-model="group.userName" @input="$refs.xForm.updateStatus(scope)"
-                         placeholder="请输入人员姓名" clearable></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="手机号" field="phoneNumber" span="12" :item-render="{}">
-            <template #default="scope">
-              <vxe-input v-model="group.phoneNumber" @input="$refs.xForm.updateStatus(scope)"
-                         placeholder="请输入手机号" clearable></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item v-if="ytres" title="密码" field="password" span="12" :item-render="{}">
-            <template #default="scope">
-              <vxe-input type="password" v-model="group.password" @input="$refs.xForm.updateStatus(scope)"
-                         placeholder="请输入密码" clearable></vxe-input>
-            </template>
-          </vxe-form-item>
-          <!--<vxe-form-item title="专业" field="profession" span="12" :item-render="{}">-->
-            <!--<template #default="scope">-->
-              <!--<vxe-input v-model="group.profession" @input="$refs.xForm.updateStatus(scope)"-->
-                         <!--placeholder="请输入人员姓名" clearable></vxe-input>-->
-            <!--</template>-->
-          <!--</vxe-form-item>-->
-          <vxe-form-item title="专业" field="professionName" span="12" :item-render="{}">
-            <template #default="scope">
-              <vxe-select v-model="group.professionName" @change="$refs.xForm.updateStatus(scope)"
-                          placeholder="请选择标签" clearable>
-                <vxe-option  :key="1" value="1" label="生产"></vxe-option>
-                <vxe-option  :key="2" value="2" label="安全"></vxe-option>
-                <vxe-option  :key="3" value="3" label="电气"></vxe-option>
-                <vxe-option  :key="4" value="4" label="设备"></vxe-option>
-              </vxe-select>
-            </template>
-          </vxe-form-item>
-
-
-          <vxe-form-item class="bottomShow" align="center" span="24" :item-render="{}">
-            <template #default>
-              <vxe-button @click="groupSumbit" status="primary">确定</vxe-button>
-              <vxe-button @click="showTabs=false">取消</vxe-button>
-            </template>
-          </vxe-form-item>
-        </vxe-form>
-      </template>
-    </vxe-modal>
+		<vxe-modal v-model="showTabs" title="新增&保存" width="60%" min-width="600" height="50%" resize destroy-on-close>
+			<template #default>
+				<vxe-form :data="group" :rules="groupRules" title-colon title-align="right" title-width="150"
+					ref="xForm" @submit="submitEvent">
+					<vxe-form-item title="用户名称" field="name" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-input v-model="group.name" @input="$refs.xForm.updateStatus(scope)"
+								placeholder="请输入用户名称" clearable></el-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item title="人员姓名" field="userName" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-input v-model="group.userName" @input="$refs.xForm.updateStatus(scope)"
+								placeholder="请输入人员姓名" clearable></el-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item title="手机号" field="phoneNumber" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-input v-model="group.phoneNumber" @input="$refs.xForm.updateStatus(scope)"
+								placeholder="请输入手机号" clearable></el-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item title="密码" field="password" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-input   v-model="group.password" @input="$refs.xForm.updateStatus(scope)"
+								placeholder="请输入密码" clearable></el-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item title="专业" field="professionName" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-select v-model="group.professionName" @change="$refs.xForm.updateStatus(scope)"
+								placeholder="请选择专业" clearable>
+								<el-option :key="1" value="1" label="生产"></el-option>
+								<el-option :key="2" value="2" label="安全"></el-option>
+								<el-option :key="3" value="3" label="电气"></el-option>
+								<el-option :key="4" value="4" label="设备"></el-option>
+							</el-select>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item title="部门选择" field="dept" span="12" :item-render="{}">
+						<template #default="scope">
+							<el-popover placement="right" width="400" trigger="click" v-model="isdeptshow">
+								<div style="height: 200px;overflow-y: scroll;">
+									<el-tree :data="deptList" accordion node-key="id" :default-expanded-keys="updateTree"
+										:expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick">
+									</el-tree>
+								</div>
+								<!-- <el-button slot="reference">选择部门</el-button> -->
+								<el-input v-model="group.dept" placeholder="请点击选择部门" slot="reference" clearable />
+							</el-popover>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item class="bottomShow" align="center" span="24" :item-render="{}">
+						<template #default>
+							<vxe-button type="submit" status="primary">确定</vxe-button>
+							<vxe-button type="reset">重置</vxe-button>
+						</template>
+					</vxe-form-item>
+				</vxe-form>
+				
+				
+				
+				
+				
+			</template>
+		</vxe-modal>
 	</div>
 </template>
 
@@ -122,41 +133,52 @@
 		data() {
 			return {
 				// 筛选
-        ytres:true,
-        showTabs: false,
-        group: {
-          name: '',
-          userName: '',
-          phoneNumber: '',
-          password: '',
-          professionName: '',
-          personId: '0',
-        },
-        groupRules: {
-          name: [{
-            required: true,
-            message: '请输入名称'
-          }],
-          userName: [{
-            required: true,
-            message: '请输入人员姓名'
-          }],
-          phoneNumber: [{
-            required: true,
-            message: '请输入手机号'
-          }],
-          password: [{
-            required: true,
-            message: '请输入密码'
-          }],
-          professionName: [{
-            required: true,
-            message: '请选择专业'
-          }],
-        },
+				ytres: true,
+				showTabs: false,
+				group: {
+					name: '',
+					userName: '',
+					phoneNumber: '',
+					defaultProps:'',
+					dept:'',
+					orgCode: '',
+					password: '',
+					professionName: '',
+					personId: '0',
+					
+				},
+				isdeptshow: false, //部门弹出
+				deptList: [],
+				updateTree: [],
+				defaultProps: {
+					children: 'childOrgs',
+					label: 'name'
+				},
+				groupRules: {
+					name: [{
+						required: true,
+						message: '请输入名称'
+					}],
+					userName: [{
+						required: true,
+						message: '请输入人员姓名'
+					}],
+					phoneNumber: [{
+						required: true,
+						message: '请输入手机号'
+					}],
+					password: [{
+						required: true,
+						message: '请输入密码'
+					}],
+					professionName: [{
+						required: true,
+						message: '请选择专业'
+					}],
+				},
 				user: {
-				  name: '',
-				  personName: ''
+					name: '',
+					personName: ''
 				},
 				loading: false,
 				tableHeight: document.body.clientHeight - 84 - 36 - 50 - 152, // 表格高度
@@ -183,17 +205,44 @@
 		},
 		created() {
 			this.getTable() //获取table数据
-			this.$bus.$on("userTable_update", msg => {
-				// this.currentPage = 1
-				// this.jsonData.pageNo = 1
-				this.getTable() //请求数据
-			});
+			this.getDeptData()
+			
 		},
 		methods: {
-			user_username_show (event) {
+			//获取部门接口
+			getDeptData() {
+				let json = {
+					orgType: 2
+				}
+				this.updateTree = []
+				this.deptList = []
+				this.pointPlanFarmDataByUser(json).then(res => {
+					if (res.data.code === 0) {
+						console.log("部门数据", res.data.data)
+						//将设备位置 从左树传给右侧 主界面
+						// this.$bus.emit('devicePlace', res.data.data)
+						const data = res.data.data
+						// this.updateTree[0] = res.data.data[.id]
+						this.deptList = data
+			
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
+			},
+			handleNodeClick(data) {
+				console.log(data);
+				this.isdeptshow = false
+				this.group.dept = data.name
+				this.group.orgCode = data.orgCode
+			},
+			user_username_show(event) {
 				this.jsonData.userName = event
 			},
-			user_name_show (event) {
+			user_name_show(event) {
 				this.jsonData.name = event
 			},
 			onSubmit(item) {
@@ -203,45 +252,58 @@
 			},
 			//新增角色
 			adduser() {
-			  this.ytres = true
-        this.group =   {
-            name: '',
-            userName: '',
-            phoneNumber: '',
-            password: '',
-            professionName: '',
-            personId: '0',
-        },
-			  this.showTabs = true
+				this.ytres = true
+				this.group = {
+						name: '',
+						userName: '',
+						phoneNumber: '',
+						password: '',
+						professionName: '',
+						personId: '0',
+					},
+					this.showTabs = true
 				// this.$bus.$emit('userAdd', true)
 				//this.$bus.$emit('roleAdd', true)
 			},
-
-      groupSumbit() {
-			  this.userAdd(this.group).then(res =>{
-          if (res.data.code==0){
-            this.$message.success('操作成功')
-            this.showTabs = false
-            this.getTable()
-          } else {
-            this.$message.error('操作失败')
-            this.showTabs = false
-          }
-        })
-      },
+			submitEvent () {
+					// this.submitLoading = true
+					// setTimeout(() => {
+					// 	this.submitLoading = false
+						
+					// 	if (this.selectRow) {
+							
+					// 	} else {
+					// 		console.log('新增')
+					// 	}
+					// }, 500)
+					this.groupSumbit()
+				
+			},
+			groupSumbit() {
+				this.userAdd(this.group).then(res => {
+					if (res.data.code == 0) {
+						this.$message.success('操作成功')
+						this.showTabs = false
+						this.getTable()
+					} else {
+						this.$message.error('操作失败')
+						this.showTabs = false
+					}
+				})
+			},
 			//查看
 			lookList(row) {
 				// this.$bus.$emit('userLook', row)
-        this.ytres = false
-        this.showTabs = true
+				this.ytres = false
+				this.showTabs = true
 
-        this.group.name = row.name
-        this.group.userName = row.userName
-        this.group.phoneNumber = row.phoneNumber
-        this.group.password = row.password
-        this.group.professionName = row.professionName
-        this.group.personId = '0'
-        console.log(row)
+				this.group.name = row.name
+				this.group.userName = row.userName
+				this.group.phoneNumber = row.phoneNumber
+				this.group.password = row.password
+				this.group.professionName = row.professionName
+				this.group.personId = '0'
+				console.log(row)
 			},
 			//删除
 			deleteList(row) {
@@ -264,15 +326,15 @@
 					userName: row.userName
 				}
 				//console.log(addJson)
-				this.userdelete(addJson).then(res =>{
-				  if (res.data.code==0){
-				    this.$message.success('操作成功')
-            this.getTable()
-          } else {
-            this.$message.error('操作失败')
-          }
+				this.userdelete(addJson).then(res => {
+					if (res.data.code == 0) {
+						this.$message.success('操作成功')
+						this.getTable()
+					} else {
+						this.$message.error('操作失败')
+					}
 
-        })
+				})
 			},
 			getRowKeys(row) {
 				return row.cid; // cid为列表数据的唯一标识
@@ -293,8 +355,12 @@
 							if (data.length !== 0) { //如果请求数据不为空
 								that.total = res.data.data.total //列表总数
 								// that.totalPages = res.data.data.totalPages
-                that.tableData =data
-                //console.log('表', that.tableData)
+								for (var i = 0; i < data.length; i++) {
+									data[i]['cid'] = that.jsonData.pageNo * that.jsonData.pageSize - that
+											.jsonData.pageSize + i + 1
+								}
+								that.tableData = data
+								//console.log('表', that.tableData)
 							} else {
 								that.tableData = []
 								that.total = 0
