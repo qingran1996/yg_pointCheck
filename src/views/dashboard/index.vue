@@ -1,26 +1,41 @@
 <template>
   <div class="dashboard-container" :style="{height: indexheight}">
-	  
-    <!-- <el-row :gutter="10">
-      <el-col :xl="10" >
-        <todayWarning/>
+
+    <div class="head_">
+
+      <div class="head_title">
+        <!--<img src="../../../public/headerTip.png"-->
+             <!--style="width: 30px;height: 30px;vertical-align: middle;margin: 10px 0 10px 12px;" alt="">-->
+        <!--<span style="margin-left: 10px">联峰实业设备管理系统</span>-->
+        </div>
+    </div>
+    <div class="body_"></div>
+    <el-row :gutter="10" class="row1">
+      <el-col :xl="8" >
+
       </el-col>
-      <el-col :xl="14" >
-         <Agent/>
+      <el-col :xl="8" >
+
+      </el-col>
+      <el-col :xl="8" >
+
       </el-col>
     </el-row>
-    <el-row :gutter="15" style="margin-top: 10px;">
+    <el-row :gutter="10" class="row2">
       <el-col :xl="8" >
-        <warningTrend/>
+
       </el-col>
       <el-col :xl="8" >
-        <deviceCount/>
+
       </el-col>
       <el-col :xl="8" >
-        <onlineStatistics/>
+
       </el-col>
-    </el-row> -->
-    <!-- <component :is="currentRole" /> -->
+      <el-col :xl="8" >
+
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -57,13 +72,43 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .dashboard-container{
+  border: 1px solid red;
   /* padding: 15px; */
 	background: url(../../assets/user_images/indexPic.png) no-repeat center/cover;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 	overflow-y: hidden;
 	background-size: 100% 100%;
 	object-fit: fill;
 }
+  .head_{
+    width: 100%;
+    height: 5%;
+    border: 1px solid yellow;
+    .head_title{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(0,227,232);
+      font-size: 32px;
+    }
+  }
+
+
+  .body_{
+    width: 100%;
+    height: 95%;
+    border: 1px solid cornflowerblue;
+    .row2{
+      height: 55%;
+    }
+    .row2{
+      margin-top: 10px;
+      height: 45%;
+    }
+  }
 </style>

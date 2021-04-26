@@ -15,11 +15,11 @@
 				<el-form-item>
 					<el-button type="primary" style="margin-top: 20px;" class="submit_btn" @click="submitForm('loginForm')"
 					 @keyup.enter="submitForm('loginForm')">登录</el-button>
-				</el-form-item>  
-			</el-form>   
+				</el-form-item>
+			</el-form>
 		</div>
 
-	</div> 
+	</div>
 </template>
 
 <script>
@@ -134,22 +134,15 @@
 					this.$refs.password.focus()
 				})
 			},
+      getMenu(){
+        this.getWEBTree().then(res => {
+          console.log('WEBTree', res.data.data)
+          localStorage.setItem('userMenu', JSON.stringify(res.data.data)) // 存储动态菜单
+        }).catch(err => {
+          console.log(err)
+        })
+      },
 			submitForm(formName) {
-				// let addJson = {
-				// 	userName: this.loginUser.username,
-				// 	password: this.loginUser.password
-				// }
-				// this.$axios.post('/a/login', addJson).then(res => {
-				// 	if (res.data.code == 0) { //登录成功
-				// 		this.loginSuccess(res.data.data)
-				// 		console.log(res.data.data.accessToken)
-				// 	} else {
-				// 		this.$notify.error({
-				// 			title: '登录失败',
-				// 			message: res.data.message
-				// 		});
-				// 	}
-				// })
 				this.$refs.loginForm.validate(valid => {
 					if (valid) {
 						const addJson = {
@@ -159,6 +152,7 @@
 						this.$axios.post('/user/login', addJson).then(res => {
 							if (res.data.code === 0) { // 登录成功
 								const data = res.data.data
+                // this.getMenu()
 								localStorage.setItem('eleToken', data.accessToken) // 存储token
 								localStorage.setItem('userId', data.id) // 存储用户id
 								localStorage.setItem('username', data.userName) // 存储用户账户名
@@ -309,7 +303,7 @@
 		color: rgba(17,105,255,0.7)
 	}
 
-	
+
 
 	::-webkit-input-placeholder {
 		/*Webkit browsers 谷歌*/
@@ -341,7 +335,7 @@
 		color: white;
 		padding: 20px 20px 0 20px;
 		border-radius: 5px;
-		
+
 	}
 
 	@keyframes clipMe {
