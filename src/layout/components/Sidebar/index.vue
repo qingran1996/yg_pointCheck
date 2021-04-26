@@ -33,8 +33,9 @@
 		data() {
 			return {
 				titlename: '点检检修系统',
-				showMenu: [
-				  {
+
+				showMenu: [{
+
 						children: [{
 							path: 'index',
 							name: '首页',
@@ -56,7 +57,7 @@
 							path: 'person',
 							name: 'person',
 							meta: {
-								title: '人员管理66',
+								title: '人员管理',
 								keepAlive: true,
 								noCache: true
 							}
@@ -110,6 +111,7 @@
 								noCache: true
 							}
 						}]
+
 					},
 					{
 
@@ -202,7 +204,6 @@
 											noCache: true
 										}
 									},
-
 								]
 							},
 							{
@@ -299,12 +300,7 @@
 								}
 							}
 						]
-
 					},
-
-
-
-
 
 				]
 			}
@@ -340,7 +336,6 @@
 			}
 		},
 		mounted() {
-
 			console.log(this.isCollapse)
 			const data = JSON.parse(this.getItems.replace(/url/g, 'path'))
       let showMenu = []
@@ -386,9 +381,7 @@
         if (da.children.length!=0){
           da.children.forEach(o =>{
             // console.log('o.id',o)
-
             for (let i = 0; i < data.length; i++) {
-
               // console.log('o.id',o.id)
               // console.log('data[i].parentId',data[i].parentId)
               if (o.id==data[i].parentId){
@@ -415,7 +408,7 @@
 
       })
       console.log('menuData8',showMenu)
-      this.showMenu = showMenu
+      // this.showMenu = showMenu
 
 		},
     methods:{

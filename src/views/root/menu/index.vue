@@ -293,7 +293,7 @@
 
     },
     methods: {
-     //获取部门接口
+      //获取部门接口
       getDeptData() {
 
         this.updateTree = []

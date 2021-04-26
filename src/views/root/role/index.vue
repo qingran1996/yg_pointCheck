@@ -1041,45 +1041,49 @@
 
     }
   }
+
+
 </script>
 <style scoped>
-  .domain {
-    padding: 10px;
-  }
+	.domain {
+		padding: 10px;
+	}
 
-  .el-icon-circle-plus-outline, .el-icon-setting {
-    color: #1890ff;
-    cursor: pointer;
-  }
+	.el-icon-circle-plus-outline,
+	.el-icon-setting {
+		color: #1890ff;
+		cursor: pointer;
+	}
 
-  .info {
-    position: relative;
-  }
+	.info {
+		position: relative;
+	}
 
-  .sumbit{
-    position: absolute;
-    right: 50px;
-    top: 30px;
-  }
-  ._box {
-    width: 100%;
-    height: 100%;
-  }
+	.sumbit {
+		position: absolute;
+		right: 50px;
+		top: 30px;
+	}
 
-  ._bar {
-    width: 40%;
-    height: 100%;
-    min-height: 500px;
-    float: left;
-    border: 1px solid #eee;
-  }
+	._box {
+		width: 100%;
+		height: 100%;
+	}
 
-  .title {
-    width: 50%;
-    height: 50px;
-    line-height: 50px;
-    border-bottom: 1px solid #eee;
-    border-right: 1px solid #eee;
-    text-align: center;
-  }
+	._bar {
+		width: 40%;
+		height: 100%;
+		min-height: 500px;
+		float: left;
+		border: 1px solid #eee;
+	}
+
+	.title {
+		width: 50%;
+		height: 50px;
+		line-height: 50px;
+		border-bottom: 1px solid #eee;
+		border-right: 1px solid #eee;
+		text-align: center;
+	}
 </style>

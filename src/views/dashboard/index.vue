@@ -4,9 +4,9 @@
     <div class="head_">
 
       <div class="head_title">
-        <img src="../../../public/headerTip.png"
-             style="width: 30px;height: 30px;vertical-align: middle;margin: 10px 0 10px 12px;" alt="">
-        <span style="margin-left: 10px">联峰实业设备管理系统</span>
+        <!--<img src="../../../public/headerTip.png"-->
+             <!--style="width: 30px;height: 30px;vertical-align: middle;margin: 10px 0 10px 12px;" alt="">-->
+        <!--<span style="margin-left: 10px">联峰实业设备管理系统</span>-->
         </div>
     </div>
     <div class="body_"></div>
@@ -76,7 +76,7 @@ export default {
 .dashboard-container{
   border: 1px solid red;
   /* padding: 15px; */
-	background: url(../../assets/user_images/indexbg.png) no-repeat center/cover;
+	background: url(../../assets/user_images/indexPic.png) no-repeat center/cover;
   width: 100%;
   height: 100%;
 	overflow-y: hidden;
