@@ -13,7 +13,7 @@
 								:expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick">
 							</el-tree> -->
 							<el-tree :data="deptList" accordion show-checkbox check-strictly
-								:expand-on-click-node="false"  ref="treeForm" node-key="id"
+								:expand-on-click-node="false" ref="treeForm" node-key="id"
 								@check-change="handleNodeClick" :props="defaultProps">
 								<span slot-scope="{ node }" class="custom-tree-node">
 									<el-tooltip class="item" effect="dark" :content="node.label" placement="right">
@@ -62,20 +62,21 @@
 				<el-button icon="el-icon-download" v-else type="info" @click="ewmOut">批量导出二维码</el-button>
 			</el-row>
 			<vxe-table border round show-overflow highlight-hover-row highlight-current-row highlight-hover-column
-				highlight-current-column resizable ref="xTree" row-id="id" 
-				:tree-config="{lazy: true, accordion: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
-				:data="tableData" :max-height="tableHeight" @checkbox-change="selectChangeEvent">
+				highlight-current-column resizable ref="xTree" row-id="id"
+				:tree-config="{accordion: true, children: 'childrenData'}" :data="tableData" :max-height="tableHeight"
+				@checkbox-change="selectChangeEvent" @checkbox-all="checkAllShow">
 				<vxe-table-column type="checkbox" title="全选" width="100" tree-node></vxe-table-column>
-				<vxe-table-column field="cid" title="序号" align="center" width="100" ></vxe-table-column>
+				<vxe-table-column field="cid" title="序号" align="center" width="100"></vxe-table-column>
 				<vxe-table-column field="areaName" min-width="180" align="center" title="父区域"></vxe-table-column>
-				<vxe-table-column field="areaNameSon" min-width="180" align="center" title="子区域"></vxe-table-column>
-				<vxe-table-column field="areaNameLong" min-width="180" align="center" title="全区域"></vxe-table-column>
+				<vxe-table-column field="areaNameSon" min-width="180" align="center" title="区域名称"></vxe-table-column>
+				<!-- <vxe-table-column field="areaNameLong" min-width="180" align="center" title="全区域"></vxe-table-column> -->
 				<vxe-table-column field="dept" min-width="180" align="center" title="部门"></vxe-table-column>
 				<vxe-table-column field="state" min-width="180" align="center" title="状态"></vxe-table-column>
 				<vxe-table-column field="" title="操作" align="center" min-width="280" fixed="right">
 					<template slot-scope="scope">
 						<div class="action" style="cursor: pointer;">
-							<el-tooltip v-show="scope.row.isSon==false" class="item" effect="dark" content="新增子区域" placement="bottom">
+							<el-tooltip v-show="scope.row.isSon==false" class="item" effect="dark" content="新增子区域"
+								placement="bottom">
 								<el-tag @click="addSonList(scope.row)">新增子区域</el-tag>
 							</el-tooltip>
 							<el-tooltip class="item" effect="dark" content="修改" placement="bottom">
@@ -87,13 +88,13 @@
 							<el-tooltip class="item" effect="white" content="二维码" placement="bottom">
 								<div slot="content" ref="imageWrapper">
 									<div class="channelQrcode" :id="'scopeindex'+scope.row.ewm">
-										<!-- <div style="justify-content: center;font-size: 13px;text-align: left;">区域1：
+										<div style="justify-content: center;font-size: 13px;text-align: left;">区域1：
 											{{ scope.row.areaNameSon }}
 										</div>
 										<div style="justify-content: center;font-size: 13px;text-align: left;">部门：
 											{{ scope.row.dept }}
-										</div> -->
-										<qrcode-vue  :id="'showqrcode'+scope.row.ewm" :value="scope.row.ewm"
+										</div>
+										<qrcode-vue :id="'showqrcode'+scope.row.ewm" :value="scope.row.ewm"
 											:size="'150'" level="H"
 											style="display: flex;justify-content: center;text-align: left;">
 										</qrcode-vue>
@@ -103,7 +104,7 @@
 								</div>
 								<el-tag type="warning">二维码</el-tag>
 							</el-tooltip>
-							
+
 						</div>
 					</template>
 				</vxe-table-column>
@@ -114,7 +115,7 @@
 					</span>
 				</template> -->
 			</vxe-table>
-			
+
 			<!-- 分页器 -->
 			<div class="block" style="margin-top:15px;" v-show="showpage">
 				<el-pagination v-show="total!==0" align="center" :current-page="currentPage" :page-sizes="[5,10,20,200]"
@@ -295,12 +296,18 @@
 			// })
 		},
 		methods: {
-			selectChangeEvent ({ records }) {
+			selectChangeEvent({
+				records
+			}) {
 				console.log(records)
 				this.chooseData = records
 			},
+			checkAllShow (records) {
+				console.log(records.records)
+				this.chooseData = records.records
+			},
 			//新增子区域
-			addSonList (item) {
+			addSonList(item) {
 				console.log(item)
 				this.formData = {
 					name: '',
@@ -348,8 +355,8 @@
 							obj.state = data[i].status == 0 ? '禁用' : '启用'
 							// obj.cid = that.jsonData.pageNo * that.jsonData.pageSize - that.jsonData
 							// 	.pageSize + i + 1
-							
-							console.log(obj);
+
+							// console.log(obj);
 							child.push(obj)
 						}
 						resolve(child)
@@ -553,7 +560,32 @@
 									obj.data = data[i]
 									obj.hasChild = data[i].childArea != null ? true : false
 									obj.isSon = false
-									obj.childrenData = data[i].childArea;
+									if (data[i].childArea != null) {
+										obj.childrenData = []
+										for (let j = 0; j < data[i].childArea.length; j++) {
+											var k = j + 1
+											obj.childrenData.push({
+												cid: obj.cid + '.' + k,
+												id: data[i].childArea[j].id,
+												ewm: JSON.stringify(data[i].childArea[j].id),
+												areaName: data[i].name,
+												areaNameSon: data[i].childArea[j].name,
+												areaNameLong: data[i].name + '___' + data[i]
+													.childArea[j]
+													.name,
+												pareacode: data[i].areaCode,
+												data: data[i].childArea[j],
+												isSon: true,
+												dept: data[i].childArea[j].orgName,
+												state: data[i].childArea[j].status == 0 ? '禁用' :
+													'启用'
+											})
+										}
+									} else {
+										obj.childrenData = data[i].childArea
+									}
+
+									// obj.childrenData = data[i].childArea;
 									// if(obj.hasChild){
 									// 	for(var j=0; j<data[i].childArea.length;j++){
 									// 			data[i].childArea[j].ewm = JSON.stringify(data[i].childArea[j].id);
@@ -561,7 +593,7 @@
 									// 	obj.childrenData = data[i].childArea;
 									// 	console.log("=====childrenData:"+obj.childrenData);
 									// }
-									
+
 									obj.orgCode = data[i].orgCode
 									obj.dept = data[i].orgName
 									obj.version = data[i].cid
@@ -744,29 +776,29 @@
 			},
 			ewmOut() {
 				// console.log(this.chooseData)
-				if (this.user.dept != ''&&this.jsonData.orgCode!='') {
-					this.downloadLoading = true;
-					let val = []
-					val = this.chooseData
-					val.forEach((e, i) => {
-						val[i].qid = `${e.areaNameLong}`; //二维码图片名称标识
-						val[i].url = `${e.id}`; //二维码文本内容 https://www.baidu.com/s?wd=${e.id}
-					});
-					this.multipleSelection = val;
-				} else {
-					this.$message({
-						message: '请选择部门再进行打包下载，谢谢!',
-						type: 'warning'
-					})
-				}
-				// this.downloadLoading = true;
-				// let val = []
-				// val = this.chooseData
-				// val.forEach((e, i) => {
-				// 	val[i].qid = `${e.areaName}`; //二维码图片名称标识
-				// 	val[i].url = `${e.id}`; //二维码文本内容 https://www.baidu.com/s?wd=${e.id}
-				// });
-				// this.multipleSelection = val;
+				// if (this.user.dept != '' && this.jsonData.orgCode != '') {
+				// 	this.downloadLoading = true;
+				// 	let val = []
+				// 	val = this.chooseData
+				// 	val.forEach((e, i) => {
+				// 		val[i].qid = `${e.areaNameLong}`; //二维码图片名称标识
+				// 		val[i].url = `${e.id}`; //二维码文本内容 https://www.baidu.com/s?wd=${e.id}
+				// 	});
+				// 	this.multipleSelection = val;
+				// } else {
+				// 	this.$message({
+				// 		message: '请选择部门再进行打包下载，谢谢!',
+				// 		type: 'warning'
+				// 	})
+				// }
+				this.downloadLoading = true;
+				let val = []
+				val = this.chooseData
+				val.forEach((e, i) => {
+					val[i].qid = `${e.areaNameLong}`; //二维码图片名称标识
+					val[i].url = `${e.id}`; //二维码文本内容 https://www.baidu.com/s?wd=${e.id}
+				});
+				this.multipleSelection = val;
 			},
 			closeDownload() {
 				this.downloadLoading = false;
