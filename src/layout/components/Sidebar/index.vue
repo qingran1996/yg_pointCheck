@@ -340,6 +340,7 @@
 			const data = JSON.parse(this.getItems.replace(/url/g, 'path'))
       let showMenu = []
       console.log('menuData',data)
+
 			for (let i = 0; i < data.length; i++) {
 			  if (data[i].parentId==-1){
           showMenu.push({
@@ -354,6 +355,7 @@
 
 
 			}
+
       // console.log('menuData6',showMenu)
 
 			for (let i = 0; i < showMenu.length; i++) {
@@ -376,17 +378,16 @@
 			    }
 			  }
 			}
+
       // console.log('menuData7',showMenu)
       showMenu.forEach(da =>{
-        if (da.children.length!=0){
+
+        if (da.children&&da.children.length!=0){
+
           da.children.forEach(o =>{
             // console.log('o.id',o)
             for (let i = 0; i < data.length; i++) {
-              // console.log('o.id',o.id)
-              // console.log('data[i].parentId',data[i].parentId)
               if (o.id==data[i].parentId){
-                // console.log('data[i].parentId',data[i].parentId)
-                // console.log('o.id',o)
                 o.children.push({
                   id: data[i].id,
                   path: data[i].path,
@@ -396,8 +397,6 @@
                     title: data[i].name
                   }
                 })
-
-
                 // console.log('o',o)
               }
               // console.log('children',children)
@@ -408,7 +407,7 @@
 
       })
       console.log('menuData8',showMenu)
-      // this.showMenu = showMenu
+      this.showMenu = showMenu
 
 		},
     methods:{
