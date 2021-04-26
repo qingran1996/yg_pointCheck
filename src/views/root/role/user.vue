@@ -30,9 +30,12 @@
 				<el-table-column fixed="right" label="操作" min-width="180" align="center">
 					<template slot-scope="scope">
 						<div class="action">
-							<el-tooltip class="item" effect="dark" content="角色配置" placement="bottom">
-								<el-tag @click="lookList(scope.row)">角色配置</el-tag>
+							<el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+								<el-tag @click="lookList(scope.row)">编辑</el-tag>
 							</el-tooltip>
+              <el-tooltip class="item" effect="dark" content="角色配置" placement="bottom">
+                <el-tag @click="setRole(scope.row)">角色配置</el-tag>
+              </el-tooltip>
 							<el-tooltip class="item" effect="dark" content="删除" placement="bottom">
 								<el-tag @click="deleteList(scope.row)" type="danger">删除</el-tag>
 							</el-tooltip>
@@ -47,10 +50,6 @@
 					@size-change="handleSizeChange" @current-change="handleCurrentChange" />
 			</div>
 		</el-card>
-		<!-- 配置角色 -->
-		<userEdit></userEdit>
-		<!-- 新增 -->
-		<userAdd></userAdd>
 
 		<vxe-modal v-model="showTabs" title="新增&保存" width="60%" min-width="600" height="50%" resize destroy-on-close>
 			<template #default>
@@ -74,7 +73,7 @@
 								placeholder="请输入手机号" clearable></el-input>
 						</template>
 					</vxe-form-item>
-					<vxe-form-item title="密码" field="password" span="12" :item-render="{}">
+					<vxe-form-item v-if="ytres" title="密码" field="password" span="12" :item-render="{}">
 						<template #default="scope">
 							<el-input   v-model="group.password" @input="$refs.xForm.updateStatus(scope)"
 								placeholder="请输入密码" clearable></el-input>
@@ -111,13 +110,46 @@
 						</template>
 					</vxe-form-item>
 				</vxe-form>
-				
-				
-				
-				
-				
+
+
+
+
+
 			</template>
 		</vxe-modal>
+
+    <vxe-modal v-model="showTabs2" title="角色配置" width="60%" min-width="600" height="50%" resize destroy-on-close>
+      <template #default>
+        <vxe-form :data="roleForm" :rules="roleRules" title-colon title-align="right" title-width="150"
+                  ref="xForm" @submit="submitEvent">
+          <vxe-form-item title="用户名称"  span="12" :item-render="{}">
+            <template #default="scope">
+              <el-input v-model="roleForm.name" @input="$refs.xForm.updateStatus(scope)"
+                        placeholder="请输入用户名称" disabled></el-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="关联角色" field="roleIds" span="12" :item-render="{}">
+            <template #default="scope">
+              <el-select v-model="roleForm.roleIds" @change="$refs.xForm.updateStatus(scope)"
+                         placeholder="请选择角色" clearable>
+                <el-option v-for="list in reData" :key="list.id" :value="list.id" :label="list.roleName"></el-option>
+              </el-select>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item class="bottomShow" align="center" span="24" :item-render="{}">
+            <template #default>
+              <vxe-button type="submit" status="primary">确定</vxe-button>
+              <vxe-button type="reset">重置</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+
+
+
+
+
+      </template>
+    </vxe-modal>
 	</div>
 </template>
 
@@ -135,6 +167,19 @@
 				// 筛选
 				ytres: true,
 				showTabs: false,
+        showTabs2: false,
+
+
+        roleForm:{
+          name:'',
+          roleIds:'',
+        },
+        roleRules: {
+          roleIds: [{
+            required: true,
+            message: '请选择关联角色'
+          }],
+        },
 				group: {
 					name: '',
 					userName: '',
@@ -145,7 +190,7 @@
 					password: '',
 					professionName: '',
 					personId: '0',
-					
+
 				},
 				isdeptshow: false, //部门弹出
 				deptList: [],
@@ -195,6 +240,7 @@
 				showpage: true,
 				//展示参数表，并未实际应用
 				tableData: [],
+				reData: [],
 			}
 		},
 		destroyed() {
@@ -206,9 +252,24 @@
 		created() {
 			this.getTable() //获取table数据
 			this.getDeptData()
-			
+			this.getRoleList()
+
 		},
 		methods: {
+		  //获取角色列表
+      getRoleList() {
+
+        let data ={
+          size:999,
+          current:1,
+        }
+        this.roleList(data).then(res => {
+          this.reData = res.data.data.records
+          console.log('获取角色列表', this.reData)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
 			//获取部门接口
 			getDeptData() {
 				let json = {
@@ -224,7 +285,7 @@
 						const data = res.data.data
 						// this.updateTree[0] = res.data.data[.id]
 						this.deptList = data
-			
+
 					} else {
 						this.$message({
 							message: res.data.message,
@@ -266,18 +327,7 @@
 				//this.$bus.$emit('roleAdd', true)
 			},
 			submitEvent () {
-					// this.submitLoading = true
-					// setTimeout(() => {
-					// 	this.submitLoading = false
-						
-					// 	if (this.selectRow) {
-							
-					// 	} else {
-					// 		console.log('新增')
-					// 	}
-					// }, 500)
-					this.groupSumbit()
-				
+        this.groupSumbit()
 			},
 			groupSumbit() {
 				this.userAdd(this.group).then(res => {
@@ -291,7 +341,15 @@
 					}
 				})
 			},
-			//查看
+      //角色配置
+      setRole(row){
+        console.log('角色配置',row)
+        this.roleForm.name = row.name
+        this.roleForm.id = row.id
+        this.showTabs2 = true
+
+      },
+			//编辑
 			lookList(row) {
 				// this.$bus.$emit('userLook', row)
 				this.ytres = false

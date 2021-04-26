@@ -8,55 +8,21 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import basicInfomationRouter from './modules/basicInfomation'
-import rootRouter from './modules/root' 
+import rootRouter from './modules/root'
 import pointCheckRouter from './modules/pointCheck'
 import abnormaWeekRouter from './modules/abnorma'
 import overhaulRouter from './modules/overhaul'
 import goodsRouter from './modules/goods'
 import systemRouter from './modules/system'
 import onlineRouter from './modules/online'
-// import componentsRouter from './modules/components'
-// import rootRouter from './modules/root' 
-// import alarmRouter from './modules/alarm'
-// import deviceRouter from './modules/device'
-// import personRouter from './modules/person'
-// import sparePartRouter from './modules/sparePart'
-// import deviceServiceRouter from './modules/deviceService'
-// import relatedUnitsRouter from './modules/relatedUnits'
-// import spotInspectionRouter from './modules/spotInspection'
-// import workTicketRouter from './modules/workTicket'
-// import tableRouter from './modules/table'
-// import nestedRouter from './modules/nested'
 
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
 
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
+
+
+
 export const constantRoutes = [{
   path: '/redirect',
-  component: Layout, 
+  component: Layout,
   hidden: true,
   children: [{
     path: '/redirect/:path(.*)',
