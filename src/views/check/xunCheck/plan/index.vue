@@ -119,7 +119,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<vxe-modal v-model="showEdit" :title="selectRow ? '点检计划编辑&保存' : '点检计划新增&保存'" width="60%" min-width="600"
+			<vxe-modal v-model="showEdit" :title="selectRow ? '巡检计划编辑&保存' : '巡检计划新增&保存'" width="60%" min-width="600"
 				height="50%" :loading="submitLoading" resize destroy-on-close @close="closemodel">
 				<template #default>
 					<el-row :gutter="20">
@@ -128,11 +128,13 @@
 								title-width="150" ref="xForm" @submit="submitEvent">
 								<vxe-form-item title="计划名称" field="planName" span="24" :item-render="{}">
 									<template #default="scope">
-										<vxe-input v-model="formData.planName" @input="$refs.xForm.updateStatus(scope)"
-											placeholder="请输入计划名称" clearable></vxe-input>
+										<!-- <vxe-input v-model="formData.planName" @input="$refs.xForm.updateStatus(scope)"
+											placeholder="请输入计划名称" clearable></vxe-input> -->
+											<vxe-input v-model="formData.planName" @input="planshow(scope)"
+												placeholder="请输入计划名称" clearable></vxe-input>
 									</template>
 								</vxe-form-item>
-								<vxe-form-item title="点检车间" field="farm" span="12" :item-render="{}">
+								<vxe-form-item title="巡检车间" field="farm" span="12" :item-render="{}">
 									<template #default="scope">
 										<el-popover placement="right" trigger="click">
 											<div style="height: 200px;overflow-y: scroll;">
@@ -162,7 +164,7 @@
 										</vxe-select>
 									</template>
 								</vxe-form-item>
-								<vxe-form-item :title="changePD?'点检部门':'点检人员'" :field="changePD?'dept':'person'"
+								<vxe-form-item :title="changePD?'巡检部门':'巡检人员'" :field="changePD?'dept':'person'"
 									span="24" :item-render="{}">
 									<template #default="scope">
 										<div style="display: flex;">
@@ -294,7 +296,7 @@
 										<template #default>
 											<el-input style="width: 220px;" slot="reference"
 												v-model="formData.checkTime" @focus="focusEvent2"
-												@input="$refs.xForm.updateStatus(scope)" placeholder="请选择点检时间">
+												@input="$refs.xForm.updateStatus(scope)" placeholder="请选择巡检时间">
 											</el-input>
 										</template>
 										<template #dropdown>
@@ -310,9 +312,9 @@
 										</template>
 									</vxe-pulldown>
 								</vxe-form-item>
-								<vxe-form-item title="点检时长" field="checkHour" span="12" :item-render="{}">
+								<vxe-form-item title="巡检时长" field="checkHour" span="12" :item-render="{}">
 									<template #default="scope">
-										<vxe-input v-model="formData.checkHour" placeholder="请选择点检时长(小时),为数字"
+										<vxe-input v-model="formData.checkHour" placeholder="请选择巡检时长(小时),为数字"
 											@input="$refs.xForm.updateStatus(scope)" type="number" min="0" clearable>
 										</vxe-input>
 									</template>
@@ -352,7 +354,7 @@
 							</vxe-form>
 						</el-col>
 						<el-col :span="6">
-							<div style="font-weight: bold;color: orange;font-size: 16px;">点检区域</div>
+							<div style="font-weight: bold;color: orange;font-size: 16px;">巡检区域</div>
 							<div style="height: 300px;overflow-y: scroll;">
 								<el-tree :data="areadata" show-checkbox node-key="id" ref="tree"
 									:props="areadatadefaultProps" @check="areacheck"
@@ -488,7 +490,7 @@
 					}],
 					person: [{
 						required: true,
-						message: '请输入点检人'
+						message: '请输入巡检人'
 					}],
 					showDate: [{
 						required: true,
@@ -504,7 +506,7 @@
 					}],
 					checkTime: [{
 						required: true,
-						message: '请输入点检时间'
+						message: '请输入巡检时间'
 					}],
 					week: [{
 						required: true,
@@ -512,7 +514,7 @@
 					}],
 					checkHour: [{
 						required: true,
-						message: '请选择点检时长(小时)'
+						message: '请选择巡检时长(小时)'
 					}],
 					status: [{
 						required: true,
@@ -684,6 +686,34 @@
 			this.$bus.off()
 		},
 		methods: {
+			planshow(scope) {
+				// this.$refs.xForm.updateStatus(scope)
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					let json = {
+						planName: scope.data.planName
+					}
+					this.planNameIsExist(json).then(res => {
+						if (res.data.code == 0) { //查询到数据
+							console.log(res.data.data.isExist)
+							if (res.data.data.isExist==1) {
+								this.$message({
+									message: '计划名称已存在，请重输',
+									type: 'warning'
+								});
+								this.formData.planName = null
+								this.$refs.xForm.updateStatus(scope)
+							} else {
+								this.$message({
+									message: '计划名称可用',
+									type: 'success'
+								});
+								this.$refs.xForm.updateStatus(scope)
+							}
+						}
+					})
+				}, 2000)
+			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
 				// console.log('区域管理')
@@ -843,7 +873,7 @@
 			farm_change(data, checked, node) {
 				if (checked == true) {
 					this.checkedId = data.comcode;
-					this.$refs.treeForm.setCheckedNodes([data]);
+					// this.$refs.treeForm.setCheckedNodes([data]);
 					// console.log(data)
 					this.isFarmshow = false
 					this.checkpointDept = true
@@ -928,7 +958,7 @@
 				// this.persontags = []
 				if (checked == true) {
 					this.checkedId = data.comcode;
-					this.$refs.treeForm.setCheckedNodes([data]);
+					// this.$refs.treeForm.setCheckedNodes([data]);
 					console.log(data)
 					console.log(this.selectRow)
 					this.isFarmshow1 = false
@@ -947,6 +977,7 @@
 					this.persontags = []
 
 					this.getDeptData(data.id) //获取部门
+					this.getDisciplineData(data.orgCode);
 					this.getArea(data.orgCode)
 
 
@@ -1197,7 +1228,7 @@
 					if (res.data.code === 0) { //查询到数据
 						//console.log(res)
 						let data = res.data.data.records
-						console.log('点检计划列表', data)
+						console.log('巡检计划列表', data)
 						this.numberPage = res.data.data.current
 						//console.log('当前页数数据数量', this.numberPage)
 						this.loading = true

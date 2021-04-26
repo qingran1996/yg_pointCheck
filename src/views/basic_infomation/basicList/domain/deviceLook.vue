@@ -4,15 +4,15 @@
 			@close="showclose" center>
 			<el-row :gutter="20">
 				<el-col :span="24">
-					<el-table :data="tableData" style="width: 100%" :max-height="treeheight">
+					<el-table :data="tableData" v-loading="loading" style="width: 100%" :max-height="treeheight">
 						<el-table-column prop="index" width="100" label="序号" align="center"></el-table-column>
-						<el-table-column prop="name" label="名称"  show-overflow-tooltip>
+						<el-table-column prop="name" label="名称" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="specification" label="规格"  show-overflow-tooltip>
+						<el-table-column prop="specification" label="规格" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="commissioningDate" label="投运日期"  show-overflow-tooltip>
+						<el-table-column prop="commissioningDate" label="投运日期" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="orgName" label="所属部门"  show-overflow-tooltip>
+						<el-table-column prop="orgName" label="所属部门" show-overflow-tooltip>
 						</el-table-column>
 						<!-- <el-table-column fixed="right" label="操作" min-width="200" align="center">
 							<template slot-scope="scope">
@@ -24,6 +24,12 @@
 							</template>
 						</el-table-column> -->
 					</el-table>
+					<div class="block" style="margin-top:15px;">
+						<el-pagination v-show="total!==0" align="center" :current-page="currentPage"
+							:page-sizes="[5,10,20,200]" :page-size="pageSize"
+							layout="total, sizes, prev, pager, next, jumper" :total="total"
+							@size-change="handleSizeChange" @current-change="handleCurrentChange" />
+					</div>
 				</el-col>
 			</el-row>
 			<!-- <span slot="footer" class="dialog-footer">
@@ -53,6 +59,10 @@
 		},
 		data() {
 			return {
+				currentPage: 1,
+				pageSize: 10,
+				totalPages: 0,
+				total: 1,
 				pointWayAdd_show: false, // 控制显示dialog
 				isdeptshow: false, // 部门弹出
 				tableData: [],
@@ -106,7 +116,7 @@
 			deleteList(item) {
 				console.log(item)
 			},
-			getTable () {
+			getTable() {
 				let json = {
 					areaCode: this.areaCode
 				}
@@ -115,11 +125,27 @@
 				this.equipByArea(json).then(res => {
 					if (res.data.code === 0) {
 						console.log(res.data.data)
-						let data = res.data.data
-						for (let i=0;i<data.length;i++) {
-							data[i]['index'] = i+1
-						}
-						this.tableData = data
+						let data = res.data.data.records
+						this.loading = true
+						setTimeout(() => {
+							this.loading = false
+							for (let i = 0; i < data.length; i++) {
+								data[i]['index'] = i + 1
+							}
+							this.tableData = data
+						}, 500)
+
+						// this.loading = true
+						// setTimeout(function() {
+						// 	this.loading = false
+						// 	// this.total = res.data.data.total //列表总数
+						// 	for (let i = 0; i < data.length; i++) {
+						// 		data[i]['index'] = i + 1
+						// 	}
+						// 	this.tableData = data
+						// }, 500)
+
+
 					} else {
 						this.$message({
 							message: res.data.message,
@@ -127,6 +153,20 @@
 						})
 					}
 				})
+			},
+			handleSizeChange(val) {
+				//console.log(`每页 ${val} 条`)
+				this.currentPage = 1
+				this.pageSize = val
+				this.jsonData.pageSize = val
+				this.jsonData.pageNo = 1
+				this.getTable()
+			},
+			handleCurrentChange(val) {
+				//console.log(`当前页: ${val}`)
+				this.currentPage = val
+				this.jsonData.pageNo = val
+				this.getTable()
 			},
 			getdata() {
 				this.updateTree = []
@@ -156,7 +196,7 @@
 								// 		}]
 								// 	})
 								// }
-								if (item.equips!=undefined) {
+								if (item.equips != undefined) {
 									item.childOrgs = item.equips
 									item['disabled'] = false
 									delete item.equips

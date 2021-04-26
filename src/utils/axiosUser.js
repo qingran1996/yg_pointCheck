@@ -60,7 +60,7 @@ export default {
 			})
 		};
 		//根据点检部门查询设备
-		Vue.prototype.equipByOrg = function(data) { //全局函数
+		Vue.prototype.equipByOrg = function(data) { //全局函数equipByArea
 			return service({
 				url: '/bi/equip/equipByOrg',
 				method: 'post',
@@ -250,6 +250,15 @@ export default {
 		Vue.prototype.pointPlanData = function(data) { //全局函数
 			return service({
 				url: '/ps/spotCheckController/querySpotCheckPlan',
+				method: 'post',
+				data: data
+			})
+		};
+		//判断计划名称是否存在
+
+		Vue.prototype.planNameIsExist = function(data) { //全局函数
+			return service({
+				url: '/ps/spotCheckController/planNameIsExist',
 				method: 'post',
 				data: data
 			})

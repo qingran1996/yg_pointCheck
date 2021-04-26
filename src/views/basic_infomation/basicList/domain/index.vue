@@ -72,7 +72,7 @@
 				<!-- <vxe-table-column field="areaNameLong" min-width="180" align="center" title="全区域"></vxe-table-column> -->
 				<vxe-table-column field="dept" min-width="180" align="center" title="部门"></vxe-table-column>
 				<vxe-table-column field="state" min-width="180" align="center" title="状态"></vxe-table-column>
-				<vxe-table-column field="" title="操作" align="center" min-width="280" fixed="right">
+				<vxe-table-column field="" title="操作" align="center" min-width="380" fixed="right">
 					<template slot-scope="scope">
 						<div class="action" style="cursor: pointer;">
 							<el-tooltip v-show="scope.row.isSon==false" class="item" effect="dark" content="新增子区域"
@@ -82,18 +82,21 @@
 							<el-tooltip class="item" effect="dark" content="修改" placement="bottom">
 								<el-tag type="info" @click="updateList(scope.row)">修改</el-tag>
 							</el-tooltip>
-							<el-tooltip class="item" effect="dark" content="设备关联" placement="bottom">
-								<el-tag @click="deviceList(scope.row)" type="success">设备关联</el-tag>
+							<el-tooltip class="item" effect="dark" content="设备绑定" placement="bottom">
+								<el-tag @click="deviceList(scope.row)" type="success">设备绑定</el-tag>
+							</el-tooltip>
+							<el-tooltip class="item" effect="dark" content="已绑定设备" placement="bottom">
+								<el-tag @click="deviceisBD(scope.row)" type="success">已绑定设备</el-tag>
 							</el-tooltip>
 							<el-tooltip class="item" effect="white" content="二维码" placement="bottom">
 								<div slot="content" ref="imageWrapper">
 									<div class="channelQrcode" :id="'scopeindex'+scope.row.ewm">
-										<div style="justify-content: center;font-size: 13px;text-align: left;">区域1：
+										<!-- <div style="justify-content: center;font-size: 13px;text-align: left;">区域1：
 											{{ scope.row.areaNameSon }}
 										</div>
 										<div style="justify-content: center;font-size: 13px;text-align: left;">部门：
 											{{ scope.row.dept }}
-										</div>
+										</div> -->
 										<qrcode-vue :id="'showqrcode'+scope.row.ewm" :value="scope.row.ewm"
 											:size="'150'" level="H"
 											style="display: flex;justify-content: center;text-align: left;">
@@ -138,9 +141,18 @@
 						<template #default="scope">
 							<el-popover placement="right" width="400" trigger="click" v-model="isdeptshow1">
 								<div style="height: 200px;overflow-y: scroll;">
-									<el-tree :data="deptList" accordion node-key="id"
+									<!-- <el-tree :data="deptList" accordion node-key="id"
 										:default-expanded-keys="updateTree" :expand-on-click-node="false"
-										:props="defaultProps" @node-click="handleNodeClick1"></el-tree>
+										:props="defaultProps" @node-click="handleNodeClick1"></el-tree> -->
+										<el-tree :data="deptList" accordion show-checkbox check-strictly
+											:expand-on-click-node="false" ref="treeForm" node-key="id"
+											@check-change="handleNodeClick1" :props="defaultProps">
+											<span slot-scope="{ node }" class="custom-tree-node">
+												<el-tooltip class="item" effect="dark" :content="node.label" placement="right">
+													<span>{{ node.label }}</span>
+												</el-tooltip>
+											</span>
+										</el-tree>
 								</div>
 								<vxe-input slot="reference" v-model="formData.dept" :disabled="isSon"
 									@input="$refs.xForm.updateStatus(scope)" placeholder="请点击选择部门" clearable>
@@ -161,6 +173,7 @@
 			v-if="downloadLoading" @isshow="downloadLoading" />
 		<!-- 选择设备 -->
 		<choosedevice :isshow="addType" :areaCode="areaCode" @closedialog="closedialog"></choosedevice>
+		<deviceLook :isshow="lookType" :areaCode="areaCode" @closedialogg="closedialog1"></deviceLook>
 		<showexcel @dataUpdate="dataUpdate"></showexcel>
 		<!-- 点检修改 -->
 		<!-- <domainEdit :isshow="addType" :deptList="deptList" @closedialog="closedialog" @dataUpdate="dataUpdate"></domainEdit> -->
@@ -170,6 +183,7 @@
 <script>
 	import bus from "../../../../utils/bus"
 	import choosedevice from './deviceChoose.vue'
+	import deviceLook from './deviceLook.vue'
 	import showexcel from "./excel_.vue"
 	import QrcodeVue from 'qrcode.vue'
 	import JSZip from "jszip";
@@ -180,6 +194,7 @@
 		name: 'domain',
 		components: {
 			choosedevice,
+			deviceLook,
 			showexcel,
 			QrcodeVue,
 			QrCode
@@ -187,6 +202,7 @@
 		data() {
 			return {
 				isSon: false,
+				lookType: false,
 				// 导出
 				downloadLoading: false,
 				multipleSelection: [],
@@ -368,10 +384,22 @@
 				this.addType = true
 				this.areaCode = row.data.areaCode
 			},
+			deviceisBD (row) {
+				this.lookType = true
+				this.areaCode = row.data.areaCode
+			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
 				// console.log('区域管理')
 				this.addType = val
+				this.areaCode = ''
+				// this.areaCode = ''
+				this.jsonData.pageNo = 1
+				this.jsonData.pageSize = 10
+				this.getData()
+			},
+			closedialog1 (val) {
+				this.lookType = val
 				this.areaCode = ''
 			},
 			// 添加信息
@@ -397,7 +425,7 @@
 			updateList(item) {
 				console.log(item)
 				this.formData = {
-					name: item.areaName,
+					name: item.areaNameSon,
 					dept: item.dept,
 					version: item.cid,
 					belongToLine: '',
@@ -405,7 +433,7 @@
 					remarks: ''
 				}
 				this.addJson = {
-					name: item.areaName,
+					name: item.areaNameSon,
 					orgCode: item.orgCode,
 					orgName: item.dept
 				}

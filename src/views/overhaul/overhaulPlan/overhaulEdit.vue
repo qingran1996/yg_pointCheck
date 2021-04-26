@@ -29,11 +29,30 @@
 					</vxe-form-item>
 					<vxe-form-item title="设备" field="device" span="12" :item-render="{}">
 						<template #default="scope">
-							<el-select v-model="formData.device" filterable clearable placeholder="请选择设备">
+							<!-- <el-select v-model="formData.device" filterable clearable placeholder="请选择设备">
 								<el-option v-for="item in deviceData" :key="item.value" :label="item.label"
 									:value="item.value">
+									<div class="name" style="text-overflow: ellipsis;overflow: hidden;">{{ item.label }}
+									</div>
+									<div class="orgName" style="color: #b4b4b4;font-size: 12px;">{{ item.orgName }}
+									</div>
 								</el-option>
-							</el-select>
+							</el-select> -->
+							<el-autocomplete v-model="formData.device" :trigger-on-focus="true"
+								:fetch-suggestions="querySearchAsync" placeholder="请输入设备名字" @select="handleSelect">
+								<template slot-scope="{ item }">
+									<div class="name" style="display: inline-block;color: #000000;" :title="item.label">
+										{{ item.label }}
+									</div>
+									<!-- <div class="name" style="display: inline-block;float: right;"><i
+											class="el-icon-phone"
+											style="margin-left: 10px;color: orange;"></i>{{ item.phoneNumber }}
+									</div> -->
+									<div class="dept" style="color: lightseagreen;" :title="item.orgName">
+										部门： {{ item.orgName }}
+									</div>
+								</template>
+							</el-autocomplete>
 						</template>
 					</vxe-form-item>
 					<vxe-form-item title="专业" field="profession" span="12" :item-render="{}">
@@ -321,11 +340,13 @@
 								</el-table-column>
 								<el-table-column prop="unit" label="单位" show-overflow-tooltip>
 								</el-table-column>
-								<el-table-column fixed="right" label="操作"  align="center">
+								<el-table-column fixed="right" label="操作" align="center">
 									<template slot-scope="scope">
 										<div class="action">
 											<el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-												<el-tag type="danger" @click.native.prevent="deleteRow(scope.$index, gascheckData)">删除</el-tag>
+												<el-tag type="danger"
+													@click.native.prevent="deleteRow(scope.$index, gascheckData)">删除
+												</el-tag>
 											</el-tooltip>
 										</div>
 									</template>
@@ -603,8 +624,7 @@
 					value: 2,
 					label: '抢修'
 				}],
-				gasTypeData: [
-					{
+				gasTypeData: [{
 						value: 1,
 						label: '手动'
 					},
@@ -648,6 +668,9 @@
 				processSurePersonData: [], //过程确认人员
 				bugSurePersonData: [], //调试验收人员
 				sumUpPersonData: [], //总结人员
+				restaurants: [], //设备查询
+				state: '',
+				timeout: null
 			}
 		},
 		computed: {},
@@ -662,7 +685,7 @@
 
 		},
 		created() {
-			this.getDevice() //获取设备
+			// this.getDevice() //获取设备
 			this.getUser() //获取人员
 		},
 		mounted() {
@@ -670,7 +693,7 @@
 			// this.getLookData()
 		},
 		methods: {
-			typechange (num) {
+			typechange(num) {
 				let val = ''
 				for (var i = 0; i < this.gasTypeData.length; i++) {
 					if (num === this.gasTypeData[i].value) {
@@ -693,7 +716,7 @@
 					workShopCode: localStorage.getItem('workShopCode'),
 					profession: null,
 					pageNo: 1,
-					pageSize: 9999
+					pageSize: 50
 				}
 				// this.checkPersonLiskData = [] //检修负责人
 				this.deviceProfessionLiskData = [] //四方审核--设备专业
@@ -753,16 +776,37 @@
 					}
 				})
 			},
+			querySearchAsync(queryString, cb) {
+				this.deviceData = []
+				this.getDevice(queryString)
+				clearTimeout(this.timeout);
+				this.timeout = setTimeout(() => {
+					cb(this.deviceData);
+				}, 2000 * Math.random());
+			},
+			createStateFilter(queryString) {
+				return (state) => {
+					return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+				};
+			},
+			handleSelect(item) {
+				console.log(item)
+				this.formData.device = item.label
+				this.formData.deviceId = item.value
+			},
 			//获取设备
-			getDevice() {
+			getDevice(name) {
 				let json = {
-					orgCode: localStorage.getItem('workShopCode')
+					orgCode: localStorage.getItem('workShopCode'),
+					equipName: name,
+					pageNo: 1,
+					pageSize: 50
 				}
 				this.deviceData = []
 				this.equipByOrg(json).then(res => {
 					if (res.data.code == 0) { //查询到数据
-						// console.log('查找到的设备',res.data.data)
-						let data = res.data.data
+						console.log('查找到的设备', res.data.data.record)
+						let data = res.data.data.record
 						for (var i = 0; i < data.length; i++) {
 							this.deviceData.push({
 								value: data[i].id,
@@ -787,35 +831,36 @@
 						let auditorList = [{
 							lineId: 1,
 							maUserBoList: []
-						},{
+						}, {
 							lineId: 2,
 							maUserBoList: []
-						},{
+						}, {
 							lineId: 3,
 							maUserBoList: []
-						},{
+						}, {
 							lineId: 4,
 							maUserBoList: []
 						}]
-						for (let i=0;i<this.craftProfessionLiskData.length;i++) { //生产
+						for (let i = 0; i < this.craftProfessionLiskData.length; i++) { //生产
 							auditorList[0].maUserBoList.push({
 								userId: this.craftProfessionLiskData[i].value,
 								userName: this.allPerson_change(this.craftProfessionLiskData[i].value)
 							})
 						}
-						for (let i=0;i<this.safeProfessionLiskData.length;i++) { //安全
+						for (let i = 0; i < this.safeProfessionLiskData.length; i++) { //安全
 							auditorList[1].maUserBoList.push({
 								userId: this.safeProfessionLiskData[i].value,
 								userName: this.allPerson_change(this.safeProfessionLiskData[i].value)
 							})
 						}
-						for (let i=0;i<this.electricalInstrumentProfessionLiskData.length;i++) { //电气
+						for (let i = 0; i < this.electricalInstrumentProfessionLiskData.length; i++) { //电气
 							auditorList[2].maUserBoList.push({
 								userId: this.electricalInstrumentProfessionLiskData[i].value,
-								userName: this.allPerson_change(this.electricalInstrumentProfessionLiskData[i].value)
+								userName: this.allPerson_change(this
+									.electricalInstrumentProfessionLiskData[i].value)
 							})
 						}
-						for (let i=0;i<this.deviceProfessionLiskData.length;i++) { //设备
+						for (let i = 0; i < this.deviceProfessionLiskData.length; i++) { //设备
 							auditorList[3].maUserBoList.push({
 								userId: this.deviceProfessionLiskData[i].value,
 								userName: this.allPerson_change(this.deviceProfessionLiskData[i].value)
@@ -826,62 +871,67 @@
 							lineName: '生产',
 							content: this.formData.fourWorkSure_craft,
 							confirmerBoList: []
-						},{
+						}, {
 							lineId: 2,
 							lineName: '安全',
 							content: this.formData.fourWorkSure_safe,
 							confirmerBoList: []
-						},{
+						}, {
 							lineId: 3,
 							lineName: '电气',
 							content: this.formData.fourWorkSure_electricalInstrument,
 							confirmerBoList: []
-						},{
+						}, {
 							lineId: 4,
 							lineName: '设备',
 							content: this.formData.fourWorkSure_device,
 							confirmerBoList: []
 						}]
-						for (let i=0;i<this.fourWorkSure_craftSurePersonLiskData.length;i++) { //生产
+						for (let i = 0; i < this.fourWorkSure_craftSurePersonLiskData.length; i++) { //生产
 							confirmJobBoList[0].confirmerBoList.push({
 								userId: this.fourWorkSure_craftSurePersonLiskData[i].value,
-								userName: this.allPerson_change(this.fourWorkSure_craftSurePersonLiskData[i].value)
+								userName: this.allPerson_change(this.fourWorkSure_craftSurePersonLiskData[
+									i].value)
 							})
 						}
-						for (let i=0;i<this.fourWorkSure_safeSurePersonLiskData.length;i++) { //安全
+						for (let i = 0; i < this.fourWorkSure_safeSurePersonLiskData.length; i++) { //安全
 							confirmJobBoList[1].confirmerBoList.push({
 								userId: this.fourWorkSure_safeSurePersonLiskData[i].value,
-								userName: this.allPerson_change(this.fourWorkSure_safeSurePersonLiskData[i].value)
+								userName: this.allPerson_change(this.fourWorkSure_safeSurePersonLiskData[i]
+									.value)
 							})
 						}
-						for (let i=0;i<this.fourWorkSure_electricalInstrumentSurePersonLiskData.length;i++) { //电气
+						for (let i = 0; i < this.fourWorkSure_electricalInstrumentSurePersonLiskData
+							.length; i++) { //电气
 							confirmJobBoList[2].confirmerBoList.push({
 								userId: this.fourWorkSure_electricalInstrumentSurePersonLiskData[i].value,
-								userName: this.allPerson_change(this.fourWorkSure_electricalInstrumentSurePersonLiskData[i].value)
+								userName: this.allPerson_change(this
+									.fourWorkSure_electricalInstrumentSurePersonLiskData[i].value)
 							})
 						}
-						for (let i=0;i<this.fourWorkSure_deviceSurePersonLiskData.length;i++) { //设备
+						for (let i = 0; i < this.fourWorkSure_deviceSurePersonLiskData.length; i++) { //设备
 							confirmJobBoList[3].confirmerBoList.push({
 								userId: this.fourWorkSure_deviceSurePersonLiskData[i].value,
-								userName: this.allPerson_change(this.fourWorkSure_deviceSurePersonLiskData[i].value)
+								userName: this.allPerson_change(this.fourWorkSure_deviceSurePersonLiskData[
+									i].value)
 							})
 						}
 						let acceptancerList = []
-						for (let i=0;i<this.bugSurePersonData.length;i++) { //调试验收
+						for (let i = 0; i < this.bugSurePersonData.length; i++) { //调试验收
 							acceptancerList.push({
 								userId: this.bugSurePersonData[i].value,
 								userName: this.allPerson_change(this.bugSurePersonData[i].value)
 							})
 						}
 						let scorerList = []
-						for (let i=0;i<this.sumUpPersonData.length;i++) { //总结
+						for (let i = 0; i < this.sumUpPersonData.length; i++) { //总结
 							scorerList.push({
 								userId: this.sumUpPersonData[i].value,
 								userName: this.allPerson_change(this.sumUpPersonData[i].value)
 							})
 						}
 						let maintainerList = []
-						for (let i=0;i<this.workPersonData.length;i++) { //作业人员
+						for (let i = 0; i < this.workPersonData.length; i++) { //作业人员
 							maintainerList.push({
 								userId: this.workPersonData[i].value,
 								userName: this.allPerson_change(this.workPersonData[i].value)
@@ -899,12 +949,13 @@
 							type: this.formData.workType, //类型 1日修，2抢修
 							jobNo: null, //项目编号
 							planStart: this.formData.workTime[0], //计划开始时间
-							planEnd: JSON.parse(new Date(( this.formData.workTime[1]/1000+86400)*1000) - 1), //计划结束时间
+							planEnd: JSON.parse(new Date((this.formData.workTime[1] / 1000 + 86400) * 1000) -
+								1), //计划结束时间
 							planLong: this.formData.workLongTime, //计划时长
 							location: this.formData.deviceAddress, //设备地址
 							equipmentType: null, //设备类型
-							equipmentId: this.formData.device, //设备id
-							equipmentName: null, //设备名称
+							equipmentId: this.formData.deviceId, //设备id
+							equipmentName: this.formData.device, //设备名称
 							jobContent: null, //作业内容
 							areaName: this.formData.changeArea, //影响区域名称
 							prepareJob: null, //准备工作
@@ -935,7 +986,7 @@
 					}
 				}, 500)
 			},
-			updateshow () {
+			updateshow() {
 				this.updateJobCard(this.addJson).then(res => {
 					if (res.data.code === 0) {
 						this.$message({
@@ -972,7 +1023,7 @@
 			//风险展示与否
 			riskClose(val) {
 				console.log(val)
-				for (let i=0;i<val.length;i++) {
+				for (let i = 0; i < val.length; i++) {
 					this.riskData.push({
 						measure: val[i].measure,
 						note: val[i].note,
@@ -990,7 +1041,7 @@
 			//气体展示与否
 			gasClose(val) {
 				console.log(val)
-				for (let i=0;i<val.length;i++) {
+				for (let i = 0; i < val.length; i++) {
 					this.gascheckData.push(val[i])
 				}
 				this.gasLookType = false
@@ -1123,7 +1174,8 @@
 								name: data.jobName, //作业名称
 								workType: data.type, //作业类型
 								workTime: workTime, //作业时间范围
-								device: data.equipmentId, //设备
+								device: data.equipmentName, //设备
+								deviceId: data.equipmentId, //设备
 								profession: data.lineId, //专业
 								problem: null, //解决问题
 								source: this.$parent.source_change(1),

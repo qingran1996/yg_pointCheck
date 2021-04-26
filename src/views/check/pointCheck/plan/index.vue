@@ -128,7 +128,7 @@
 								title-width="150" ref="xForm" @submit="submitEvent">
 								<vxe-form-item title="计划名称" field="planName" span="24" :item-render="{}">
 									<template #default="scope">
-										<vxe-input v-model="formData.planName" @input="$refs.xForm.updateStatus(scope)"
+										<vxe-input v-model="formData.planName" @input="planshow(scope)"
 											placeholder="请输入计划名称" clearable></vxe-input>
 									</template>
 								</vxe-form-item>
@@ -412,7 +412,7 @@
 				isdeptshow1: false,
 				isFarmshow: false,
 				isFarmshow1: false,
-				lookId: null,//查看得详情
+				lookId: null, //查看得详情
 				isBego: false,
 				areaupdateTree: [],
 				persontags: [],
@@ -548,7 +548,7 @@
 				jsonData: {
 					deptId: null, //部门id
 					shopId: null, //车间id（分厂id）
-					shopCode:null,//车间code
+					shopCode: null, //车间code
 					lineId: null, //条线id
 					planStart: null, //计划开始日期
 					planEnd: null, //计划结束日期
@@ -596,16 +596,16 @@
 				disciplineData: [{
 					value: '',
 					label: '全部'
-				},{
+				}, {
 					value: 1,
 					label: '生产'
-				},{
+				}, {
 					value: 2,
 					label: '安全'
-				},{
+				}, {
 					value: 3,
 					label: '电气'
-				},{
+				}, {
 					value: 4,
 					label: '设备'
 				}],
@@ -683,6 +683,35 @@
 			this.$bus.off()
 		},
 		methods: {
+			planshow(scope) {
+				// this.$refs.xForm.updateStatus(scope)
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					let json = {
+						planName: scope.data.planName
+					}
+					this.planNameIsExist(json).then(res => {
+						if (res.data.code == 0) { //查询到数据
+							console.log(res.data.data.isExist)
+							if (res.data.data.isExist==1) {
+								this.$message({
+									message: '计划名称已存在，请重输',
+									type: 'warning'
+								});
+								this.formData.planName = null
+								this.$refs.xForm.updateStatus(scope)
+							} else {
+								this.$message({
+									message: '计划名称可用',
+									type: 'success'
+								});
+								this.$refs.xForm.updateStatus(scope)
+							}
+						}
+					})
+					
+				}, 2000)
+			},
 			//父子组件传值，控制隐藏显示
 			closedialog(val) {
 				// console.log('区域管理')
@@ -839,8 +868,9 @@
 			//车间选中
 			farm_change(data, checked, node) {
 				if (checked == true) {
+					console.log(data)
 					this.checkedId = data.comcode;
-					this.$refs.treeForm.setCheckedNodes([data]);
+					// this.$refs.treeForm.setCheckedNodes([data]);
 					// console.log(data)
 					this.isFarmshow = false
 					this.checkpointDept = true
@@ -896,7 +926,7 @@
 				// this.persontags = []
 				if (checked == true) {
 					this.checkedId = data.comcode;
-					this.$refs.treeForm.setCheckedNodes([data]);
+					// this.$refs.treeForm.setCheckedNodes([data]);
 					console.log(data)
 					console.log(this.selectRow)
 					this.isFarmshow1 = false
@@ -916,6 +946,7 @@
 					this.persontags = []
 
 					this.getDeptData(data.id) //获取部门
+					this.getDisciplineData(data.orgCode)
 					console.log("=========");
 					console.log(data);
 					this.getArea(data.orgCode)
@@ -939,7 +970,7 @@
 				this.submitLoading = true
 				setTimeout(() => {
 					this.submitLoading = false
-					
+
 					if (this.addJson.areaBoList.length === 0) {
 						this.showEdit = true
 						this.$message({
@@ -964,7 +995,8 @@
 						// this.addJson.planEnd = JSON.parse(this.formData.showDate[1] - 1)
 						// }
 						this.addJson.planStart = this.formData.showDate[0]
-						this.addJson.planEnd = JSON.parse(new Date(( this.formData.showDate[1]/1000+86400)*1000) - 1)
+						this.addJson.planEnd = JSON.parse(new Date((this.formData.showDate[1] / 1000 + 86400) *
+							1000) - 1)
 						this.addJson.planLong = this.formData.checkHour
 						this.addJson.isActived = this.formData.status
 						this.addJson.userBoList = []
@@ -994,7 +1026,8 @@
 						// this.addJson.planEnd = JSON.parse(this.formData.showDate[1] - 1)
 						// }
 						this.addJson.planStart = this.formData.showDate[0]
-							this.addJson.planEnd = JSON.parse(new Date(( this.formData.showDate[1]/1000+86400)*1000) - 1)
+						this.addJson.planEnd = JSON.parse(new Date((this.formData.showDate[1] / 1000 + 86400) *
+							1000) - 1)
 						this.addJson.planLong = this.formData.checkHour
 						this.addJson.isActived = this.formData.status
 						// this.addJson.planLong = this.formData.checkTime
@@ -1140,21 +1173,21 @@
 					}
 				})
 			},
-			getDisciplineData(orgCode){
+			getDisciplineData(orgCode) {
 				let newDisciplineData = []
 				let param = {
-					orgType:2,
-					orgCode:orgCode
+					orgType: 2,
+					orgCode: orgCode
 				};
 				this.getDisciplineDataByUserOrg(param).then(res => {
 					if (res.data.code === 0) {
 						const data = res.data.data
 						for (let i = 0; i < this.disciplineData.length; i++) {
-							if(this.disciplineData[i].value==''){
+							if (this.disciplineData[i].value == '') {
 								newDisciplineData.push(this.disciplineData[i])
 							}
 							for (let j = 0; j < data.length; j++) {
-								if(data[j] == this.disciplineData[i].value){
+								if (data[j] == this.disciplineData[i].value) {
 									newDisciplineData.push(this.disciplineData[i])
 								}
 							}
@@ -1422,12 +1455,12 @@
 						console.log(data.timePoint.match(/\d+/g))
 						let showTimepoint = data.timePoint.match(/\d+/g)
 						for (var i = 0; i < showTimepoint.length; i++) {
-							if (JSON.parse(showTimepoint[i])<10) {
-								showTimepoint[i] = '0'+showTimepoint[i]+':00'
+							if (JSON.parse(showTimepoint[i]) < 10) {
+								showTimepoint[i] = '0' + showTimepoint[i] + ':00'
 							} else {
-								showTimepoint[i] = showTimepoint[i]+':00'
+								showTimepoint[i] = showTimepoint[i] + ':00'
 							}
-						} 
+						}
 						// console.log(showTimepoint)
 						let arr = []
 						for (var i = 0; i < showTimepoint.length; i++) {

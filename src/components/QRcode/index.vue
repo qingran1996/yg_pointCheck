@@ -17,7 +17,7 @@
 								style="justify-content: center;text-align: center;">
 							</qrcode-vue>
 							<div style="justify-content: center;font-size: 13px;text-align: center;">
-								{{ item.areaNameSon }}
+								{{ item.areaNameLong }}
 							</div>
 						</el-col>
 					</el-row>
@@ -108,8 +108,8 @@
 							// console.log("canvas", canvas);
 							var url = canvas.toDataURL(); //这里上面不设值cors会报错
 							data.push({
-								id: this.qrCodeData[i].id,
-								name: this.qrCodeData[i].areaName,
+								id: this.qrCodeData[i].ewm,
+								name: this.qrCodeData[i].areaNameLong,
 								url: url
 							})
 							if (data.length == this.qrCodeData.length) {

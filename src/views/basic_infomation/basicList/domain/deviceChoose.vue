@@ -2,6 +2,33 @@
 	<div v-show="isshow" class="personAdd">
 		<el-dialog title="设备关联" v-dialogDrag :visible.sync="pointWayAdd_show" width="80%" :close-on-click-modal="false"
 			@close="showclose" center>
+			<!-- <el-popover placement="right" width="400" trigger="click" v-model="isdeptshow">
+				<div style="height: 200px;overflow-y: scroll;">
+					<el-tree :data="$parent.deptList" accordion show-checkbox check-strictly
+						:expand-on-click-node="false" ref="treeForm" node-key="id"
+						@check-change="handleNodeClick1" :props="defaultProps">
+						<span slot-scope="{ node }" class="custom-tree-node">
+							<el-tooltip class="item" effect="dark" :content="node.label" placement="right">
+								<span>{{ node.label }}</span>
+							</el-tooltip>
+						</span>
+					</el-tree>
+				</div>
+				<el-input v-model="farm" style="width: 200px;margin-bottom: 10px;" placeholder="请点击选择车间"
+					slot="reference" clearable />
+			</el-popover>
+			<el-table :data="tableData" border="" style="width: 100%" :max-height="treeheight1">
+				<el-table-column prop="index" width="100" label="序号" align="center"></el-table-column>
+				<el-table-column prop="name" label="名称" show-overflow-tooltip>
+				</el-table-column>
+				<el-table-column prop="specs" label="规格" show-overflow-tooltip>
+				</el-table-column>
+				<el-table-column prop="startTime" label="投运日期" show-overflow-tooltip>
+				</el-table-column>
+				<el-table-column prop="departmentName" label="所属部门" show-overflow-tooltip>
+				</el-table-column>
+			</el-table> -->
+			
 			<el-row :gutter="20">
 				<el-col :span="8">
 					<el-input class="searchInput" v-model="filterText" placeholder="请输入区域名称">
@@ -22,25 +49,16 @@
 					</el-tree>
 				</el-col>
 				<el-col :span="16">
-					<el-table :data="tableData" style="width: 100%" :max-height="treeheight">
+					<el-table :data="tableData" border="" style="width: 100%" :max-height="treeheight1">
 						<el-table-column prop="index" width="100" label="序号" align="center"></el-table-column>
-						<el-table-column prop="name" label="名称"  show-overflow-tooltip>
+						<el-table-column prop="name" label="名称" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="specs" label="规格"  show-overflow-tooltip>
+						<el-table-column prop="specs" label="规格" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="startTime" label="投运日期"  show-overflow-tooltip>
+						<el-table-column prop="startTime" label="投运日期" show-overflow-tooltip>
 						</el-table-column>
-						<el-table-column prop="departmentName" label="所属部门"  show-overflow-tooltip>
+						<el-table-column prop="departmentName" label="所属部门" show-overflow-tooltip>
 						</el-table-column>
-						<!-- <el-table-column fixed="right" label="操作" min-width="200" align="center">
-							<template slot-scope="scope">
-								<div class="action">
-									<el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-										<el-tag type="danger" @click="deleteList(scope.row)">删除</el-tag>
-									</el-tooltip>
-								</div>
-							</template>
-						</el-table-column> -->
 					</el-table>
 				</el-col>
 			</el-row>
@@ -71,6 +89,11 @@
 		},
 		data() {
 			return {
+				/********************************/
+				checkAll: false,
+				checkedCities: ['上海', '北京'],
+				cities: ['上海', '北京', '广州', '深圳','苏州'],
+				isIndeterminate: true,
 				pointWayAdd_show: false, // 控制显示dialog
 				isdeptshow: false, // 部门弹出
 				tableData: [],
@@ -82,9 +105,11 @@
 					state: '',
 					remarks: ''
 				},
+				farm: '',
 				/*********tree**********/
 				filterText: '', // 查询区域名称
 				treeheight: document.body.clientHeight * 0.5 + 'px',
+				treeheight1: document.body.clientHeight * 0.5,
 				data: [],
 				aboutData: [],
 				updateTree: [],
@@ -93,6 +118,7 @@
 					children: 'childOrgs',
 					label: 'name'
 				},
+				jsonData: {}
 			}
 		},
 		watch: {
@@ -114,21 +140,60 @@
 			}
 		},
 		mounted() {
-			// console.log(this.$parent.tableHeight)
+
 		},
 		created() {
 
 		},
 		methods: {
+			handleCheckAllChange(val) {
+				this.checkedCities = val ? this.cities : [];
+				this.isIndeterminate = false;
+			},
+			handleCheckedCitiesChange(value) {
+				let checkedCount = value.length;
+				this.checkAll = checkedCount === this.cities.length;
+				this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+			},
+			handleNodeClick1(data) {
+				console.log(data)
+				this.farm = data.name
+				let json = {
+					orgCode: data.orgCode,
+					equipName: '',
+					pageNo: 1,
+					pageSize: 9999
+				}
+				// this.deviceData = []
+				this.equipByOrg(json).then(res => {
+					if (res.data.code == 0) { //查询到数据
+						console.log('查找到的设备', res.data.data.record)
+						// let data = res.data.data.record
+						// for (var i = 0; i < data.length; i++) {
+						// 	this.deviceData.push({
+						// 		value: data[i].id,
+						// 		label: data[i].name,
+						// 		orgName: data[i].orgName
+						// 	})
+						// }
+					} else {
+						this.$message({
+							message: res.data.message,
+							type: 'warning'
+						})
+					}
+				})
+			},
 			deleteList(item) {
 				console.log(item)
+
 			},
 			getdata() {
 				this.updateTree = []
 				this.data = []
 				this.spotAreaEquips().then(res => {
 					if (res.data.code === 0) {
-						console.log("获取厂区分厂点检区域树", res.data.data)
+						// console.log("获取厂区分厂点检区域树", res.data.data)
 						//将设备位置 从左树传给右侧 主界面
 						// this.$bus.emit('devicePlace', res.data.data)
 						const arr = []
@@ -151,7 +216,7 @@
 								// 		}]
 								// 	})
 								// }
-								if (item.equips!=undefined) {
+								if (item.equips != undefined) {
 									item.childOrgs = item.equips
 									item['disabled'] = false
 									delete item.equips
@@ -178,7 +243,8 @@
 								}
 							});
 						}
-						console.log(arr)
+						// console.log(arr)
+						// console.log(this.$parent.deptList)
 						this.data = arr
 						this.updateTree[0] = arr[0].id
 						// this.data.push(res.data.data)
@@ -302,7 +368,7 @@
 							message: '设备关联成功',
 							type: 'success'
 						})
-						this.showclose()
+						// this.showclose()
 						this.pointWayAdd_show = false
 					} else {
 						this.$message({
@@ -315,6 +381,7 @@
 			//关闭对话框,并清空选择状态
 			showclose() {
 				// console.log(123)
+				this.farm = ''
 				this.aboutData = []
 				this.tableData = []
 				this.$emit('closedialog', false)

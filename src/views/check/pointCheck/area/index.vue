@@ -113,7 +113,7 @@
 			
 			<!-- 分页器 -->
 			<div class="block" style="margin-top:15px;">
-				<el-pagination v-show="total!==0" align="center" :current-page="currentPage" :page-sizes="[10,15,20]"
+				<el-pagination v-show="total!=0" align="center" :current-page="currentPage" :page-sizes="[10,15,20]"
 					:page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
 					@size-change="handleSizeChange" @current-change="handleCurrentChange" />
 			</div>

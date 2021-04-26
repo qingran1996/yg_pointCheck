@@ -60,7 +60,7 @@
 								<el-tag @click="updateList(scope.row)">编辑</el-tag>
 							</el-tooltip>
 							<el-tooltip class="item" effect="dark" content="下发" placement="bottom">
-								<el-tag @click="putdown(scope.row)">下发</el-tag>
+								<el-tag type="success" @click="putdown(scope.row)">下发</el-tag>
 							</el-tooltip>
 							<!-- <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
 								<el-tag type="danger" @click="deleteList(scope.row)">删除</el-tag>
@@ -287,7 +287,7 @@
 					if (res.data.code === 0) {
 						this.$message({
 							message: '下发成功',
-							type: 'warning'
+							type: 'success'
 						})
 						this.getTable()
 					} else {

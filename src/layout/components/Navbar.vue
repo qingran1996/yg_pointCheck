@@ -54,7 +54,7 @@
 				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
-		<el-dialog v-dialogDrag :close-on-click-modal="false" :title="dialogTitle" :visible.sync="editDialogVisible" width="25%"
+		<!-- <el-dialog v-dialogDrag :close-on-click-modal="false" :title="dialogTitle" :visible.sync="editDialogVisible" width="25%"
 		 center :key="editRender">
 			<h3 style="display: flex;justify-content: center;color: #F56C6C" v-show="isPassWordInit">为了保护账号安全性,请对初始密码进行修改</h3>
 			<el-form ref="ruleForm" :model="infoData" label-width="130px" class="demo-ruleForm" :rules="rules">
@@ -69,7 +69,7 @@
 				<el-button @click="close">取消</el-button>
 				<el-button type="primary" @click="updateInfo" v-prevent-re-click>修改</el-button>
 			</span>
-		</el-dialog>
+		</el-dialog> -->
 		<changeHead />
 	</div>
 </template>
