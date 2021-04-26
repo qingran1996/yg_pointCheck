@@ -175,7 +175,7 @@
                resize destroy-on-close @close="closemodel">
       <template #default>
         <div class="info">
-          <p>角色名称：设备处-设备处处长</p>
+          <p>角色名称：{{menuTitle}}</p>
           <p>排列顺序：1</p>
           <el-button class="sumbit" @click="savesubmit" type="primary">保存</el-button>
         </div>
@@ -306,7 +306,6 @@
         whah:[],
         celkSum2:[],
         mdJson:[
-          {name:'下属专业',id:'children'},
           {name:'所有专业',id:'owner'},
           {name:'用户所属专业',id:'all'},
           {
@@ -327,6 +326,7 @@
             disabled:false
           }
         ],
+        menuTitle:'设备处-设备处处长',
         /**********************vxe-model*/
         submitLoading: false,
         selectRow: null,
@@ -747,6 +747,7 @@
          console.log(item) //roleCode
         this.tabIndex = '1'
         this.demoRoleCode = item.roleCode  //保存在本地
+        this.menuTitle = item.roleName
         this.pullMenu(item.roleCode)
         this.pullRole(item.roleCode)
 
@@ -756,6 +757,7 @@
         console.log(item)  //roleCode
         this.tabIndex = '2'
         this.demoRoleCode = item.roleCode
+        this.menuTitle = item.roleName
         this.pullMenu(item.roleCode)
         this.pullRole(item.roleCode)
         // this.showMenu = true

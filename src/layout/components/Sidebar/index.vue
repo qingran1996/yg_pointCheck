@@ -117,7 +117,6 @@
 							noCache: true
 						}
 					}]
-<<<<<<< HEAD
 				},
 				{
 
@@ -159,63 +158,6 @@
 					]
 
 				},
-=======
-				}, 
-				// {
-
-				// 	id: 2,
-				// 	path: '/root',
-				// 	name: 'root',
-				// 	meta: {
-				// 		title: '权限管理',
-				// 		icon: 'guide',
-				// 	},
-				// 	children: [{
-				// 		path: 'role',
-				// 		name: 'rootrole',
-				// 		meta: {
-				// 			title: '角色管理'
-				// 		},
-				// 		children: [{
-				// 				path: 'menuRole',
-				// 				name: 'menuRole',
-				// 				meta: {
-				// 					title: '菜单权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			},
-				// 			{
-				// 				path: 'flowPathRole',
-				// 				name: 'flowPathRole',
-				// 				meta: {
-				// 					title: '流程权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			},
-				// 			{
-				// 				path: 'dataRole',
-				// 				name: 'dataRole',
-				// 				meta: {
-				// 					title: '数据权限',
-				// 					keepAlive: true,
-				// 					noCache: true
-				// 				}
-				// 			}
-				// 		]
-				// 	}, {
-				// 		path: 'menu',
-				// 		name: 'rootMenu',
-				// 		meta: {
-				// 			title: '菜单管理',
-				// 			keepAlive: true,
-				// 			noCache: true
-				// 		}
-				// 	}]
-
-				// }, 
->>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 				{
 					id: 3,
 					path: '/pointCheck',
@@ -266,15 +208,15 @@
 										noCache: true
 									}
 								},
-								// {
-								// 	path: 'pointCheckDataAbout',
-								// 	name: 'pointCheckDataAbout',
-								// 	meta: {
-								// 		title: '点检数据分析',
-								// 		keepAlive: true,
-								// 		noCache: true
-								// 	}
-								// }
+								{
+									path: 'pointCheckDataAbout',
+									name: 'pointCheckDataAbout',
+									meta: {
+										title: '点检数据分析',
+										keepAlive: true,
+										noCache: true
+									}
+								}
 							]
 						},
 						{
@@ -336,7 +278,7 @@
 							path: 'abnormaMock',
 							name: 'abnormaMock',
 							meta: {
-								title: '隐患模块',
+								title: '异常模块',
 								keepAlive: true,
 								noCache: true
 							}
@@ -351,7 +293,6 @@
 						// 	}
 						// }
 					]
-<<<<<<< HEAD
 				},
 				// {
 				// 	id: 5,
@@ -390,47 +331,6 @@
 				// 	]
 
 				// },
-=======
-				}, 
-				{
-					id: 5,
-					path: '/overhaul',
-					name: 'overhaul',
-					meta: {
-						title: '检修管理',
-						icon: 'guide',
-					},
-					children: [{
-							path: 'overhaulPlan',
-							name: 'overhaulPlan',
-							meta: {
-								title: '检修作业卡',
-								keepAlive: true,
-								noCache: true
-							}
-						},
-						// {
-						// 	path: 'overhaulProject',
-						// 	name: 'overhaulProject',
-						// 	meta: {
-						// 		title: '检修项目',
-						// 		keepAlive: true,
-						// 		noCache: true
-						// 	}
-						// }, 
-						{
-							path: 'safe',
-							name: 'safe',
-							meta: {
-								title: '安全风险措施管理',
-								keepAlive: true,
-								noCache: true
-							}
-						}
-					]
-
-				}, 
->>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 				// {
 				// 	id: 6,
 				// 	path: '/goods',

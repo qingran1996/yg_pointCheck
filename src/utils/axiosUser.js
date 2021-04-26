@@ -133,7 +133,7 @@ export default {
 		};
 		//新增设备*********
 		Vue.prototype.deviceAdd = function(data) { //全局函数
-		
+
 			return service({
 				url: '/bi/equip/add',
 				method: 'post',
@@ -142,7 +142,7 @@ export default {
 		};
 		//更新设备*********
 		Vue.prototype.deviceUpdate = function(data) { //全局函数
-		
+
 			return service({
 				url: '/bi/equip/update',
 				method: 'post',
@@ -398,7 +398,6 @@ export default {
 				data: data
 			})
 		};
-<<<<<<< HEAD
     //WEB权限 菜单树状接口
     Vue.prototype.getWEBTree = function() { //全局函数
       return service({
@@ -533,8 +532,6 @@ export default {
 
 
 
-
-=======
 		/************检修管理***********/
 		//作业卡列表
 		Vue.prototype.jobCardList = function(data) { //全局函数
@@ -584,6 +581,5 @@ export default {
 				data: data
 			})
 		};
->>>>>>> 6a375931ffc8b9ccb23d31a0e26136bfcad16c7e
 	}
 }
